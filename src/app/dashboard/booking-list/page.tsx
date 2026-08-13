@@ -1,7 +1,7 @@
 /** @format */
 
 import React from "react";
-import BookingListTable from "@/components/BookingListComponents/BookingListTable";
+import BookingListTable from "@/components/DashboardComponents/BookingListComponents/BookingListTable";
 
 const BookingListPage = () => {
   return (
