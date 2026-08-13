@@ -21,7 +21,7 @@ import { City, Country, type ICity, type ICountry } from "country-state-city"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import type { ArenaInfo, ArenaInfoForm, ArenaInfoTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
-import { mockArenaInfo } from "./mock-data"
+import { mockArenaInfo } from "../../../mock-data/DashboardMockData/arena-management-mock-data"
 import EditSaveHeader from "./EditSaveHeader"
 
 const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {

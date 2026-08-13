@@ -19,7 +19,7 @@ import {
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import type { PayoutDetailsData, PayoutForm, PayoutDetailsTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
-import { mockPayoutDetails } from "./mock-data"
+import { mockPayoutDetails } from "../../../mock-data/DashboardMockData/arena-management-mock-data"
 import EditSaveHeader from "./EditSaveHeader"
 import PayoutLockedView from "./PayoutLockedView"
 

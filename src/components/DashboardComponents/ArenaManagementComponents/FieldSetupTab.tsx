@@ -19,7 +19,7 @@ import {
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import type { FieldSetupData, FieldSetupForm, FieldSetupTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
-import { mockFieldSetup } from "./mock-data"
+import { mockFieldSetup } from "../../../mock-data/DashboardMockData/arena-management-mock-data"
 import EditSaveHeader from "./EditSaveHeader"
 import ToggleField from "./ToggleField"
 

@@ -8,7 +8,7 @@ import { toAbsoluteMediaUrl } from "@/lib/utils"
 import {
   mockArenaInfo,
   mockSubscriptionStatus,
-} from "./mock-data"
+} from "../../../mock-data/DashboardMockData/arena-management-mock-data"
 import ArenaManagementLoading from "./ArenaManagementLoading"
 import CoverImageSlider from "./CoverImageSlider"
 import ArenaLightbox from "./ArenaLightbox"
