@@ -1,16 +1,15 @@
 "use client"
 
+/**
+ * ArenaLightbox.tsx
+ * Fullscreen image viewer overlay with keyboard navigation (Escape, Arrow keys),
+ * thumbnail strip, and prev/next buttons. Locks body scroll when open.
+ */
+
 import React, { useState, useEffect, useCallback } from "react"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import Image from "next/image"
-
-interface ArenaLightboxProps {
-  isOpen: boolean
-  imageUrls: string[]
-  currentSlide: number
-  onClose: () => void
-  onSlideChange: (index: number) => void
-}
+import type { ArenaLightboxProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 
 export default function ArenaLightbox({
   isOpen,

@@ -1,13 +1,15 @@
 "use client"
 
+/**
+ * BillingsTable.tsx
+ * HTML table rendering billing history rows with invoice ID, date,
+ * plan, price, and status badge. Uses getPlanDisplayName utility.
+ */
+
 import { useTranslation } from "react-i18next"
 import { getPlanDisplayName } from "@/lib/utils"
-import type { BillingHistoryItem } from "@/types/DashboardTypes/ArenaManagementTypes"
+import type { BillingHistoryItem, BillingsTableProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import StatusBadge from "./StatusBadge"
-
-interface BillingsTableProps {
-  data: BillingHistoryItem[]
-}
 
 export default function BillingsTable({ data }: BillingsTableProps) {
   const { t } = useTranslation("dashboard")

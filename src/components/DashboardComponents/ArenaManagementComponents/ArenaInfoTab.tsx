@@ -1,5 +1,12 @@
 "use client"
 
+/**
+ * ArenaInfoTab.tsx
+ * Editable form for arena basic information including name, description,
+ * country/city selection (using country-state-city library), and address.
+ * Uses EditSaveHeader for edit/save toggle workflow.
+ */
+
 import React, { useEffect, useMemo, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -13,21 +20,9 @@ import {
 import { City, Country, type ICity, type ICountry } from "country-state-city"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import type { ArenaInfo } from "@/types/DashboardTypes/ArenaManagementTypes"
+import type { ArenaInfo, ArenaInfoForm, ArenaInfoTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import { mockArenaInfo } from "./mock-data"
 import EditSaveHeader from "./EditSaveHeader"
-
-type ArenaInfoForm = {
-  field_name: string
-  description: string
-  country: string
-  city: string
-  full_address: string
-}
-
-interface ArenaInfoTabProps {
-  arenaInfo?: ArenaInfo
-}
 
 const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
   const { t } = useTranslation("dashboard")

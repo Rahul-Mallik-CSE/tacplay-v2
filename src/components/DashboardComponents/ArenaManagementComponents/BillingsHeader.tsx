@@ -1,12 +1,14 @@
 "use client"
 
+/**
+ * BillingsHeader.tsx
+ * Header row with title and search input for filtering billing records.
+ * Used as part of the BillingsTab component.
+ */
+
 import { Search } from "lucide-react"
 import { useTranslation } from "react-i18next"
-
-interface BillingsHeaderProps {
-  search: string
-  onSearchChange: (value: string) => void
-}
+import type { BillingsHeaderProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 
 export default function BillingsHeader({
   search,

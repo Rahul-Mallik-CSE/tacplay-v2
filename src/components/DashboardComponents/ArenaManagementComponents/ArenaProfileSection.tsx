@@ -1,16 +1,16 @@
 "use client"
 
+/**
+ * ArenaProfileSection.tsx
+ * Renders the arena owner's profile with avatar (with fallback to initials),
+ * full name, email, and an optional "Pro" badge with crown icon.
+ */
+
 import React from "react"
 import { Crown } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import Image from "next/image"
-
-interface ArenaProfileSectionProps {
-  fullName: string
-  email: string
-  profileImageUrl: string | null
-  showProBadge: boolean
-}
+import type { ArenaProfileSectionProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 
 function getInitials(name: string): string {
   return (

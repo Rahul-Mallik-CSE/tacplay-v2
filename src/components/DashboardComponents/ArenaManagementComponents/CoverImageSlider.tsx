@@ -1,15 +1,17 @@
 "use client"
 
+/**
+ * CoverImageSlider.tsx
+ * Hero image carousel with auto-advance, prev/next navigation,
+ * dot indicators, fullscreen/lightbox button, and edit slider button.
+ * Supports hover pause and responsive sizing.
+ */
+
 import React, { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight, Maximize2, Pen } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import Image from "next/image"
-
-interface CoverImageSliderProps {
-  imageUrls: string[]
-  onOpenLightbox: () => void
-  onOpenManageModal: () => void
-}
+import type { CoverImageSliderProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 
 export default function CoverImageSlider({
   imageUrls,

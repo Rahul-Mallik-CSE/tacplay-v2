@@ -1,7 +1,13 @@
 "use client"
 
+/**
+ * PayoutDetailsTab.tsx
+ * Editable form component for managing payout/bank details.
+ * Supports edit/save workflow with draft state management.
+ * Shows a locked view (PayoutLockedView) for lower-tier subscription plans.
+ */
+
 import React, { useMemo, useState } from "react"
-import { Crown } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -12,50 +18,10 @@ import {
 } from "@/components/ui/select"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import type { PayoutDetailsData } from "@/types/DashboardTypes/ArenaManagementTypes"
+import type { PayoutDetailsData, PayoutForm, PayoutDetailsTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import { mockPayoutDetails } from "./mock-data"
 import EditSaveHeader from "./EditSaveHeader"
-
-type PayoutForm = {
-  business_name: string
-  business_type: string
-  contact_phone_number: string
-  bank_account_holder_name: string
-  bank_name: string
-  account_number: string
-  iban_routing_number: string
-  swift_bic_code: string
-}
-
-function PayoutLockedView() {
-  const { t } = useTranslation("dashboard")
-
-  return (
-    <div className="flex flex-col items-center justify-center py-12 px-6 text-center bg-card border border-white/5 rounded-2xl shadow-xl min-h-[300px]">
-      <div className="w-16 h-16 rounded-full bg-custom-red/10 border border-custom-red/20 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(152,0,9,0.3)] animate-pulse">
-        <span className="w-6 h-6 text-custom-red">&#128274;</span>
-      </div>
-      <h3 className="text-lg sm:text-xl font-bold text-primary mb-2">
-        {t("arena.payoutTab.unlockTitle", "Unlock Payout Details")}
-      </h3>
-      <p className="text-sm text-secondary max-w-[420px] mb-6 leading-relaxed">
-        {t(
-          "arena.payoutTab.unlockDesc",
-          "Upgrade your plan to Essential for Field Growth or Gold to view and edit your payout accounts, bank credentials, and manage business details.",
-        )}
-      </p>
-      <button className="flex items-center gap-2 bg-linear-to-r from-[#980009] via-[#C00069] to-[#980009] text-white text-sm font-bold px-6 py-3 rounded-xl hover:opacity-90 transition-all shadow-[0_0_15px_rgba(192,0,105,0.4)] hover:scale-105 active:scale-95 cursor-pointer">
-        <Crown className="w-4 h-4 text-[#cdba20]" />
-        {t("sidebar.upgrade", "Upgrade")}
-      </button>
-    </div>
-  )
-}
-
-interface PayoutDetailsTabProps {
-  payoutDetails?: PayoutDetailsData
-  showLockedView?: boolean
-}
+import PayoutLockedView from "./PayoutLockedView"
 
 const PayoutDetailsTab = ({
   payoutDetails = mockPayoutDetails,

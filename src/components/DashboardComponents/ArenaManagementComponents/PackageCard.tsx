@@ -1,5 +1,12 @@
 "use client"
 
+/**
+ * PackageCard.tsx
+ * Renders a single package with editable fields: name, description, fee,
+ * active toggle, and included items. Supports remove functionality.
+ * Used within PackageManagementTab for each package item.
+ */
+
 import { X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -7,26 +14,7 @@ import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 import { useTranslation } from "react-i18next"
 import IncludeItemsInput from "./IncludeItemsInput"
-import type { PackageItem } from "@/types/DashboardTypes/ArenaManagementTypes"
-
-type PackageForm = {
-  id?: number
-  package_name: string
-  description: string
-  package_fee: string
-  include_items: string[]
-  is_active: boolean
-}
-
-interface PackageCardProps {
-  pkg: PackageForm
-  index: number
-  isEditing: boolean
-  onUpdate: (index: number, patch: Partial<PackageForm>) => void
-  onRemove: (index: number) => void
-  onAddItem: (index: number, value: string) => void
-  onRemoveItem: (index: number, value: string) => void
-}
+import type { PackageForm, PackageCardProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 
 export default function PackageCard({
   pkg,

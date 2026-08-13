@@ -1,5 +1,12 @@
 "use client"
 
+/**
+ * ManageCoverImagesModal.tsx
+ * Dialog/modal for managing cover images. Shows existing images with delete toggles,
+ * an upload zone, queued uploads preview, and save/cancel buttons.
+ * Manages file state and revokes object URLs on cleanup.
+ */
+
 import React, { useState, useEffect } from "react"
 import { X } from "lucide-react"
 import {
@@ -12,16 +19,10 @@ import {
 import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import type { ArenaMedia } from "@/types/DashboardTypes/ArenaManagementTypes"
+import type { ArenaMedia, ManageCoverImagesModalProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import ExistingImagesGrid from "./ExistingImagesGrid"
 import ImageUploadZone from "./ImageUploadZone"
 import QueuedUploadsGrid from "./QueuedUploadsGrid"
-
-interface ManageCoverImagesModalProps {
-  isOpen: boolean
-  onClose: () => void
-  existingMedia?: ArenaMedia[]
-}
 
 export default function ManageCoverImagesModal({
   isOpen,

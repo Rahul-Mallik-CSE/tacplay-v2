@@ -1,23 +1,20 @@
 "use client"
 
+/**
+ * PackageManagementTab.tsx
+ * Manages a list of arena packages with edit/save, add new, and remove functionality.
+ * Delegates individual package rendering to PackageCard component.
+ */
+
 import React, { useMemo, useState } from "react"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import type { PackageManagementData } from "@/types/DashboardTypes/ArenaManagementTypes"
+import type { PackageManagementData, PackageForm, PackageManagementTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import { mockPackageManagement } from "./mock-data"
 import EditSaveHeader from "./EditSaveHeader"
 import PackageCard from "./PackageCard"
-
-type PackageForm = {
-  id?: number
-  package_name: string
-  description: string
-  package_fee: string
-  include_items: string[]
-  is_active: boolean
-}
 
 const EMPTY_PACKAGE: PackageForm = {
   package_name: "",
@@ -25,10 +22,6 @@ const EMPTY_PACKAGE: PackageForm = {
   package_fee: "",
   include_items: [],
   is_active: true,
-}
-
-interface PackageManagementTabProps {
-  packageManagement?: PackageManagementData
 }
 
 const PackageManagementTab = ({

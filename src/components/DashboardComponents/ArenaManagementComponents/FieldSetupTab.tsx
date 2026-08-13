@@ -1,5 +1,12 @@
 "use client"
 
+/**
+ * FieldSetupTab.tsx
+ * Editable form for field configuration including min/max players per team/session,
+ * session duration, base price, and social/ranked match toggles.
+ * Uses EditSaveHeader and ToggleField components.
+ */
+
 import React, { useMemo, useState } from "react"
 import { Input } from "@/components/ui/input"
 import {
@@ -11,26 +18,10 @@ import {
 } from "@/components/ui/select"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import type { FieldSetupData } from "@/types/DashboardTypes/ArenaManagementTypes"
+import type { FieldSetupData, FieldSetupForm, FieldSetupTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import { mockFieldSetup } from "./mock-data"
 import EditSaveHeader from "./EditSaveHeader"
 import ToggleField from "./ToggleField"
-
-type FieldSetupForm = {
-  minimum_players_per_team: number
-  maximum_players_per_team: number
-  minimum_players_per_session: number
-  maximum_players_per_session: number
-  default_session_duration: number
-  duration_unit: string
-  base_price_per_player: string
-  allow_social_matches: boolean
-  allow_ranked_matches: boolean
-}
-
-interface FieldSetupTabProps {
-  fieldSetup?: FieldSetupData
-}
 
 const FieldSetupTab = ({ fieldSetup = mockFieldSetup }: FieldSetupTabProps) => {
   const { t } = useTranslation("dashboard")

@@ -1,15 +1,17 @@
 "use client"
 
+/**
+ * BillingsTab.tsx
+ * Displays billing history with search filtering functionality.
+ * Composes BillingsHeader for search input and BillingsTable for data display.
+ */
+
 import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import type { BillingHistoryItem } from "@/types/DashboardTypes/ArenaManagementTypes"
+import type { BillingHistoryItem, BillingsTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import { mockBillingHistory } from "./mock-data"
 import BillingsHeader from "./BillingsHeader"
 import BillingsTable from "./BillingsTable"
-
-interface BillingsTabProps {
-  billingHistory?: BillingHistoryItem[]
-}
 
 const BillingsTab = ({
   billingHistory = mockBillingHistory,
