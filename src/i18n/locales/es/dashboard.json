@@ -1,6 +1,7 @@
 {
   "common": {
     "dashboard": "Panel",
+    "admin": "Panel de administracion",
     "settings": "Configuracion",
     "cancel": "Cancelar",
     "save": "Guardar",
@@ -41,6 +42,12 @@
     "unlockMessage": "Desbloquea partidas clasificadas, analiticas y herramientas premium.",
     "manage": "Gestionar",
     "upgrade": "Mejorar"
+  },
+  "adminSidebar": {
+    "overview": "Resumen",
+    "users": "Usuarios",
+    "arenas": "Arenas",
+    "analytics": "Analiticas"
   },
   "home": {
     "analyticsReport": "Informe de analitica",

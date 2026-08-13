@@ -1,6 +1,7 @@
 {
   "common": {
     "dashboard": "Tableau de bord",
+    "admin": "Panneau d'administration",
     "settings": "Parametres",
     "cancel": "Annuler",
     "save": "Enregistrer",
@@ -41,6 +42,12 @@
     "unlockMessage": "Debloquez l'hebergement classe, les analyses et les outils premium.",
     "manage": "Gerer",
     "upgrade": "Upgrade"
+  },
+  "adminSidebar": {
+    "overview": "Aperçu",
+    "users": "Utilisateurs",
+    "arenas": "Arènes",
+    "analytics": "Analyses"
   },
   "home": {
     "analyticsReport": "Rapport d'analyse",

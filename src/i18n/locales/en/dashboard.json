@@ -1,6 +1,7 @@
 {
   "common": {
     "dashboard": "Dashboard",
+    "admin": "Admin Panel",
     "settings": "Settings",
     "cancel": "Cancel",
     "save": "Save",
@@ -41,6 +42,12 @@
     "unlockMessage": "Unlock ranked hosting, analytics, and premium tools.",
     "manage": "Manage",
     "upgrade": "Upgrade"
+  },
+  "adminSidebar": {
+    "overview": "Overview",
+    "users": "Users",
+    "arenas": "Arenas",
+    "analytics": "Analytics"
   },
   "home": {
     "analyticsReport": "Analytics report",

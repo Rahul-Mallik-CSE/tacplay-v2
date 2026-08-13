@@ -1,6 +1,7 @@
 {
   "common": {
     "dashboard": "Armaturenbrett",
+    "admin": "Admin-Bereich",
     "settings": "Einstellungen",
     "cancel": "Abbrechen",
     "save": "Speichern",
@@ -41,6 +42,12 @@
     "unlockMessage": "Schalten Sie Ranglisten-Hosting, Analysen und Premium-Tools frei.",
     "manage": "Verwalten",
     "upgrade": "Upgrade"
+  },
+  "adminSidebar": {
+    "overview": "Übersicht",
+    "users": "Benutzer",
+    "arenas": "Arenen",
+    "analytics": "Analysen"
   },
   "home": {
     "analyticsReport": "Analysebericht",
