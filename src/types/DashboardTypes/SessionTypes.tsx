@@ -344,3 +344,25 @@ export interface SessionFiltersProps {
   onStatusChange: (status: SessionStatusFilter) => void
   onMatchTypeChange: (matchType: SessionMatchTypeFilter) => void
 }
+
+/** Props for SessionInfoSheet component */
+export interface SessionInfoSheetProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  sessionId: number | null
+}
+
+/** Props for EditSessionSheet component */
+export interface EditSessionSheetProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  sessionId: number | null
+}
+
+/** Props for PlayerDetailsSheet component */
+export interface PlayerDetailsSheetProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  sessionId: number | null
+  bookingId: number | null
+}

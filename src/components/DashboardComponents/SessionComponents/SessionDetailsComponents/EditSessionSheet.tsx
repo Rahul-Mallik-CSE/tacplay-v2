@@ -21,10 +21,9 @@ import { ArrowLeft, Calendar, ChevronDown, Upload, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import SessionInfoRow from "./SessionInfoRow"
 import SessionInfoSheetLoading from "./SessionInfoSheetLoading"
-import { mockSessionDetails } from "../../../DashboardMockData/sessions-mock-data"
-import type { SessionInfoSheetProps } from "@/types/DashboardTypes/SessionTypes"
+import { mockSessionDetails } from "@/mock-data/DashboardMockData/sessions-mock-data"
+import type { EditSessionSheetProps } from "@/types/DashboardTypes/SessionTypes"
 
 /** Session type options */
 type SessionType = "teams" | "manual_player"
@@ -80,7 +79,7 @@ const convertToMinutes = (time: string) => {
   return (hour % 24) * 60 + minute
 }
 
-function EditSessionSheet({ open, onOpenChange, sessionId }: SessionInfoSheetProps) {
+function EditSessionSheet({ open, onOpenChange, sessionId }: EditSessionSheetProps) {
   const { t } = useTranslation("dashboard")
   const [isUpdating, setIsUpdating] = useState(false)
 

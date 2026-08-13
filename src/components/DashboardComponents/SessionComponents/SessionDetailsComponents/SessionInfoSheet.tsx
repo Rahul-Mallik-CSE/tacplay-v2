@@ -24,7 +24,7 @@ import { useTranslation } from "react-i18next"
 import SessionInfoRow from "./SessionInfoRow"
 import SessionResultSelector from "./SessionResultSelector"
 import SessionInfoSheetLoading from "./SessionInfoSheetLoading"
-import { mockSessionInfo } from "../../../DashboardMockData/sessions-mock-data"
+import { mockSessionInfo } from "@/mock-data/DashboardMockData/sessions-mock-data"
 import type { SessionInfoSheetProps } from "@/types/DashboardTypes/SessionTypes"
 
 function SessionInfoSheet({ open, onOpenChange, sessionId }: SessionInfoSheetProps) {

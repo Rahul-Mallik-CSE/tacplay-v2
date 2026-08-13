@@ -23,15 +23,8 @@ import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import SessionInfoRow from "./SessionInfoRow"
 import PlayerDetailsSheetLoading from "./PlayerDetailsSheetLoading"
-import { mockPlayerDetails } from "../../../DashboardMockData/sessions-mock-data"
-
-/** Props for PlayerDetailsSheet component */
-interface PlayerDetailsSheetProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  sessionId: number | null
-  bookingId: number | null
-}
+import { mockPlayerDetails } from "@/mock-data/DashboardMockData/sessions-mock-data"
+import type { PlayerDetailsSheetProps } from "@/types/DashboardTypes/SessionTypes"
 
 function PlayerDetailsSheet({ open, onOpenChange, sessionId, bookingId }: PlayerDetailsSheetProps) {
   const { t } = useTranslation("dashboard")
