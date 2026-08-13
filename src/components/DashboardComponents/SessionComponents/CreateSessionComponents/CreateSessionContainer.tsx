@@ -14,10 +14,11 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import TimePicker from "@/components/CommonComponents/TimePicker"
+
 import SessionFormField from "./SessionFormField"
 import SessionCustomSelect from "./SessionCustomSelect"
 import SessionFileUpload from "./SessionFileUpload"
+import TimePicker from "@/components/SharedComponents/TimePicker"
 
 /** Session type options */
 type SessionType = "teams" | "manual_player"
