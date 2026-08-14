@@ -18,6 +18,7 @@ export function useDashboardNavItems(): NavItemConfig[] {
       href: "/dashboard",
       icon: LayoutGrid,
       label: t("common.dashboard"),
+      exact: true,
     },
     {
       href: "/dashboard/sessions",

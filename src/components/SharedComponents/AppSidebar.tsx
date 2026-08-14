@@ -20,6 +20,7 @@ import { usePathname } from "next/navigation";
 import { Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LogoutModal from "./LogOutModal";
+import UpgradeModal from "./UpgradeModal";
 import type { NavItemConfig } from "./NavItem";
 import NavItem from "./NavItem";
 import { useTranslation } from "react-i18next";
@@ -43,6 +44,7 @@ export default function AppSidebar({
   const { state } = useSidebar();
   const pathname = usePathname();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
 
   const isCollapsed = state === "collapsed";
 
@@ -102,10 +104,12 @@ export default function AppSidebar({
                 icon={item.icon}
                 label={item.label}
                 active={
-                  !!(
-                    pathname === item.href ||
-                    pathname?.startsWith(item.href + "/")
-                  )
+                  item.exact
+                    ? pathname === item.href
+                    : !!(
+                        pathname === item.href ||
+                        pathname?.startsWith(item.href + "/")
+                      )
                 }
                 collapsed={isCollapsed}
               />
@@ -119,6 +123,7 @@ export default function AppSidebar({
             isCollapsed ? (
               <div className="flex justify-center mb-2">
                 <Button
+                  onClick={() => setIsUpgradeModalOpen(true)}
                   className="w-10 h-10 rounded-full flex items-center justify-center bg-linear-to-br from-[#980009] to-[#C00069] border-2 border-[#cdba20] shadow-lg"
                   title={t("sidebar.upgradeToPremium")}
                 >
@@ -146,7 +151,10 @@ export default function AppSidebar({
                     <p className="text-secondary text-xs mb-2">
                       {t("sidebar.unlockMessage")}
                     </p>
-                    <Button className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-[#980009] via-[#C00069] to-[#980009] text-white font-bold py-2.5 rounded-xl text-sm hover:opacity-90 transition-opacity shadow-[0_0_10px_rgba(192,0,105,0.4)]">
+                    <Button
+                      onClick={() => setIsUpgradeModalOpen(true)}
+                      className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-[#980009] via-[#C00069] to-[#980009] text-white font-bold py-2.5 rounded-xl text-sm hover:opacity-90 transition-opacity shadow-[0_0_10px_rgba(192,0,105,0.4)]"
+                    >
                       <Crown size={15} className="text-[#cdba20]" />
                       {t("sidebar.upgrade")}
                     </Button>
@@ -163,6 +171,10 @@ export default function AppSidebar({
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
         onConfirm={handleConfirmLogout}
+      />
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
       />
     </>
   );
