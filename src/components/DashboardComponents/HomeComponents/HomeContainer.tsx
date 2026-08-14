@@ -50,7 +50,7 @@ const HomeContainer = () => {
         <HomeHeader
           title={header.title}
           subtitle={header.subtitle}
-          reportType={header.report_type}
+          yearRange={header.year_range}
         />
 
         <StatsGrid items={statsItems} />
