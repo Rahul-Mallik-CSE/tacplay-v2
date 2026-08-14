@@ -470,6 +470,8 @@
       "descPlaceholder": "Beschreiben Sie Ihre Arena...",
       "countryLabel": "Land",
       "countryPlaceholder": "Land auswählen",
+      "stateLabel": "Bundesland",
+      "statePlaceholder": "Bundesland auswählen",
       "cityLabel": "Stadt",
       "cityPlaceholder": "Stadt auswählen",
       "addressLabel": "Vollständige Adresse",

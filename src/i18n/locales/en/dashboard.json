@@ -471,6 +471,8 @@
       "descPlaceholder": "Describe your arena...",
       "countryLabel": "Country",
       "countryPlaceholder": "Select country",
+      "stateLabel": "State",
+      "statePlaceholder": "Select state",
       "cityLabel": "City",
       "cityPlaceholder": "Select city",
       "addressLabel": "Full Address",

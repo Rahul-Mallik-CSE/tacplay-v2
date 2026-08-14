@@ -26,6 +26,7 @@ const defaultArena: ArenaStepForm = {
   field_name: "",
   description: "",
   country: "Bangladesh",
+  state: "",
   city: "Dhaka",
   full_address: "",
   images: [],

@@ -470,6 +470,8 @@
       "descPlaceholder": "Décrivez votre arène...",
       "countryLabel": "Pays",
       "countryPlaceholder": "Sélectionner le pays",
+      "stateLabel": "État",
+      "statePlaceholder": "Sélectionner l'état",
       "cityLabel": "Ville",
       "cityPlaceholder": "Sélectionner la ville",
       "addressLabel": "Adresse complète",

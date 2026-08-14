@@ -17,7 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { City, Country, type ICity, type ICountry } from "country-state-city"
+import { GetCountries, GetState, GetCity } from "react-country-state-city"
+import type { Country, State, City } from "react-country-state-city/dist/cjs/types"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import type { ArenaInfo, ArenaInfoForm, ArenaInfoTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
@@ -30,14 +31,16 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
   const [draft, setDraft] = useState<ArenaInfoForm | null>(null)
   const [isSaving, setIsSaving] = useState(false)
 
-  const [countries, setCountries] = useState<ICountry[]>([])
-  const [cities, setCities] = useState<ICity[]>([])
+  const [countries, setCountries] = useState<Country[]>([])
+  const [states, setStates] = useState<State[]>([])
+  const [cities, setCities] = useState<City[]>([])
 
   const baseForm = useMemo<ArenaInfoForm>(
     () => ({
       field_name: arenaInfo.field_name ?? "",
       description: arenaInfo.description ?? "",
       country: arenaInfo.country?.name ?? "",
+      state: "",
       city: arenaInfo.city?.name ?? "",
       full_address: arenaInfo.full_address ?? "",
     }),
@@ -48,7 +51,7 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
 
   const countryOptions = useMemo(() => {
     const options = countries.map((country) => ({
-      key: country.isoCode,
+      key: country.iso2,
       value: country.name,
     }))
     if (!form.country) return options
@@ -59,9 +62,20 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
     return [...options, { key: `custom-${form.country}`, value: form.country }]
   }, [countries, form.country])
 
+  const stateOptions = useMemo(() => {
+    const options = states.map((state) => ({
+      key: state.state_code,
+      value: state.name,
+    }))
+    if (!form.state) return options
+    const hasCurrent = options.some((state) => state.value === form.state)
+    if (hasCurrent) return options
+    return [...options, { key: `custom-${form.state}`, value: form.state }]
+  }, [states, form.state])
+
   const cityOptions = useMemo(() => {
     const options = cities.map((city) => ({
-      key: city.name,
+      key: String(city.id),
       value: city.name,
     }))
     if (!form.city) return options
@@ -72,29 +86,46 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
 
   useEffect(() => {
     let active = true
-    const loadCountries = () => {
-      const data = Country.getAllCountries()
+    GetCountries().then((data) => {
       if (!active) return
       setCountries(Array.isArray(data) ? data : [])
-    }
-    loadCountries()
+    })
     return () => { active = false }
   }, [])
 
   useEffect(() => {
     let active = true
-    const loadCities = () => {
+    const loadStates = async () => {
       const selectedCountry = countries.find(
         (item) => item.name === form.country,
       )
-      if (!selectedCountry) { setCities([]); return }
-      const data = City.getCitiesOfCountry(selectedCountry.isoCode)
+      if (!selectedCountry) { setStates([]); setCities([]); return }
+      const data = await GetState(selectedCountry.id)
+      if (!active) return
+      setStates(Array.isArray(data) ? data : [])
+      setCities([])
+    }
+    loadStates()
+    return () => { active = false }
+  }, [countries, form.country])
+
+  useEffect(() => {
+    let active = true
+    const loadCities = async () => {
+      const selectedCountry = countries.find(
+        (item) => item.name === form.country,
+      )
+      const selectedState = states.find(
+        (item) => item.name === form.state,
+      )
+      if (!selectedCountry || !selectedState) { setCities([]); return }
+      const data = await GetCity(selectedCountry.id, selectedState.id)
       if (!active) return
       setCities(Array.isArray(data) ? data : [])
     }
     loadCities()
     return () => { active = false }
-  }, [countries, form.country])
+  }, [countries, states, form.country, form.state])
 
   const handleToggleEdit = () => {
     if (isEditing) { setDraft(null); setIsEditing(false); return }
@@ -159,7 +190,7 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-medium text-primary">
               {t("onboardingFields.arena.countryLabel")}
@@ -167,7 +198,7 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
             <Select
               value={form.country}
               onValueChange={(v) =>
-                setDraft((p) => p ? { ...p, country: v, city: "" } : p)
+                setDraft((p) => p ? { ...p, country: v, state: "", city: "" } : p)
               }
               disabled={!isEditing}
             >
@@ -183,6 +214,27 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium text-primary">
+              {t("onboardingFields.arena.stateLabel")}
+            </label>
+            <Select
+              value={form.state}
+              onValueChange={(v) =>
+                setDraft((p) => p ? { ...p, state: v, city: "" } : p)
+              }
+              disabled={!isEditing || !form.country}
+            >
+              <SelectTrigger className="w-full bg-input/30 border-white/10 text-primary h-11">
+                <SelectValue placeholder={t("onboardingFields.arena.statePlaceholder")} />
+              </SelectTrigger>
+              <SelectContent className="bg-card border-white/10">
+                {stateOptions.map((s) => (
+                  <SelectItem key={s.key} value={s.value}>{s.value}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-primary">
               {t("onboardingFields.arena.cityLabel")}
             </label>
             <Select
@@ -190,7 +242,7 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
               onValueChange={(v) =>
                 setDraft((p) => p ? { ...p, city: v } : p)
               }
-              disabled={!isEditing}
+              disabled={!isEditing || !form.state}
             >
               <SelectTrigger className="w-full bg-input/30 border-white/10 text-primary h-11">
                 <SelectValue placeholder={t("onboardingFields.arena.cityPlaceholder")} />

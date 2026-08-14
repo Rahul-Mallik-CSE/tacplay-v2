@@ -10,12 +10,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Camera } from "lucide-react";
-import { City, Country, type ICity, type ICountry } from "country-state-city";
+import { GetCountries, GetState, GetCity } from "react-country-state-city";
+import type { Country, State, City } from "react-country-state-city/dist/cjs/types";
 
 export type ArenaStepForm = {
   field_name: string;
   description: string;
   country: string;
+  state: string;
   city: string;
   full_address: string;
   images: File[];
@@ -68,20 +70,16 @@ const StepArenaInfo = ({ value, onChange }: StepArenaInfoProps) => {
   const { t } = useTranslation("dashboard");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputId = useId();
-  const [countries, setCountries] = useState<ICountry[]>([]);
-  const [cities, setCities] = useState<ICity[]>([]);
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [states, setStates] = useState<State[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
 
   useEffect(() => {
     let active = true;
-
-    const loadCountries = () => {
-      const data = Country.getAllCountries();
+    GetCountries().then((data) => {
       if (!active) return;
       setCountries(Array.isArray(data) ? data : []);
-    };
-
-    loadCountries();
-
+    });
     return () => {
       active = false;
     };
@@ -89,33 +87,57 @@ const StepArenaInfo = ({ value, onChange }: StepArenaInfoProps) => {
 
   useEffect(() => {
     let active = true;
-
-    const loadCities = () => {
+    const loadStates = async () => {
       if (!value.country) {
+        setStates([]);
         setCities([]);
         return;
       }
-
       const selectedCountry = countries.find(
         (country) => country.name === value.country,
       );
       if (!selectedCountry) {
+        setStates([]);
         setCities([]);
         return;
       }
-
-      const data = City.getCitiesOfCountry(selectedCountry.isoCode);
-
+      const data = await GetState(selectedCountry.id);
       if (!active) return;
-      setCities(Array.isArray(data) ? data : []);
+      setStates(Array.isArray(data) ? data : []);
+      setCities([]);
     };
-
-    loadCities();
-
+    loadStates();
     return () => {
       active = false;
     };
   }, [countries, value.country]);
+
+  useEffect(() => {
+    let active = true;
+    const loadCities = async () => {
+      if (!value.country || !value.state) {
+        setCities([]);
+        return;
+      }
+      const selectedCountry = countries.find(
+        (country) => country.name === value.country,
+      );
+      const selectedState = states.find(
+        (state) => state.name === value.state,
+      );
+      if (!selectedCountry || !selectedState) {
+        setCities([]);
+        return;
+      }
+      const data = await GetCity(selectedCountry.id, selectedState.id);
+      if (!active) return;
+      setCities(Array.isArray(data) ? data : []);
+    };
+    loadCities();
+    return () => {
+      active = false;
+    };
+  }, [countries, states, value.country, value.state]);
 
 
 
@@ -155,22 +177,43 @@ const StepArenaInfo = ({ value, onChange }: StepArenaInfoProps) => {
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-medium text-primary">
               {t("onboardingFields.arena.countryLabel")}
             </label>
             <Select
               value={value.country}
-              onValueChange={(v) => onChange({ country: v, city: "" })}
+              onValueChange={(v) => onChange({ country: v, state: "", city: "" })}
             >
               <SelectTrigger className="w-full bg-input/30 border-white/10 text-primary h-11">
                 <SelectValue placeholder={t("onboardingFields.arena.countryPlaceholder")} />
               </SelectTrigger>
               <SelectContent className="bg-card border-white/10">
                 {countries.map((country) => (
-                  <SelectItem key={country.isoCode} value={country.name}>
+                  <SelectItem key={country.id} value={country.name}>
                     {country.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-primary">
+              {t("onboardingFields.arena.stateLabel")}
+            </label>
+            <Select
+              value={value.state}
+              onValueChange={(v) => onChange({ state: v, city: "" })}
+              disabled={!value.country}
+            >
+              <SelectTrigger className="w-full bg-input/30 border-white/10 text-primary h-11">
+                <SelectValue placeholder={t("onboardingFields.arena.statePlaceholder")} />
+              </SelectTrigger>
+              <SelectContent className="bg-card border-white/10">
+                {states.map((state) => (
+                  <SelectItem key={state.id} value={state.name}>
+                    {state.name}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -183,13 +226,14 @@ const StepArenaInfo = ({ value, onChange }: StepArenaInfoProps) => {
             <Select
               value={value.city}
               onValueChange={(v) => onChange({ city: v })}
+              disabled={!value.state}
             >
               <SelectTrigger className="w-full bg-input/30 border-white/10 text-primary h-11">
                 <SelectValue placeholder={t("onboardingFields.arena.cityPlaceholder")} />
               </SelectTrigger>
               <SelectContent className="bg-card border-white/10">
                 {cities.map((city) => (
-                  <SelectItem key={city.name} value={city.name}>
+                  <SelectItem key={city.id} value={city.name}>
                     {city.name}
                   </SelectItem>
                 ))}

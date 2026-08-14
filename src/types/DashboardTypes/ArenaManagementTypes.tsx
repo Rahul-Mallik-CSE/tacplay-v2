@@ -115,6 +115,7 @@ export type ArenaInfoForm = {
   field_name: string
   description: string
   country: string
+  state: string
   city: string
   full_address: string
 }
