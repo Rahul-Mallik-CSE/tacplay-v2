@@ -3,16 +3,18 @@
 /**
  * HomeContainer.tsx
  * Container component that orchestrates the dashboard home layout:
- * header, stats grid, revenue chart, session pie chart, and booking bar chart.
+ * header, stats grid, charts row, and data sections grid.
  * Manages state for time range selection and upgrade modal.
  */
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import HomeHeader from "./HomeHeader";
 import StatsGrid from "./StatsGrid";
 import RevenueChart from "./RevenueChart";
 import SessionPieChart from "./SessionPieChart";
 import BookingBarChart from "./BookingBarChart";
+import DataSectionsGrid from "./DataSectionsGrid";
 import DashboardLoading from "./DashboardLoading";
 import UpgradeModal from "@/components/SharedComponents/UpgradeModal";
 import { mockDashboardOverview } from "@/mock-data/DashboardMockData/home-mock-data";
@@ -21,6 +23,7 @@ import type { DashboardRange } from "@/types/DashboardTypes/HomeTypes";
 const RANGE_OPTIONS: DashboardRange[] = ["week", "month", "year"];
 
 const HomeContainer = () => {
+  const { t } = useTranslation("dashboard");
   const [selectedRange, setSelectedRange] =
     useState<DashboardRange>("month");
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
@@ -88,6 +91,19 @@ const HomeContainer = () => {
             onUpgradeClick={() => setIsUpgradeModalOpen(true)}
           />
         </div>
+
+        {/* Data sections: Recent Booking, Today's Sessions, Upcoming Sessions */}
+        <DataSectionsGrid
+          recentBookings={payload.recent_bookings}
+          todaySessions={payload.today_sessions}
+          upcomingSessions={payload.upcoming_sessions}
+          labels={{
+            recentBooking: t("home.recentBooking", "Recent Booking"),
+            todaySessions: t("home.todaySessions", "Today's Sessions"),
+            upcomingSessions: t("home.upcomingSessions", "Upcoming Sessions"),
+            viewAll: t("home.viewAll", "View All"),
+          }}
+        />
       </div>
 
       <UpgradeModal

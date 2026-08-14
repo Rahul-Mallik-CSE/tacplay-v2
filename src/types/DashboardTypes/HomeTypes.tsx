@@ -137,6 +137,72 @@ export type BookingBarChartProps = {
 };
 
 // ============================================================================
+// Data Section Types (Recent Booking, Today's Sessions, Upcoming Sessions)
+// ============================================================================
+
+/** Single recent booking item */
+export type RecentBookingItem = {
+  id: string;
+  playerName: string;
+  sessionName: string;
+  imageUrl: string;
+  price: string;
+  status: "confirmed" | "pending" | "cancelled";
+};
+
+/** Single today's session item */
+export type TodaySessionItem = {
+  id: string;
+  playerName: string;
+  sessionName: string;
+  imageUrl: string;
+  timeRange: string;
+  playersCount: string;
+};
+
+/** Single upcoming session item */
+export type UpcomingSessionItem = {
+  id: string;
+  month: string;
+  day: string;
+  sessionName: string;
+  timeRange: string;
+  playersCount: string;
+};
+
+/** Props for the DataSection wrapper */
+export type DataSectionProps = {
+  title: string;
+  viewAllLabel: string;
+  onViewAll?: () => void;
+  children: ReactNode;
+};
+
+/** Props for the RecentBookingCard */
+export type RecentBookingCardProps = {
+  title: string;
+  viewAllLabel: string;
+  items: RecentBookingItem[];
+  onViewAll?: () => void;
+};
+
+/** Props for the TodaySessionCard */
+export type TodaySessionCardProps = {
+  title: string;
+  viewAllLabel: string;
+  items: TodaySessionItem[];
+  onViewAll?: () => void;
+};
+
+/** Props for the UpcomingSessionCard */
+export type UpcomingSessionCardProps = {
+  title: string;
+  viewAllLabel: string;
+  items: UpcomingSessionItem[];
+  onViewAll?: () => void;
+};
+
+// ============================================================================
 // Dashboard Overview Types
 // ============================================================================
 
@@ -187,6 +253,9 @@ export type DashboardOverviewData = {
     can_view_advanced_analytics: boolean;
     show_upgrade_popup: boolean;
   };
+  recent_bookings: RecentBookingItem[];
+  today_sessions: TodaySessionItem[];
+  upcoming_sessions: UpcomingSessionItem[];
 };
 
 /** API response wrapper for dashboard overview */
