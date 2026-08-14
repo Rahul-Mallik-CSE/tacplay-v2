@@ -1,25 +1,180 @@
-/** @format */
-
 "use client";
 
-import React from "react";
+/**
+ * page.tsx — Dashboard Home Page
+ * Displays analytics overview with stats cards, revenue chart,
+ * session distribution pie chart, and booking source bar chart.
+ * Uses mock data for frontend development (no API integration).
+ */
+
+import {
+  CalendarCheck,
+  Gamepad2,
+  Trophy,
+  FileText,
+  Euro,
+} from "lucide-react";
+import { type ReactNode, useState } from "react";
+import StatsCard from "@/components/DashboardComponents/HomeComponents/StatsCard";
+import RevenueChart from "@/components/DashboardComponents/HomeComponents/RevenueChart";
+import SessionPieChart from "@/components/DashboardComponents/HomeComponents/SessionPieChart";
+import BookingBarChart from "@/components/DashboardComponents/HomeComponents/BookingBarChart";
+import DashboardLoading from "@/components/DashboardComponents/HomeComponents/DashboardLoading";
+import UpgradeModal from "@/components/SharedComponents/UpgradeModal";
+import { mockDashboardOverview } from "@/mock-data/DashboardMockData/home-mock-data";
+import type { DashboardRange } from "@/types/DashboardTypes/HomeTypes";
 import { useTranslation } from "react-i18next";
+
+/** Available time range options for the dashboard */
+const RANGE_OPTIONS: DashboardRange[] = ["week", "month", "year"];
+
+/** Icon mapping for each stats card key */
+const STATS_ICON_BY_KEY: Record<string, ReactNode> = {
+  total_revenue: <Euro className="w-4 h-4" />,
+  total_bookings: <CalendarCheck className="w-4 h-4" />,
+  upcoming_sessions: <Gamepad2 className="w-4 h-4" />,
+  matches_hosted: <Trophy className="w-4 h-4" />,
+};
+
+/** Map stats card keys to their i18n translation keys */
+const getStatsTranslationKey = (key: string) => {
+  if (key === "total_revenue") return "totalRevenue";
+  if (key === "total_bookings") return "totalBookings";
+  if (key === "upcoming_sessions") return "upcomingSessions";
+  if (key === "matches_hosted") return "matchesHosted";
+  return key;
+};
 
 export default function DashboardHomePage() {
   const { t } = useTranslation("dashboard");
 
+  /** Currently selected time range for stats display */
+  const [selectedRange, setSelectedRange] =
+    useState<DashboardRange>("month");
+
+  /** Toggle for the upgrade modal visibility */
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+
+  /** Loading simulation state (set to false since using mock data) */
+  const [isLoading] = useState(false);
+
+  /** Use mock data directly (no API calls) */
+  const payload = mockDashboardOverview;
+  const header = payload.analytics_header;
+  const statsItems = payload.mark_1.items;
+
+  const revenueSection = payload.mark_2;
+  const revenueRanges = revenueSection.range_options.filter(
+    (option): option is DashboardRange =>
+      RANGE_OPTIONS.includes(option as DashboardRange),
+  );
+  const visibleRanges =
+    revenueRanges.length > 0 ? revenueRanges : RANGE_OPTIONS;
+
+  /** Check if current plan is Bronze (locked for advanced analytics) */
+  const isBronze = payload.subscription.plan_code === "field_bronze_monthly";
+
+  if (isLoading) {
+    return <DashboardLoading />;
+  }
+
   return (
     <div className="w-full p-3 md:p-4">
       <div className="max-w-625 mx-auto space-y-4 md:space-y-6">
-        <div className="rounded-2xl border border-white/5 bg-muted/20 p-6 md:p-8">
-          <h2 className="text-lg md:text-xl font-bold text-primary mb-2">
-            {t("common.dashboard")}
-          </h2>
-          <p className="text-sm text-secondary">
-            Welcome to your dashboard. Manage sessions, bookings, and earnings from here.
-          </p>
+        {/* Header: title, subtitle, All Reports button, and range selector */}
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-primary">
+              {header.title ?? t("home.analyticsReport")}
+            </h1>
+            <p className="text-sm text-secondary mt-0.5">
+              {header.subtitle ?? t("home.analyticsSupport")}
+            </p>
+          </div>
+          <div className="flex items-center gap-3 flex-wrap justify-end">
+            <button className="flex items-center gap-2 bg-muted hover:bg-muted/80 text-primary text-sm font-medium px-4 py-2 rounded-lg border border-white/5 transition-colors">
+              <FileText className="w-4 h-4" />
+              {header.report_type ?? t("home.allReports")}
+            </button>
+
+            {/* Time range selector: Week / Month / Year */}
+            <div className="flex bg-muted rounded-lg p-0.5 border border-white/5">
+              {visibleRanges.map((range) => (
+                <button
+                  key={range}
+                  onClick={() => setSelectedRange(range)}
+                  className={`px-3 py-2 cursor-pointer text-xs font-medium rounded-md transition-all ${
+                    selectedRange === range
+                      ? "bg-custom-red text-primary"
+                      : "text-primary hover:text-secondary"
+                  }`}
+                >
+                  {t(`home.${range}`)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Stats cards: 4-column responsive grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {statsItems.map((item) => (
+            <StatsCard
+              key={item.key}
+              title={t(`home.${getStatsTranslationKey(item.key)}`, {
+                defaultValue: item.label,
+              })}
+              value={item.value}
+              change={item.change.display}
+              isPositive={item.change.is_positive}
+              showCurrencyIcon={item.key === "total_revenue"}
+              icon={
+                STATS_ICON_BY_KEY[item.key] ?? (
+                  <Euro className="w-4 h-4" />
+                )
+              }
+            />
+          ))}
+        </div>
+
+        {/* Revenue area chart (full width) */}
+        <RevenueChart
+          title={revenueSection.title}
+          valueDisplay={revenueSection.value}
+          legends={revenueSection.legends}
+          chartData={revenueSection.chart}
+          isLocked={isBronze}
+          onUpgradeClick={() => setIsUpgradeModalOpen(true)}
+        />
+
+        {/* Session pie chart + Booking bar chart (2-column grid) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <SessionPieChart
+            title={payload.mark_3.title}
+            centerValueDisplay={payload.mark_3.center_value_display}
+            items={payload.mark_3.items}
+            isLocked={isBronze}
+            onUpgradeClick={() => setIsUpgradeModalOpen(true)}
+          />
+
+          <BookingBarChart
+            title={payload.mark_4.title}
+            valueDisplay={payload.mark_4.value_display}
+            subtitle={payload.mark_4.subtitle}
+            totalsDisplay={payload.mark_4.totals_display}
+            legends={payload.mark_4.legends}
+            chartData={payload.mark_4.chart}
+            isLocked={isBronze}
+            onUpgradeClick={() => setIsUpgradeModalOpen(true)}
+          />
         </div>
       </div>
+
+      {/* Upgrade modal for subscription management */}
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+      />
     </div>
   );
 }
