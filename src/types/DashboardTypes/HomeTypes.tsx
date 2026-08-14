@@ -4,8 +4,25 @@
  * Covers stats cards, revenue chart, session pie chart, and booking bar chart.
  */
 
+import type { ReactNode } from "react";
+
+// ============================================================================
+// Shared Types
+// ============================================================================
+
 /** Available time range options for the dashboard */
 export type DashboardRange = "week" | "month" | "year";
+
+/** Props for the shared chart tooltip component */
+export type ChartTooltipProps = {
+  active?: boolean;
+  payload?: Array<{ value: number; name: string; color: string }>;
+  label?: string;
+};
+
+// ============================================================================
+// Stats Card Types
+// ============================================================================
 
 /** Change indicator for a stats card (up/down trend with display text) */
 export type DashboardChange = {
@@ -29,6 +46,20 @@ export type DashboardMark1Item = {
   change: DashboardChange;
 };
 
+/** Props for the StatsCard component */
+export type StatsCardProps = {
+  title: string;
+  value: number | string;
+  change: string;
+  isPositive: boolean;
+  icon: ReactNode;
+  showCurrencyIcon?: boolean;
+};
+
+// ============================================================================
+// Revenue Chart Types
+// ============================================================================
+
 /** Legend entry for charts (color-coded labels) */
 export type DashboardLegend = {
   key: string;
@@ -43,12 +74,42 @@ export type DashboardMark2ChartItem = {
   booking_count: number;
 };
 
+/** Props for the RevenueChart component */
+export type RevenueChartProps = {
+  title: string;
+  valueDisplay: string;
+  legends: DashboardLegend[];
+  chartData: DashboardMark2ChartItem[];
+  isLocked?: boolean;
+  onUpgradeClick?: () => void;
+};
+
+// ============================================================================
+// Session Pie Chart Types
+// ============================================================================
+
 /** Session pie chart item (ranked vs social session counts) */
 export type DashboardMark3Item = {
   key: string;
   label: string;
   value: number;
 };
+
+/** Color palette for pie chart segments (red for ranked, yellow for social) */
+export const PIE_CHART_COLORS = ["#980009", "#b4971e"] as const;
+
+/** Props for the SessionPieChart component */
+export type SessionPieChartProps = {
+  title: string;
+  centerValueDisplay: string;
+  items: DashboardMark3Item[];
+  isLocked?: boolean;
+  onUpgradeClick?: () => void;
+};
+
+// ============================================================================
+// Booking Bar Chart Types
+// ============================================================================
 
 /** Booking bar chart data point (premium vs free booking counts) */
 export type DashboardMark4ChartItem = {
@@ -57,6 +118,22 @@ export type DashboardMark4ChartItem = {
   premium: number;
   free: number;
 };
+
+/** Props for the BookingBarChart component */
+export type BookingBarChartProps = {
+  title: string;
+  valueDisplay: string;
+  subtitle: string;
+  totalsDisplay: string;
+  legends: DashboardLegend[];
+  chartData: DashboardMark4ChartItem[];
+  isLocked?: boolean;
+  onUpgradeClick?: () => void;
+};
+
+// ============================================================================
+// Dashboard Overview Types
+// ============================================================================
 
 /** Complete dashboard overview data structure */
 export type DashboardOverviewData = {

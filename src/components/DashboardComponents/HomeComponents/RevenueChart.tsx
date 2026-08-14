@@ -7,7 +7,6 @@
  * Shows a blurred lock overlay with upgrade CTA when isLocked is true.
  */
 
-import React from "react";
 import {
   AreaChart,
   Area,
@@ -17,56 +16,20 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import type {
-  DashboardLegend,
-  DashboardMark2ChartItem,
-} from "@/types/DashboardTypes/HomeTypes";
 import { Euro, Lock, Crown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
+import type { RevenueChartProps } from "@/types/DashboardTypes/HomeTypes";
+import ChartTooltip from "./ChartTooltip";
 
-type RevenueChartProps = {
-  title: string;
-  valueDisplay: string;
-  legends: DashboardLegend[];
-  chartData: DashboardMark2ChartItem[];
-  isLocked?: boolean;
-  onUpgradeClick?: () => void;
-};
-
-/** Custom tooltip for the revenue area chart */
-const CustomTooltip = ({
-  active,
-  payload,
-  label,
-}: {
-  active?: boolean;
-  payload?: Array<{ value: number; name: string; color: string }>;
-  label?: string;
-}) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-[#1a1826] border border-white/10 rounded-lg px-3 py-2 shadow-xl">
-        <p className="text-xs text-muted-foreground mb-1">{label}</p>
-        {payload.map((entry, index) => (
-          <p key={index} className="text-xs" style={{ color: entry.color }}>
-            {entry.name}: {entry.value.toLocaleString()}
-          </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
-
-const RevenueChart: React.FC<RevenueChartProps> = ({
+const RevenueChart = ({
   title,
   valueDisplay,
   legends,
   chartData,
   isLocked = false,
   onUpgradeClick,
-}) => {
+}: RevenueChartProps) => {
   const { t } = useTranslation("dashboard");
 
   /** Resolve legend label with i18n translation */
@@ -184,7 +147,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
                   value >= 1000 ? `${value / 1000}k` : value
                 }
               />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip content={<ChartTooltip />} />
               <Area
                 type="monotone"
                 dataKey="booking_count"

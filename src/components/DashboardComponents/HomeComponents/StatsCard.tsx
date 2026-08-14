@@ -6,26 +6,17 @@
  * trend indicator (up/down), title, and optional currency icon.
  */
 
-import React from "react";
 import { TrendingUp, TrendingDown, Euro } from "lucide-react";
+import type { StatsCardProps } from "@/types/DashboardTypes/HomeTypes";
 
-interface StatsCardProps {
-  title: string;
-  value: number | string;
-  change: string;
-  isPositive: boolean;
-  icon: React.ReactNode;
-  showCurrencyIcon?: boolean;
-}
-
-const StatsCard: React.FC<StatsCardProps> = ({
+const StatsCard = ({
   title,
   value,
   change,
   isPositive,
   icon,
   showCurrencyIcon,
-}) => {
+}: StatsCardProps) => {
   return (
     <div className="bg-card border border-white/5 rounded-xl p-5 flex flex-col gap-3 min-w-0 flex-1">
       <div className="flex items-start justify-between gap-2">

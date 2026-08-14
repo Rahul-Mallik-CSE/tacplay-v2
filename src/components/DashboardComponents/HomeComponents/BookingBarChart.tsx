@@ -8,7 +8,6 @@
  * Displays a blurred lock overlay with upgrade CTA when isLocked is true.
  */
 
-import React from "react";
 import {
   BarChart,
   Bar,
@@ -19,50 +18,12 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useTranslation } from "react-i18next";
-import type {
-  DashboardLegend,
-  DashboardMark4ChartItem,
-} from "@/types/DashboardTypes/HomeTypes";
 import { Lock, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { BookingBarChartProps } from "@/types/DashboardTypes/HomeTypes";
+import ChartTooltip from "./ChartTooltip";
 
-type BookingBarChartProps = {
-  title: string;
-  valueDisplay: string;
-  subtitle: string;
-  totalsDisplay: string;
-  legends: DashboardLegend[];
-  chartData: DashboardMark4ChartItem[];
-  isLocked?: boolean;
-  onUpgradeClick?: () => void;
-};
-
-/** Custom tooltip for the booking bar chart */
-const CustomTooltip = ({
-  active,
-  payload,
-  label,
-}: {
-  active?: boolean;
-  payload?: Array<{ value: number; name: string; color: string }>;
-  label?: string;
-}) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-[#1a1826] border border-white/10 rounded-lg px-3 py-2 shadow-xl">
-        <p className="text-xs text-muted-foreground mb-1">{label}</p>
-        {payload.map((entry, index) => (
-          <p key={index} className="text-xs" style={{ color: entry.color }}>
-            {entry.name}: {entry.value.toLocaleString()}
-          </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
-
-const BookingBarChart: React.FC<BookingBarChartProps> = ({
+const BookingBarChart = ({
   title,
   valueDisplay,
   subtitle,
@@ -71,7 +32,7 @@ const BookingBarChart: React.FC<BookingBarChartProps> = ({
   chartData,
   isLocked = false,
   onUpgradeClick,
-}) => {
+}: BookingBarChartProps) => {
   const { t } = useTranslation("dashboard");
 
   /** Resolve legend label with i18n translation */
@@ -162,7 +123,7 @@ const BookingBarChart: React.FC<BookingBarChartProps> = ({
                   value >= 1000 ? `${value / 1000}k` : value
                 }
               />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip content={<ChartTooltip />} />
               <Bar
                 dataKey="premium"
                 name={legendA}

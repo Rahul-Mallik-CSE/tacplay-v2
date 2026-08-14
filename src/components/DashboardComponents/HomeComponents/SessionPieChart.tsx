@@ -8,31 +8,20 @@
  * Displays a blurred lock overlay with upgrade CTA when isLocked is true.
  */
 
-import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { useTranslation } from "react-i18next";
-import type { DashboardMark3Item } from "@/types/DashboardTypes/HomeTypes";
 import { Lock, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { SessionPieChartProps } from "@/types/DashboardTypes/HomeTypes";
+import { PIE_CHART_COLORS } from "@/types/DashboardTypes/HomeTypes";
 
-/** Color palette for pie chart segments (red for ranked, yellow for social) */
-const COLORS = ["#980009", "#b4971e"];
-
-type SessionPieChartProps = {
-  title: string;
-  centerValueDisplay: string;
-  items: DashboardMark3Item[];
-  isLocked?: boolean;
-  onUpgradeClick?: () => void;
-};
-
-const SessionPieChart: React.FC<SessionPieChartProps> = ({
+const SessionPieChart = ({
   title,
   centerValueDisplay,
   items,
   isLocked = false,
   onUpgradeClick,
-}) => {
+}: SessionPieChartProps) => {
   const { t, i18n } = useTranslation("dashboard");
 
   /** Translate session type labels (Ranked/Social) */
@@ -115,7 +104,7 @@ const SessionPieChart: React.FC<SessionPieChartProps> = ({
                   {chartData.map((_, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
+                      fill={PIE_CHART_COLORS[index % PIE_CHART_COLORS.length]}
                     />
                   ))}
                 </Pie>
@@ -134,7 +123,7 @@ const SessionPieChart: React.FC<SessionPieChartProps> = ({
               <div key={entry.name} className="flex items-center gap-2">
                 <span
                   className="w-2.5 h-2.5 rounded-full"
-                  style={{ backgroundColor: COLORS[index] }}
+                  style={{ backgroundColor: PIE_CHART_COLORS[index] }}
                 />
                 <span className="text-xs text-secondary whitespace-nowrap">
                   {entry.value.toLocaleString()}
@@ -157,7 +146,8 @@ const SessionPieChart: React.FC<SessionPieChartProps> = ({
               <span
                 className="w-2.5 h-2.5 rounded-sm"
                 style={{
-                  backgroundColor: COLORS[index % COLORS.length],
+                  backgroundColor:
+                    PIE_CHART_COLORS[index % PIE_CHART_COLORS.length],
                 }}
               />
               <span className="text-xs text-secondary">
