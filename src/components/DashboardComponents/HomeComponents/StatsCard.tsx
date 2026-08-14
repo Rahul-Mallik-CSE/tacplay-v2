@@ -2,11 +2,11 @@
 
 /**
  * StatsCard.tsx
- * Displays a single key metric card with a numeric value,
- * trend indicator (up/down), title, and optional currency icon.
+ * Displays a single key metric card with title, icon, value,
+ * change indicator, and comparison subtitle.
  */
 
-import { TrendingUp, TrendingDown, Euro } from "lucide-react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import type { StatsCardProps } from "@/types/DashboardTypes/HomeTypes";
 
 const StatsCard = ({
@@ -16,14 +16,20 @@ const StatsCard = ({
   isPositive,
   icon,
   showCurrencyIcon,
+  subtitle,
 }: StatsCardProps) => {
   return (
-    <div className="bg-card border border-white/5 rounded-xl p-5 flex flex-col gap-3 min-w-0 flex-1">
-      <div className="flex items-start justify-between gap-2">
-        <h2 className="text-xl md:text-3xl font-bold text-primary tracking-tight flex items-center gap-1">
-          {showCurrencyIcon ? (
-            <Euro className="w-4 h-4" />
-          ) : null}
+    <div className="bg-card border border-white/5 rounded-xl p-5 flex flex-col min-w-0 flex-1">
+      {/* Row 1: Title left, icon right */}
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-medium text-secondary">{title}</h3>
+        <span className="text-secondary opacity-70">{icon}</span>
+      </div>
+
+      {/* Row 2: Value left, change badge right */}
+      <div className="flex items-center gap-3 mb-2">
+        <h2 className="text-3xl md:text-4xl font-bold text-primary tracking-tight">
+          {showCurrencyIcon && <span className="text-2xl">€</span>}
           {value}
         </h2>
         <span
@@ -38,15 +44,14 @@ const StatsCard = ({
           ) : (
             <TrendingDown className="w-3 h-3" />
           )}
-          {change}
+          ({change})
         </span>
       </div>
-      <div className="flex items-center gap-2 text-secondary text-sm">
-        <span className="w-4 h-4 flex items-center justify-center opacity-70">
-          {icon}
-        </span>
-        <span>{title}</span>
-      </div>
+
+      {/* Row 3: Comparison subtitle */}
+      {subtitle && (
+        <p className="text-xs text-secondary mt-auto">{subtitle}</p>
+      )}
     </div>
   );
 };

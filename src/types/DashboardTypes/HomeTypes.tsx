@@ -43,6 +43,7 @@ export type DashboardMark1Item = {
   label: string;
   value: string | number;
   value_display: string;
+  subtitle: string;
   change: DashboardChange;
 };
 
@@ -54,6 +55,7 @@ export type StatsCardProps = {
   isPositive: boolean;
   icon: ReactNode;
   showCurrencyIcon?: boolean;
+  subtitle?: string;
 };
 
 // ============================================================================

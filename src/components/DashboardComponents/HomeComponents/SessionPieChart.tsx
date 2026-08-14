@@ -58,7 +58,7 @@ const SessionPieChart = ({
   return (
     <div className="bg-card border border-white/5 rounded-xl p-5 relative overflow-hidden flex flex-col">
       <h3 className="text-sm text-secondary mb-1">{translatedTitle}</h3>
-      <p className="text-xs text-secondary mb-4">
+      <p className="text-sm text-primary mb-4">
         {items.reduce((s, i) => s + i.value, 0)}{" "}
         {t("home.attendance.totalPlayer", "Total Player")}
       </p>

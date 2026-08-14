@@ -6,17 +6,22 @@
  */
 
 import { type ReactNode } from "react";
-import { CalendarCheck, Gamepad2, Trophy, Euro } from "lucide-react";
+import {
+  CircleDollarSign,
+  ClipboardCheck,
+  Hourglass,
+  Crosshair,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import StatsCard from "./StatsCard";
 import type { DashboardMark1Item } from "@/types/DashboardTypes/HomeTypes";
 
-/** Icon mapping for each stats card key */
+/** Icon mapping for each stats card key — matches the provided design */
 const STATS_ICON_BY_KEY: Record<string, ReactNode> = {
-  total_revenue: <Euro className="w-4 h-4" />,
-  total_bookings: <CalendarCheck className="w-4 h-4" />,
-  upcoming_sessions: <Gamepad2 className="w-4 h-4" />,
-  matches_hosted: <Trophy className="w-4 h-4" />,
+  total_revenue: <CircleDollarSign className="w-5 h-5" />,
+  total_bookings: <ClipboardCheck className="w-5 h-5" />,
+  upcoming_sessions: <Hourglass className="w-5 h-5" />,
+  matches_hosted: <Crosshair className="w-5 h-5" />,
 };
 
 /** Map stats card keys to their i18n translation keys */
@@ -43,13 +48,16 @@ const StatsGrid = ({ items }: StatsGridProps) => {
           title={t(`home.${getStatsTranslationKey(item.key)}`, {
             defaultValue: item.label,
           })}
-          value={item.value}
+          value={item.value_display}
           change={item.change.display}
           isPositive={item.change.is_positive}
           showCurrencyIcon={item.key === "total_revenue"}
           icon={
-            STATS_ICON_BY_KEY[item.key] ?? <Euro className="w-4 h-4" />
+            STATS_ICON_BY_KEY[item.key] ?? (
+              <CircleDollarSign className="w-5 h-5" />
+            )
           }
+          subtitle={item.subtitle}
         />
       ))}
     </div>
