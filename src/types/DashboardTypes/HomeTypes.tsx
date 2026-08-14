@@ -80,6 +80,9 @@ export type RevenueChartProps = {
   valueDisplay: string;
   legends: DashboardLegend[];
   chartData: DashboardMark2ChartItem[];
+  selectedRange?: DashboardRange;
+  rangeOptions?: DashboardRange[];
+  onRangeChange?: (range: DashboardRange) => void;
   isLocked?: boolean;
   onUpgradeClick?: () => void;
 };
@@ -95,8 +98,8 @@ export type DashboardMark3Item = {
   value: number;
 };
 
-/** Color palette for pie chart segments (red for ranked, yellow for social) */
-export const PIE_CHART_COLORS = ["#980009", "#b4971e"] as const;
+/** Color palette for pie chart segments (red for check-in, yellow for late, white for no-show) */
+export const PIE_CHART_COLORS = ["#980009", "#b4971e", "#d1d5db"] as const;
 
 /** Props for the SessionPieChart component */
 export type SessionPieChartProps = {

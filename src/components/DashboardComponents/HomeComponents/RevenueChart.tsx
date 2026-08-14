@@ -3,10 +3,11 @@
 /**
  * RevenueChart.tsx
  * Area chart displaying revenue growth and booking count trends over time.
- * Uses Recharts AreaChart with gradient fills in red (#980009) and yellow (#b4971e).
+ * Includes a range selector dropdown (Week/Month/Year) in the header.
  * Shows a blurred lock overlay with upgrade CTA when isLocked is true.
  */
 
+import { useState } from "react";
 import {
   AreaChart,
   Area,
@@ -16,10 +17,13 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { Euro, Lock, Crown } from "lucide-react";
+import { Euro, Lock, Crown, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import type { RevenueChartProps } from "@/types/DashboardTypes/HomeTypes";
+import type {
+  RevenueChartProps,
+  DashboardRange,
+} from "@/types/DashboardTypes/HomeTypes";
 import ChartTooltip from "./ChartTooltip";
 
 const RevenueChart = ({
@@ -27,10 +31,14 @@ const RevenueChart = ({
   valueDisplay,
   legends,
   chartData,
+  selectedRange = "month",
+  rangeOptions = ["week", "month", "year"],
+  onRangeChange,
   isLocked = false,
   onUpgradeClick,
 }: RevenueChartProps) => {
   const { t } = useTranslation("dashboard");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   /** Resolve legend label with i18n translation */
   const getLegendLabel = (label: string) => {
@@ -52,35 +60,57 @@ const RevenueChart = ({
       ? t("home.totalRevenue")
       : title;
 
+  const rangeLabel = (range: DashboardRange) => t(`home.${range}`);
+
   return (
-    <div className="bg-card border border-white/5 rounded-xl p-5 relative overflow-hidden">
-      {/* Header with title, value, and legends */}
+    <div className="bg-card border border-white/5 rounded-xl p-5 relative overflow-hidden flex flex-col">
+      {/* Header with title, value, and range dropdown */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <p className="text-sm md:text-sm text-secondary mb-1">
-            {translatedTitle}
-          </p>
+          <p className="text-sm text-secondary mb-1">{translatedTitle}</p>
           <h2 className="text-xl md:text-3xl font-bold text-primary flex items-center gap-1">
             <Euro className="w-4 h-4" /> {valueDisplay}
           </h2>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-custom-red" />
-            <span className="text-xs text-primary">{legendA}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-custom-yellow" />
-            <span className="text-xs text-primary">{legendB}</span>
-          </div>
+
+        {/* Range selector dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="flex items-center gap-1.5 bg-muted hover:bg-muted/80 text-primary text-xs font-medium px-3 py-1.5 rounded-lg border border-white/5 transition-colors cursor-pointer"
+          >
+            {rangeLabel(selectedRange)}
+            <ChevronDown className="w-3.5 h-3.5" />
+          </button>
+          {isDropdownOpen && (
+            <div className="absolute right-0 top-full mt-1 bg-muted border border-white/10 rounded-lg shadow-lg z-20 overflow-hidden">
+              {rangeOptions.map((range) => (
+                <button
+                  key={range}
+                  onClick={() => {
+                    onRangeChange?.(range);
+                    setIsDropdownOpen(false);
+                  }}
+                  className={cn(
+                    "block w-full text-left px-4 py-2 text-xs font-medium transition-colors cursor-pointer",
+                    selectedRange === range
+                      ? "bg-custom-red text-primary"
+                      : "text-primary hover:bg-muted/80",
+                  )}
+                >
+                  {rangeLabel(range)}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="relative">
+      <div className="relative flex-1 flex flex-col">
         {/* Chart area with blur overlay when locked */}
         <div
           className={cn(
-            "w-full h-40 sm:h-48 md:h-56 lg:h-64 xl:h-70 transition-all duration-200",
+            "w-full flex-1 min-h-[200px] transition-all duration-200",
             isLocked &&
               "blur-[2.5px] pointer-events-none select-none opacity-75",
           )}
@@ -144,7 +174,7 @@ const RevenueChart = ({
                 tickLine={false}
                 tick={{ fill: "#525273", fontSize: 12 }}
                 tickFormatter={(value) =>
-                  value >= 1000 ? `${value / 1000}k` : value
+                  value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value
                 }
               />
               <Tooltip content={<ChartTooltip />} />
@@ -166,6 +196,18 @@ const RevenueChart = ({
               />
             </AreaChart>
           </ResponsiveContainer>
+        </div>
+
+        {/* Legends */}
+        <div className="flex items-center justify-center gap-4 mt-3">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-custom-red" />
+            <span className="text-xs text-secondary">{legendA}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-custom-yellow" />
+            <span className="text-xs text-secondary">{legendB}</span>
+          </div>
         </div>
 
         {/* Lock overlay with upgrade CTA when plan is locked */}

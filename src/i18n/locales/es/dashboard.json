@@ -62,7 +62,14 @@
     "upcomingSessions": "Próximas sesiones",
     "matchesHosted": "Partidas organizadas",
     "sessionDistribution": "Distribución de sesiones",
+    "todayAttendances": "Asistencias de hoy",
     "bookingSourceBreakdown": "Desglose de fuentes de reserva",
+    "attendance": {
+      "checkIn": "Registro",
+      "late": "Tarde",
+      "noShow": "No presentado",
+      "totalPlayer": "Jugador total"
+    },
     "legends": {
       "premium": "Premium",
       "free": "Gratis",

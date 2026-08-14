@@ -62,7 +62,14 @@
     "upcomingSessions": "Sessions à venir",
     "matchesHosted": "Matchs hébergés",
     "sessionDistribution": "Distribution des sessions",
+    "todayAttendances": "Présences du jour",
     "bookingSourceBreakdown": "Répartition des sources de réservation",
+    "attendance": {
+      "checkIn": "Enregistrement",
+      "late": "En retard",
+      "noShow": "Absent",
+      "totalPlayer": "Joueur total"
+    },
     "legends": {
       "premium": "Premium",
       "free": "Gratuit",

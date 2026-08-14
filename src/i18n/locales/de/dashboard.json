@@ -62,7 +62,14 @@
     "upcomingSessions": "Anstehende Sitzungen",
     "matchesHosted": "Ausgerichtete Spiele",
     "sessionDistribution": "Sitzungsverteilung",
+    "todayAttendances": "Heutige Anwesenheiten",
     "bookingSourceBreakdown": "Aufschlüsselung der Buchungsquellen",
+    "attendance": {
+      "checkIn": "Check-in",
+      "late": "Verspätet",
+      "noShow": "Nicht erschienen",
+      "totalPlayer": "Spieler gesamt"
+    },
     "legends": {
       "premium": "Premium",
       "free": "Kostenlos",

@@ -63,7 +63,14 @@
     "upcomingSessions": "Upcoming Sessions",
     "matchesHosted": "Matches Hosted",
     "sessionDistribution": "Session Distribution",
+    "todayAttendances": "Today's Attendances",
     "bookingSourceBreakdown": "Booking Source Breakdown",
+    "attendance": {
+      "checkIn": "Check In",
+      "late": "Late",
+      "noShow": "No Show",
+      "totalPlayer": "Total Player"
+    },
     "legends": {
       "premium": "Premium",
       "free": "Free",

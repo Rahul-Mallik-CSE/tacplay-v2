@@ -2,9 +2,9 @@
 
 /**
  * SessionPieChart.tsx
- * Donut pie chart displaying session distribution (Ranked vs Social matches).
+ * Donut pie chart displaying today's attendances (Check In, Late, No Show).
  * Uses Recharts PieChart with inner/outer radius for donut style.
- * Shows center text overlay and legend at the bottom.
+ * Shows center text overlay and legend at the bottom with percentages.
  * Displays a blurred lock overlay with upgrade CTA when isLocked is true.
  */
 
@@ -22,79 +22,66 @@ const SessionPieChart = ({
   isLocked = false,
   onUpgradeClick,
 }: SessionPieChartProps) => {
-  const { t, i18n } = useTranslation("dashboard");
+  const { t } = useTranslation("dashboard");
 
-  /** Translate session type labels (Ranked/Social) */
+  /** Translate attendance type labels */
   const translateLabel = (name: string) => {
-    if (name === "Ranked" || name === "Ranked Match")
-      return t("sessions.filters.rankedMatch");
-    if (name === "Social" || name === "Social Match")
-      return t("sessions.filters.socialMatch");
+    if (name === "Check In") return t("home.attendance.checkIn", "Check In");
+    if (name === "Late") return t("home.attendance.late", "Late");
+    if (name === "No Show") return t("home.attendance.noShow", "No Show");
     return name;
   };
 
-  /** Translate the center value display text based on current language */
-  const getCenterValueDisplay = (val: string) => {
-    if (!val) return val;
-    const currentLang = i18n.language;
-    if (val.toLowerCase().includes("locked")) {
-      return val.replace(/locked/gi, t("common.locked") || "Locked");
-    }
-    if (val.toLowerCase().includes("total sessions")) {
-      if (currentLang === "es")
-        return val.replace(/total sessions/gi, "Total de sesiones");
-      if (currentLang === "fr")
-        return val.replace(/total sessions/gi, "Total des sessions");
-      if (currentLang === "de")
-        return val.replace(
-          /total sessions/gi,
-          "Sitzungen insgesamt",
-        );
-    } else if (val.toLowerCase().includes("sessions")) {
-      return val.replace(/sessions/gi, t("sidebar.sessions"));
-    }
-    return val;
-  };
+  /** Calculate total for percentage display */
+  const total = items.reduce((sum, item) => sum + item.value, 0);
 
   /** Map items to chart-compatible format with translated labels */
   const chartData = items.map((item) => ({
     name: translateLabel(item.label),
     value: item.value,
+    percent: total > 0 ? Math.round((item.value / total) * 100) : 0,
   }));
+
+  /** Parse center value display (e.g. "40\nCheck In") */
+  const centerParts = centerValueDisplay.split("\n");
+  const centerNumber = centerParts[0] ?? "";
+  const centerLabel = centerParts.slice(1).join("\n");
 
   /** Translate the section title */
   const translatedTitle =
-    title === "Session Distribution"
-      ? t("home.sessionDistribution")
-      : title === "Sessions"
-        ? t("sidebar.sessions")
+    title === "Today's Attendances"
+      ? t("home.todayAttendances", "Today's Attendances")
+      : title === "Session Distribution"
+        ? t("home.sessionDistribution")
         : title;
 
   return (
-    <div className="bg-card border border-white/5 rounded-xl p-5 flex-1 relative overflow-hidden flex flex-col">
-      <h3 className="text-base md:text-lg font-semibold text-secondary mb-4">
-        {translatedTitle}
-      </h3>
+    <div className="bg-card border border-white/5 rounded-xl p-5 relative overflow-hidden flex flex-col">
+      <h3 className="text-sm text-secondary mb-1">{translatedTitle}</h3>
+      <p className="text-xs text-secondary mb-4">
+        {items.reduce((s, i) => s + i.value, 0)}{" "}
+        {t("home.attendance.totalPlayer", "Total Player")}
+      </p>
 
-      <div className="relative flex-1 flex flex-col justify-between">
+      <div className="relative flex-1 flex flex-col items-center justify-center">
         {/* Chart and legend area with blur overlay when locked */}
         <div
           className={cn(
-            "flex flex-col sm:flex-row sm:items-center justify-center relative gap-4 transition-all duration-200",
+            "flex flex-col items-center gap-4 transition-all duration-200",
             isLocked &&
               "blur-[2.5px] pointer-events-none select-none opacity-75",
           )}
         >
           {/* Donut pie chart with center text */}
-          <div className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-45 lg:h-45 mx-auto sm:mx-0">
+          <div className="relative w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={chartData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={45}
-                  outerRadius={70}
+                  innerRadius={40}
+                  outerRadius={68}
                   paddingAngle={2}
                   dataKey="value"
                   startAngle={90}
@@ -104,57 +91,45 @@ const SessionPieChart = ({
                   {chartData.map((_, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={PIE_CHART_COLORS[index % PIE_CHART_COLORS.length]}
+                      fill={
+                        PIE_CHART_COLORS[index % PIE_CHART_COLORS.length]
+                      }
                     />
                   ))}
                 </Pie>
               </PieChart>
             </ResponsiveContainer>
+            {/* Center text overlay */}
             <div className="absolute inset-0 flex items-center justify-center flex-col">
-              <span className="text-[10px] sm:text-xs text-secondary text-center px-4">
-                {getCenterValueDisplay(centerValueDisplay)}
+              <span className="text-2xl font-bold text-primary">
+                {centerNumber}
               </span>
+              {centerLabel && (
+                <span className="text-[10px] sm:text-xs text-secondary text-center">
+                  {centerLabel}
+                </span>
+              )}
             </div>
           </div>
 
-          {/* Value legend next to chart */}
-          <div className="flex flex-col gap-2 sm:ml-4">
+          {/* Bottom legend bar with percentages */}
+          <div className="flex items-center justify-center gap-4 mt-2">
             {chartData.map((entry, index) => (
-              <div key={entry.name} className="flex items-center gap-2">
+              <div key={entry.name} className="flex items-center gap-1.5">
                 <span
-                  className="w-2.5 h-2.5 rounded-full"
-                  style={{ backgroundColor: PIE_CHART_COLORS[index] }}
+                  className="w-2.5 h-2.5 rounded-sm"
+                  style={{
+                    backgroundColor:
+                      PIE_CHART_COLORS[index % PIE_CHART_COLORS.length],
+                  }}
                 />
-                <span className="text-xs text-secondary whitespace-nowrap">
-                  {entry.value.toLocaleString()}
+                <span className="text-xs text-secondary">{entry.name}</span>
+                <span className="text-xs text-secondary">
+                  {entry.percent}%
                 </span>
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Bottom legend bar */}
-        <div
-          className={cn(
-            "flex items-center justify-center gap-6 mt-4 transition-all duration-200",
-            isLocked &&
-              "blur-[1.5px] pointer-events-none select-none opacity-60",
-          )}
-        >
-          {chartData.map((entry, index) => (
-            <div key={entry.name} className="flex items-center gap-1.5">
-              <span
-                className="w-2.5 h-2.5 rounded-sm"
-                style={{
-                  backgroundColor:
-                    PIE_CHART_COLORS[index % PIE_CHART_COLORS.length],
-                }}
-              />
-              <span className="text-xs text-secondary">
-                {entry.name}
-              </span>
-            </div>
-          ))}
         </div>
 
         {/* Lock overlay with upgrade CTA when plan is locked */}

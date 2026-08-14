@@ -59,37 +59,32 @@ const BookingBarChart = ({
         : title;
 
   return (
-    <div className="bg-card border border-white/5 rounded-xl p-5 flex-1 relative overflow-hidden flex flex-col justify-between">
-      {/* Header with title, value, subtitle, and legends */}
+    <div className="bg-card border border-white/5 rounded-xl p-5 relative overflow-hidden flex flex-col">
+      {/* Header with title, value, and legends */}
       <div className="flex items-start justify-between mb-1">
         <div>
-          <h3 className="text-base font-semibold text-secondary">
+          <h3 className="text-sm text-secondary">
             {translatedTitle}
           </h3>
           {!isLocked && (
-            <>
-              <h2 className="text-xl md:text-3xl font-bold text-primary mt-1">
-                {valueDisplay}
-              </h2>
-              <p className="text-xs text-secondary mt-0.5">
-                {subtitle}&nbsp;&nbsp;&nbsp;{totalsDisplay}
-              </p>
-            </>
+            <h2 className="text-xl md:text-3xl font-bold text-primary mt-1">
+              {valueDisplay}
+            </h2>
           )}
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-custom-red" />
-            <span className="text-xs text-secondary">{legendA}</span>
+            <span className="w-2.5 h-2.5 rounded-sm bg-custom-red" />
+            <span className="text-xs text-primary">{legendA}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-custom-yellow" />
-            <span className="text-xs text-secondary">{legendB}</span>
+            <span className="w-2.5 h-2.5 rounded-sm bg-custom-yellow" />
+            <span className="text-xs text-primary">{legendB}</span>
           </div>
         </div>
       </div>
 
-      <div className="relative mt-4 flex-1 flex flex-col justify-end">
+      <div className="relative mt-4 flex-1 flex flex-col justify-end min-h-[200px]">
         {/* Bar chart with blur overlay when locked */}
         <div
           className={cn(
