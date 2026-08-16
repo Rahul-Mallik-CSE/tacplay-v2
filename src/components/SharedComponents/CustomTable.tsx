@@ -30,6 +30,9 @@ interface CustomTableProps<T> {
     className?: string;
   }[];
   onAction?: (row: T) => void;
+  actionRenderer?: (row: T) => React.ReactNode;
+  onRowClick?: (row: T) => void;
+  rowClassName?: string | ((row: T) => string);
   itemsPerPage?: number;
   serverPagination?: boolean;
   currentPage?: number;
@@ -38,12 +41,16 @@ interface CustomTableProps<T> {
   onItemsPerPageChange?: (itemsPerPage: number) => void;
   title?: string;
   additionalCount?: number;
+  minTableWidth?: string;
 }
 
 const CustomTable = <T extends Record<string, unknown>>({
   data,
   columns,
   onAction,
+  actionRenderer,
+  onRowClick,
+  rowClassName,
   itemsPerPage = 10,
   serverPagination = false,
   currentPage: controlledCurrentPage,
@@ -51,6 +58,7 @@ const CustomTable = <T extends Record<string, unknown>>({
   onPageChange,
   onItemsPerPageChange,
   additionalCount,
+  minTableWidth,
 }: CustomTableProps<T>) => {
   const { t } = useTranslation("dashboard");
   const [internalPage, setInternalPage] = useState(1);
@@ -166,12 +174,39 @@ const CustomTable = <T extends Record<string, unknown>>({
     return pages;
   };
 
+  const resolveRowClassName = (row: T): string => {
+    if (!rowClassName) return "";
+    return typeof rowClassName === "function" ? rowClassName(row) : rowClassName;
+  };
+
+  const renderAction = (row: T) => {
+    if (actionRenderer) {
+      return actionRenderer(row);
+    }
+
+    if (onAction) {
+      return (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onAction(row);
+          }}
+          className="cursor-pointer p-1.5 sm:p-2 hover:bg-white/5 rounded-full transition-colors inline-flex items-center justify-center"
+        >
+          <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-custom-yellow" />
+        </button>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div className="w-full space-y-3 sm:space-y-4 overflow-x-auto">
       {/* Table Container */}
       <div className="rounded-xl overflow-hidden border border-white/5">
         <div className="overflow-x-auto">
-          <Table className="border-none min-w-full">
+          <Table className={cn("border-none min-w-full", minTableWidth)}>
             <TableHeader>
               <TableRow className="bg-muted/50 hover:bg-muted/50 border-b border-white/5">
                 {columns.map((column, index) => (
@@ -185,7 +220,7 @@ const CustomTable = <T extends Record<string, unknown>>({
                     {column.header}
                   </TableHead>
                 ))}
-                {onAction && (
+                {(onAction || actionRenderer) && (
                   <TableHead className="font-medium text-secondary text-xs sm:text-sm text-right py-3 sm:py-4 whitespace-nowrap">
                     {t("common.action")}
                   </TableHead>
@@ -193,34 +228,37 @@ const CustomTable = <T extends Record<string, unknown>>({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentData.map((row, rowIndex) => (
-                <TableRow
-                  key={rowIndex}
-                  className="border-b border-white/5 hover:bg-muted/30 transition-colors"
-                >
-                  {columns.map((column, colIndex) => (
-                    <TableCell
-                      key={colIndex}
-                      className={cn(
-                        "text-primary/80 py-3 sm:py-4 text-xs sm:text-sm whitespace-nowrap",
-                        column.className,
-                      )}
-                    >
-                      {renderCell(row, column)}
-                    </TableCell>
-                  ))}
-                  {onAction && (
-                    <TableCell className="text-right py-3 sm:py-4">
-                      <button
-                        onClick={() => onAction(row)}
-                        className="cursor-pointer p-1.5 sm:p-2 hover:bg-white/5 rounded-full transition-colors inline-flex items-center justify-center"
+              {currentData.map((row, rowIndex) => {
+                const resolvedClassName = resolveRowClassName(row);
+                return (
+                  <TableRow
+                    key={rowIndex}
+                    className={cn(
+                      "border-b border-white/5 hover:bg-muted/30 transition-colors",
+                      onRowClick && "cursor-pointer",
+                      resolvedClassName,
+                    )}
+                    onClick={onRowClick ? () => onRowClick(row) : undefined}
+                  >
+                    {columns.map((column, colIndex) => (
+                      <TableCell
+                        key={colIndex}
+                        className={cn(
+                          "text-primary/80 py-3 sm:py-4 text-xs sm:text-sm whitespace-nowrap",
+                          column.className,
+                        )}
                       >
-                        <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-custom-yellow" />
-                      </button>
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))}
+                        {renderCell(row, column)}
+                      </TableCell>
+                    ))}
+                    {(onAction || actionRenderer) && (
+                      <TableCell className="text-right py-3 sm:py-4">
+                        {renderAction(row)}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>
