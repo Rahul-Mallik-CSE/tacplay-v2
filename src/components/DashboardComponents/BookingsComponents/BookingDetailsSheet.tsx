@@ -47,16 +47,19 @@ function BookingDetailsSheet({
           showCloseButton={false}
           className="w-full sm:max-w-lg bg-card border-l border-white/10 overflow-y-auto p-0"
         >
-          {/* Header with back button and status */}
+          {/* Header with back button, title and status */}
           <SheetHeader className="p-5 pb-0">
-            <div className="flex items-center justify-between">
-              <button
+            <button
                 onClick={() => onOpenChange(false)}
                 className="cursor-pointer p-1 hover:bg-white/5 rounded-lg transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-primary" />
               </button>
-              <SheetTitle>{t("bookings.details.title")}</SheetTitle>
+            <div className="flex items-center justify-between">
+              
+              <SheetTitle className="text-xl">
+                {t("bookings.details.title")}
+              </SheetTitle>
               <BookingStatusBadge
                 status={details?.booking.status ?? "pending"}
               />
@@ -77,24 +80,20 @@ function BookingDetailsSheet({
                   </h3>
                   <div>
                     <BookingInfoRow
-                      label="Player ID"
+                      label={t("bookings.details.playerId")}
                       value={details.player.display_player_id}
                     />
                     <BookingInfoRow
-                      label="Player Name"
+                      label={t("bookings.details.playerName")}
                       value={details.player.full_name}
                     />
                     <BookingInfoRow
-                      label="Email"
+                      label={t("bookings.details.email")}
                       value={details.player.email}
                     />
                     <BookingInfoRow
-                      label="Contact Number"
+                      label={t("bookings.details.contactNumber")}
                       value={details.player.contact_number ?? "-"}
-                    />
-                    <BookingInfoRow
-                      label="Location"
-                      value={details.player.location}
                     />
                   </div>
                 </div>
@@ -106,19 +105,19 @@ function BookingDetailsSheet({
                   </h3>
                   <div>
                     <BookingInfoRow
-                      label="Session ID"
-                      value={`#CH ${details.session.id}`}
-                    />
-                    <BookingInfoRow
-                      label="Session Name"
+                      label={t("bookings.details.sessionId")}
                       value={details.session.session_name}
                     />
                     <BookingInfoRow
-                      label="Arena Name"
+                      label={t("bookings.details.arenaName")}
                       value={details.session.field_name}
                     />
                     <BookingInfoRow
-                      label="Match Type"
+                      label={t("bookings.details.package")}
+                      value={details.session.package_name}
+                    />
+                    <BookingInfoRow
+                      label={t("bookings.details.matchType")}
                       value={
                         <BookingMatchTypeDot
                           type={details.session.match_type}
@@ -126,11 +125,11 @@ function BookingDetailsSheet({
                       }
                     />
                     <BookingInfoRow
-                      label="Session Date"
+                      label={t("bookings.details.sessionDate")}
                       value={details.session.match_date}
                     />
                     <BookingInfoRow
-                      label="Time"
+                      label={t("bookings.details.time")}
                       value={`${details.session.start_time} to ${details.session.end_time}`}
                     />
                   </div>
@@ -143,27 +142,35 @@ function BookingDetailsSheet({
                   </h3>
                   <div>
                     <BookingInfoRow
-                      label="Booking ID"
+                      label={t("bookings.details.bookingId")}
                       value={details.booking.display_booking_id}
                     />
                     <BookingInfoRow
-                      label="Transaction Ref"
-                      value={details.booking.payment_reference}
+                      label={t("bookings.details.transactionId")}
+                      value={details.booking.transaction_id}
                     />
                     <BookingInfoRow
-                      label="Amount"
+                      label={t("bookings.details.amount")}
                       value={details.payment.total_amount_display}
                     />
                     <BookingInfoRow
-                      label="Platform Fee"
+                      label={t("bookings.details.platformFee")}
                       value={details.payment.commission_amount}
                     />
                     <BookingInfoRow
-                      label="Payment Method"
+                      label={t("bookings.details.netProfit")}
+                      value={details.payment.net_profit}
+                    />
+                    <BookingInfoRow
+                      label={t("bookings.details.paymentMethod")}
                       value={details.payment.payment_method}
                     />
                     <BookingInfoRow
-                      label="Payment Status"
+                      label={t("bookings.details.dateTime")}
+                      value={details.booking.date_time}
+                    />
+                    <BookingInfoRow
+                      label={t("bookings.details.paymentStatus")}
                       value={
                         <BookingStatusBadge
                           status={details.booking.payment_status}

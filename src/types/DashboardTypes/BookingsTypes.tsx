@@ -48,6 +48,8 @@ export type BookingListItem = {
   player_count: number
   amount: string
   amount_display: string
+  package_name: string
+  check_in_status: string
   payment_status: string
   status: string
   can_view: boolean
@@ -74,6 +76,7 @@ export type BookingDetailsResponse = {
       status: string
       payment_status: string
       payment_reference: string
+      transaction_id: string
       booking_flow: string
       team: string
       team_display: string
@@ -81,6 +84,7 @@ export type BookingDetailsResponse = {
       created_at: string
       paid_at: string
       confirmed_at: string
+      date_time: string
     }
     player: {
       id: number
@@ -96,6 +100,7 @@ export type BookingDetailsResponse = {
       session_name: string
       field_name: string
       match_type: string
+      package_name: string
       session_visibility: string
       match_date: string
       start_time: string
@@ -110,6 +115,7 @@ export type BookingDetailsResponse = {
       package_fee: string
       commission_rate: string
       commission_amount: string
+      net_profit: string
       total_amount: string
       total_amount_display: string
       currency: string
@@ -173,4 +179,11 @@ export interface BookingDetailsConfirmDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   onConfirm: () => void
+}
+
+/** Props for BookingCancelDialog component */
+export interface BookingCancelDialogProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onConfirm: (reason: string) => void
 }

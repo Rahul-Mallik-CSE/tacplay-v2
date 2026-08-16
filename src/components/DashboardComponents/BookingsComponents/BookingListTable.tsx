@@ -9,11 +9,20 @@
 
 import React, { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { BsThreeDotsVertical } from "react-icons/bs"
+import { FaRegEye, FaTrashAlt } from "react-icons/fa"
 import BookingSearchBar from "./BookingSearchBar"
 import BookingStatusBadge from "./BookingStatusBadge"
 import BookingMatchTypeDot from "./BookingMatchTypeDot"
 import BookingListLoading from "./BookingListLoading"
 import BookingDetailsSheet from "./BookingDetailsSheet"
+import BookingCancelDialog from "./BookingCancelDialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { mockBookingListData } from "../../../mock-data/DashboardMockData/booking-list-mock-data"
 import type { BookingListItem } from "@/types/DashboardTypes/BookingsTypes"
 
@@ -23,12 +32,14 @@ const PAGE_SIZE_OPTIONS = [10, 25, 50] as const
 function BookingListTable() {
   const { t } = useTranslation("dashboard")
 
-  // Local state for search, pagination, and sheet
+  // Local state for search, pagination, sheet, and cancel dialog
   const [search, setSearch] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null)
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false)
+  const [cancelBookingId, setCancelBookingId] = useState<number | null>(null)
 
   // Filter and paginate mock data
   const filteredData = useMemo(() => {
@@ -40,8 +51,8 @@ function BookingListTable() {
         item.player_name,
         item.match_date,
         item.match_type,
-        item.payment_status,
-        item.team_display,
+        item.package_name,
+        item.amount_display,
         item.status,
       ]
         .filter(Boolean)
@@ -64,6 +75,24 @@ function BookingListTable() {
   const handleRowClick = (booking: BookingListItem) => {
     setSelectedBookingId(booking.booking_id)
     setSheetOpen(true)
+  }
+
+  // Handle view details from dropdown
+  const handleViewDetails = (booking: BookingListItem) => {
+    setSelectedBookingId(booking.booking_id)
+    setSheetOpen(true)
+  }
+
+  // Handle cancel booking from dropdown
+  const handleCancelClick = (booking: BookingListItem) => {
+    setCancelBookingId(booking.booking_id)
+    setCancelDialogOpen(true)
+  }
+
+  // Handle cancel confirm
+  const handleCancelConfirm = (reason: string) => {
+    setCancelDialogOpen(false)
+    setCancelBookingId(null)
   }
 
   // Handle page change
@@ -105,24 +134,26 @@ function BookingListTable() {
 
   return (
     <div className="space-y-5">
-      {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold text-primary">
-          {t("bookings.title")}
-        </h1>
-        <p className="text-sm text-secondary mt-1">{t("bookings.subtitle")}</p>
-      </div>
-
-      {/* Search bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <BookingSearchBar value={search} onChange={handleSearchChange} />
+        {/* Page header */}
+        <div>
+          <h1 className="text-2xl font-bold text-primary">
+            {t("bookings.title")}
+          </h1>
+          <p className="text-sm text-secondary mt-1">{t("bookings.subtitle")}</p>
+        </div>
+
+        {/* Search bar */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <BookingSearchBar value={search} onChange={handleSearchChange} />
+        </div>
       </div>
 
       {/* Table */}
       <div className="w-full space-y-3 sm:space-y-4 overflow-x-auto">
         <div className="rounded-xl overflow-hidden border border-white/5">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm min-w-[800px]">
+            <table className="w-full text-sm min-w-[900px]">
               <thead>
                 <tr className="bg-muted/50 hover:bg-muted/50 border-b border-white/5">
                   <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
@@ -135,13 +166,16 @@ function BookingListTable() {
                     {t("bookings.columns.sessionDate")}
                   </th>
                   <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
+                    {t("bookings.columns.package")}
+                  </th>
+                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
                     {t("bookings.columns.matchType")}
                   </th>
                   <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
-                    {t("bookings.columns.paymentStatus")}
+                    {t("bookings.columns.amount")}
                   </th>
                   <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
-                    {t("bookings.columns.team")}
+                    {t("bookings.columns.checkInStatus")}
                   </th>
                   <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
                     {t("bookings.columns.status")}
@@ -171,45 +205,56 @@ function BookingListTable() {
                       {row.match_date}
                     </td>
                     <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
+                      {row.package_name}
+                    </td>
+                    <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
                       <BookingMatchTypeDot type={row.match_type} />
                     </td>
                     <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
-                      <BookingStatusBadge status={row.payment_status} size="sm" />
+                      {row.amount_display}
                     </td>
                     <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
-                      {row.team_display}
+                      <BookingStatusBadge status={row.check_in_status} size="sm" />
                     </td>
                     <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
                       <BookingStatusBadge status={row.status} size="sm" />
                     </td>
                     <td className="text-right py-3 sm:py-4 px-4">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleRowClick(row)
-                        }}
-                        className="cursor-pointer p-1.5 sm:p-2 hover:bg-white/5 rounded-full transition-colors inline-flex items-center justify-center"
-                      >
-                        <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 text-custom-yellow"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            onClick={(e) => e.stopPropagation()}
+                            className="cursor-pointer p-1.5 sm:p-2 hover:bg-white/5 rounded-full transition-colors inline-flex items-center justify-center"
+                          >
+                            <BsThreeDotsVertical className="w-4 h-4 sm:w-5 sm:h-5 text-primary/60" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          align="end"
+                          className="bg-card border border-white/10 w-40"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                          />
-                        </svg>
-                      </button>
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleCancelClick(row)
+                            }}
+                            className="cursor-pointer text-primary gap-2 focus:bg-white/5"
+                          >
+                            <FaTrashAlt className="w-3.5 h-3.5" />
+                            {t("bookings.actions.cancel")}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleViewDetails(row)
+                            }}
+                            className="cursor-pointer text-primary gap-2 focus:bg-white/5"
+                          >
+                            <FaRegEye className="w-3.5 h-3.5" />
+                            {t("bookings.actions.viewDetails")}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </td>
                   </tr>
                 ))}
@@ -305,6 +350,13 @@ function BookingListTable() {
         open={sheetOpen}
         onOpenChange={setSheetOpen}
         bookingId={selectedBookingId}
+      />
+
+      {/* Cancel dialog */}
+      <BookingCancelDialog
+        open={cancelDialogOpen}
+        onOpenChange={setCancelDialogOpen}
+        onConfirm={handleCancelConfirm}
       />
     </div>
   )
