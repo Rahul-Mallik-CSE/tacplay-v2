@@ -40,6 +40,43 @@ export function useDashboardNavItems(): NavItemConfig[] {
       href: "/dashboard/field-profile",
       icon: GrUserManager,
       label: t("sidebar.fieldProfile"),
+      children: [
+        {
+          href: "/dashboard/field-profile/field-details",
+          icon: GrUserManager,
+          label: t("arena.tabs.fieldDetails"),
+        },
+        {
+          href: "/dashboard/field-profile/field-setup",
+          icon: GrUserManager,
+          label: t("arena.tabs.fieldSetup"),
+        },
+        {
+          href: "/dashboard/field-profile/package-management",
+          icon: GrUserManager,
+          label: t("arena.tabs.packageManagement"),
+        },
+        {
+          href: "/dashboard/field-profile/opening-hours",
+          icon: GrUserManager,
+          label: t("arena.tabs.openingHours"),
+        },
+        {
+          href: "/dashboard/field-profile/payout-details",
+          icon: GrUserManager,
+          label: t("arena.tabs.payoutDetails"),
+        },
+        {
+          href: "/dashboard/field-profile/ai-pricing",
+          icon: GrUserManager,
+          label: t("arena.tabs.aiPricing"),
+        },
+        {
+          href: "/dashboard/field-profile/billings",
+          icon: GrUserManager,
+          label: t("arena.tabs.billings"),
+        },
+      ],
     },
     {
       href: "/dashboard/settings",

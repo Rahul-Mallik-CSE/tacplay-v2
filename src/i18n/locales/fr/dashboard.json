@@ -381,9 +381,12 @@
     "pro": "Pro",
     "tabs": {
       "arenaInfo": "Infos arene",
+      "fieldDetails": "Details du terrain",
       "fieldSetup": "Configuration du terrain",
       "packageManagement": "Gestion des forfaits",
+      "openingHours": "Heures d'ouverture",
       "payoutDetails": "Details de paiement",
+      "aiPricing": "Tarification IA",
       "billings": "Facturation"
     },
     "cancelEdit": "Annuler la modification",

@@ -381,9 +381,12 @@
     "pro": "Pro",
     "tabs": {
       "arenaInfo": "Arena-Info",
+      "fieldDetails": "Felddetails",
       "fieldSetup": "Feld-Setup",
       "packageManagement": "Paketverwaltung",
+      "openingHours": "Öffnungszeiten",
       "payoutDetails": "Auszahlungsdetails",
+      "aiPricing": "KI-Preisgestaltung",
       "billings": "Abrechnungen"
     },
     "cancelEdit": "Bearbeiten abbrechen",

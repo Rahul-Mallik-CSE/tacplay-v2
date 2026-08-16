@@ -103,6 +103,8 @@ export default function AppSidebar({
                 href={item.href}
                 icon={item.icon}
                 label={item.label}
+                exact={item.exact}
+                children={item.children}
                 active={
                   item.exact
                     ? pathname === item.href

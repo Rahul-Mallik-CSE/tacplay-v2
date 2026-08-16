@@ -382,9 +382,12 @@
     "pro": "Pro",
     "tabs": {
       "arenaInfo": "Arena Info",
+      "fieldDetails": "Field Details",
       "fieldSetup": "Field Setup",
       "packageManagement": "Package Management",
+      "openingHours": "Opening Hours",
       "payoutDetails": "Payout Details",
+      "aiPricing": "AI Pricing",
       "billings": "Billings"
     },
     "cancelEdit": "Cancel Edit",

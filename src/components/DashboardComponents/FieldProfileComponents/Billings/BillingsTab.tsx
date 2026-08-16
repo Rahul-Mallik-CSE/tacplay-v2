@@ -9,7 +9,7 @@
 import { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import type { BillingHistoryItem, BillingsTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
-import { mockBillingHistory } from "../../../mock-data/DashboardMockData/arena-management-mock-data"
+import { mockBillingHistory } from "../../../../mock-data/DashboardMockData/arena-management-mock-data"
 import BillingsHeader from "./BillingsHeader"
 import BillingsTable from "./BillingsTable"
 

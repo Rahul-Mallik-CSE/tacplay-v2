@@ -12,9 +12,10 @@ import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import type { PackageManagementData, PackageForm, PackageManagementTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
-import { mockPackageManagement } from "../../../mock-data/DashboardMockData/arena-management-mock-data"
-import EditSaveHeader from "./EditSaveHeader"
+import { mockPackageManagement } from "../../../../mock-data/DashboardMockData/arena-management-mock-data"
+import EditSaveHeader from "../EditSaveHeader"
 import PackageCard from "./PackageCard"
+
 
 const EMPTY_PACKAGE: PackageForm = {
   package_name: "",

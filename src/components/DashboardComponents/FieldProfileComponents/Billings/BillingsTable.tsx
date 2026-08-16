@@ -9,7 +9,7 @@
 import { useTranslation } from "react-i18next"
 import { getPlanDisplayName } from "@/lib/utils"
 import type { BillingHistoryItem, BillingsTableProps } from "@/types/DashboardTypes/ArenaManagementTypes"
-import StatusBadge from "./StatusBadge"
+import StatusBadge from "../StatusBadge"
 
 export default function BillingsTable({ data }: BillingsTableProps) {
   const { t } = useTranslation("dashboard")
