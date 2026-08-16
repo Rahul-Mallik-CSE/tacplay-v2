@@ -9,7 +9,7 @@
 import React from "react"
 import { Search } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import type { BookingSearchBarProps } from "@/types/DashboardTypes/BookingListTypes"
+import type { BookingSearchBarProps } from "@/types/DashboardTypes/BookingsTypes"
 
 function BookingSearchBar({ value, onChange }: BookingSearchBarProps) {
   const { t } = useTranslation("dashboard")

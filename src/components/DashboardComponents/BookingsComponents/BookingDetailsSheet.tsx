@@ -24,7 +24,7 @@ import BookingStatusBadge from "./BookingStatusBadge"
 import BookingMatchTypeDot from "./BookingMatchTypeDot"
 import BookingDetailsConfirmDialog from "./BookingDetailsConfirmDialog"
 import { mockBookingDetails } from "../../../mock-data/DashboardMockData/booking-list-mock-data"
-import type { BookingDetailsSheetProps } from "@/types/DashboardTypes/BookingListTypes"
+import type { BookingDetailsSheetProps } from "@/types/DashboardTypes/BookingsTypes"
 
 function BookingDetailsSheet({
   open,

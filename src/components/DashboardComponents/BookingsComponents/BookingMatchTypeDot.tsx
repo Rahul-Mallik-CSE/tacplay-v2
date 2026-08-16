@@ -7,7 +7,7 @@
  */
 
 import React from "react"
-import type { BookingMatchTypeDotProps } from "@/types/DashboardTypes/BookingListTypes"
+import type { BookingMatchTypeDotProps } from "@/types/DashboardTypes/BookingsTypes"
 
 function BookingMatchTypeDot({ type }: BookingMatchTypeDotProps) {
   const isRanked = type.toLowerCase() === "ranked"

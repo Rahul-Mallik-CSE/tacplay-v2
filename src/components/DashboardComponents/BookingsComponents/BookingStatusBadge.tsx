@@ -7,7 +7,7 @@
  */
 
 import React from "react"
-import type { BookingStatusBadgeProps } from "@/types/DashboardTypes/BookingListTypes"
+import type { BookingStatusBadgeProps } from "@/types/DashboardTypes/BookingsTypes"
 
 /** Color mapping for different status values */
 const STATUS_COLORS: Record<string, string> = {

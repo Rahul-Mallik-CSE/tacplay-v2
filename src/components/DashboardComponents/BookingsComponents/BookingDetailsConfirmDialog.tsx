@@ -17,7 +17,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { useTranslation } from "react-i18next"
-import type { BookingDetailsConfirmDialogProps } from "@/types/DashboardTypes/BookingListTypes"
+import type { BookingDetailsConfirmDialogProps } from "@/types/DashboardTypes/BookingsTypes"
 
 function BookingDetailsConfirmDialog({
   open,

@@ -15,7 +15,7 @@ import BookingMatchTypeDot from "./BookingMatchTypeDot"
 import BookingListLoading from "./BookingListLoading"
 import BookingDetailsSheet from "./BookingDetailsSheet"
 import { mockBookingListData } from "../../../mock-data/DashboardMockData/booking-list-mock-data"
-import type { BookingListItem } from "@/types/DashboardTypes/BookingListTypes"
+import type { BookingListItem } from "@/types/DashboardTypes/BookingsTypes"
 
 /** Items per page options */
 const PAGE_SIZE_OPTIONS = [10, 25, 50] as const

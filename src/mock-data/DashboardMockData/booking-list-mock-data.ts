@@ -8,7 +8,7 @@
 import type {
   BookingListItem,
   BookingDetailsResponse,
-} from "@/types/DashboardTypes/BookingListTypes"
+} from "@/types/DashboardTypes/BookingsTypes"
 
 /** Mock booking list data for the table */
 export const mockBookingListData: BookingListItem[] = [

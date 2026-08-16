@@ -21,15 +21,16 @@ export function useDashboardNavItems(): NavItemConfig[] {
       exact: true,
     },
     {
+      href: "/dashboard/bookings",
+      icon: IoDocumentTextOutline,
+      label: t("sidebar.bookings"),
+    },
+    {
       href: "/dashboard/sessions",
       icon: CiTrophy,
       label: t("sidebar.sessions"),
     },
-    {
-      href: "/dashboard/booking-list",
-      icon: IoDocumentTextOutline,
-      label: t("sidebar.bookingList"),
-    },
+    
     {
       href: "/dashboard/earnings",
       icon: BiMoneyWithdraw,

@@ -1,9 +1,9 @@
 /** @format */
 
 import React from "react";
-import BookingListTable from "@/components/DashboardComponents/BookingListComponents/BookingListTable";
+import BookingListTable from "@/components/DashboardComponents/BookingsComponents/BookingListTable";
 
-const BookingListPage = () => {
+const BookingsPage = () => {
   return (
     <div className="w-full p-3 md:p-4">
       <div className="max-w-625 mx-auto space-y-4 md:space-y-6">
@@ -13,4 +13,4 @@ const BookingListPage = () => {
   );
 };
 
-export default BookingListPage;
+export default BookingsPage;

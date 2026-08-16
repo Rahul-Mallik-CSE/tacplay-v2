@@ -7,7 +7,7 @@
  */
 
 import React from "react"
-import type { BookingInfoRowProps } from "@/types/DashboardTypes/BookingListTypes"
+import type { BookingInfoRowProps } from "@/types/DashboardTypes/BookingsTypes"
 
 function BookingInfoRow({ label, value }: BookingInfoRowProps) {
   return (
