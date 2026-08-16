@@ -61,8 +61,8 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
     if (pathname.startsWith("/sessions")) return t("sidebar.sessions");
     if (pathname.startsWith("/booking-list")) return t("sidebar.bookingList");
     if (pathname.startsWith("/earnings")) return t("sidebar.earnings");
-    if (pathname.startsWith("/arena-management"))
-      return t("sidebar.arenaManagement");
+    if (pathname.startsWith("/field-profile"))
+      return t("sidebar.fieldProfile");
     if (pathname.startsWith("/settings")) return t("common.settings");
 
     return t("common.dashboard");

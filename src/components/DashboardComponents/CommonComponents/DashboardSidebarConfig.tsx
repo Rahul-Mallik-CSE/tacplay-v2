@@ -37,9 +37,9 @@ export function useDashboardNavItems(): NavItemConfig[] {
       label: t("sidebar.earnings"),
     },
     {
-      href: "/dashboard/arena-management",
+      href: "/dashboard/field-profile",
       icon: GrUserManager,
-      label: t("sidebar.arenaManagement"),
+      label: t("sidebar.fieldProfile"),
     },
     {
       href: "/dashboard/settings",
