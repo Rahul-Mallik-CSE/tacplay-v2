@@ -178,7 +178,7 @@ export default function ProfileSetupWizard({
             type="button"
             onClick={handlePrevious}
             disabled={currentStep === 0}
-            className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
               currentStep === 0
                 ? "opacity-0 pointer-events-none"
                 : "border border-white/10 bg-input/30 text-primary hover:bg-input/50"
@@ -191,7 +191,7 @@ export default function ProfileSetupWizard({
             type="button"
             onClick={handleNext}
             disabled={isSubmitting}
-            className="px-6 py-2.5 rounded-lg bg-custom-red text-white text-sm font-semibold hover:bg-custom-red/90 transition-colors border-2 border-border disabled:opacity-60 disabled:pointer-events-none"
+            className="px-6 py-2.5 rounded-lg bg-custom-red text-white text-sm font-semibold hover:bg-custom-red/90 transition-colors border-2 border-border disabled:opacity-60 disabled:pointer-events-none cursor-pointer"
           >
             {isSubmitting
               ? t("onboarding.pleaseWait")

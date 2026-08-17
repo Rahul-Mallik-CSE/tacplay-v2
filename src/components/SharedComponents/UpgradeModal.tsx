@@ -184,7 +184,7 @@ export default function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
                     {/* Button */}
                     <button
                       className={cn(
-                        "w-full py-2.5 rounded-xl text-sm font-semibold transition-all mb-5",
+                        "w-full py-2.5 rounded-xl text-sm font-semibold transition-all mb-5 cursor-pointer",
                         plan.is_current
                           ? "bg-transparent border border-emerald-500/30 text-emerald-400 cursor-default"
                           : plan.code.includes("silver")

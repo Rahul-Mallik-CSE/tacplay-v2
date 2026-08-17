@@ -57,7 +57,7 @@ export default function SelectSessionModal({ isOpen, onClose, onSelect }: Select
           <h3 className="text-lg font-bold text-primary">
             {t("arena.aiPricingTab.selectSessions")}
           </h3>
-          <button onClick={onClose} className="p-1 hover:bg-white/10 rounded-md transition-colors">
+          <button onClick={onClose} className="p-1 hover:bg-white/10 rounded-md transition-colors cursor-pointer">
             <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>

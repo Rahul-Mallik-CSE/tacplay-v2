@@ -80,7 +80,7 @@ export default function TopPackagesTable({ packages }: TopPackagesTableProps) {
         <h2 className="text-xl sm:text-2xl font-bold text-primary">
           {t("analytics.topPerformingPackages")}
         </h2>
-        <button className="text-sm text-custom-red hover:underline font-medium">
+        <button className="text-sm text-custom-red hover:underline font-medium cursor-pointer">
           {t("analytics.viewAllPackages")}
         </button>
       </div>

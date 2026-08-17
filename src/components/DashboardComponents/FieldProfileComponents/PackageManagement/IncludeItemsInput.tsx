@@ -72,7 +72,7 @@ export default function IncludeItemsInput({
                 <button
                   type="button"
                   onClick={() => onRemove(item)}
-                  className="flex items-center justify-center hover:text-destructive transition-colors"
+                  className="flex items-center justify-center hover:text-destructive transition-colors cursor-pointer"
                   aria-label={`Remove ${item}`}
                 >
                   <X className="w-3 h-3" />

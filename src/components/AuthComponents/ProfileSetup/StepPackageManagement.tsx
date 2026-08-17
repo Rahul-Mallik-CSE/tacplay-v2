@@ -40,7 +40,7 @@ const StepPackageManagement = ({
         <button
           type="button"
           onClick={onAddPackage}
-          className="px-4 py-2 rounded-lg border border-white/10 bg-input/30 text-sm text-primary hover:bg-input/50 transition-colors"
+          className="px-4 py-2 rounded-lg border border-white/10 bg-input/30 text-sm text-primary hover:bg-input/50 transition-colors cursor-pointer"
         >
           {t("onboardingFields.packages.addButton")}
         </button>

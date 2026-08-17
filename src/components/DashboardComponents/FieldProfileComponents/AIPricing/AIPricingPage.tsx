@@ -121,7 +121,7 @@ export default function AIPricingPage() {
           </label>
           <button
             onClick={() => setIsSessionModalOpen(true)}
-            className="w-full flex items-center justify-between p-3 bg-input/30 border border-white/10 rounded-lg text-left hover:bg-input/50 transition-colors"
+            className="w-full flex items-center justify-between p-3 bg-input/30 border border-white/10 rounded-lg text-left hover:bg-input/50 transition-colors cursor-pointer"
           >
             <span className={`text-sm ${settings.selectedSession ? "text-primary" : "text-muted-foreground"}`}>
               {settings.selectedSession || t("arena.aiPricingTab.registeredCompany")}

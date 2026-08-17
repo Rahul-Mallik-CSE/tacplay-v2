@@ -59,7 +59,7 @@ export default function BannerSlides({ onSlideChange }: BannerSlidesProps) {
               setCurrentSlide(index);
               onSlideChange?.(index);
             }}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
+            className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
               index === currentSlide ? "w-8 bg-white" : "w-4 bg-white/40"
             }`}
           />

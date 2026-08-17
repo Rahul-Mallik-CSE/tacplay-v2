@@ -59,7 +59,7 @@ export default function VerifyOtpForm({
       <button
         onClick={handleVerify}
         disabled={isVerifying}
-        className="w-full py-3 rounded-lg bg-custom-red text-white text-sm font-semibold hover:bg-custom-red/90 transition-colors border-2 border-border mt-2"
+        className="w-full cursor-pointer py-3 rounded-lg bg-custom-red text-white text-sm font-semibold hover:bg-custom-red/90 transition-colors border-2 border-border mt-2"
       >
         {isVerifying ? t("auth.verifying") : t("auth.sendCode")}
       </button>

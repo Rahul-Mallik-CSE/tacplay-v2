@@ -104,7 +104,7 @@ export default function SignUpForm({ onSubmit, isLoading = false }: SignUpFormPr
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
               >
                 {showConfirmPassword ? (
                   <Eye className="w-4 h-4" />
@@ -131,7 +131,7 @@ export default function SignUpForm({ onSubmit, isLoading = false }: SignUpFormPr
           <button
             onClick={handleSubmit}
             disabled={isLoading}
-            className="w-full py-3 rounded-lg bg-custom-red text-white text-sm font-semibold hover:bg-custom-red/90 transition-colors border-2 border-border"
+            className="w-full cursor-pointer py-3 rounded-lg bg-custom-red text-white text-sm font-semibold hover:bg-custom-red/90 transition-colors border-2 border-border"
           >
             {isLoading ? t("auth.signingUp") : t("auth.signUp")}
           </button>
