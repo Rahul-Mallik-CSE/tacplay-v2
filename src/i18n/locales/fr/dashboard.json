@@ -34,6 +34,7 @@
     "bookingList": "Liste des reservations",
     "bookings": "Reservations",
     "earnings": "Revenus",
+    "analytics": "Analyses",
     "fieldProfile": "Profil du terrain",
     "upgradeToPremium": "Passer en Premium",
     "currentPlan": "Forfait actuel : {{plan}}",
@@ -696,5 +697,37 @@
         "Bientôt disponible et mise en avant"
       ]
     }
+  },
+  "analytics": {
+    "title": "Rapport d'analyse",
+    "subtitle": "Support analytique de 2025 a 2026",
+    "exportReport": "Exporter le rapport",
+    "totalRevenue": "Revenus totaux",
+    "totalBooking": "Total des reservations",
+    "totalPlayer": "Joueurs totaux",
+    "checkinRate": "Taux de check-in",
+    "avgRevenue": "Revenu moyen",
+    "allTime": "Tout le temps",
+    "vsLastMonth": "vs mois dernier",
+    "revenueOverTime": "Revenus au fil du temps",
+    "bookingVsCheckins": "Reservations vs Check-ins",
+    "revenueSource": "Source de revenus",
+    "bookings": "Reservations",
+    "checkins": "Check-ins",
+    "month": "Mois",
+    "day": "Jour",
+    "week": "Semaine",
+    "topPerformingPackages": "Meilleurs forfaits",
+    "viewAllPackages": "Voir tous les forfaits",
+    "package": "Forfait",
+    "booking": "Reservations",
+    "revenue": "Revenus",
+    "player": "Joueurs",
+    "conversionRate": "Taux de conversion",
+    "checkIn": "Check In",
+    "walkin": "Walk-in",
+    "onlineBooking": "Reservation en ligne",
+    "packageLabel": "Forfait",
+    "other": "Autre"
   }
 }

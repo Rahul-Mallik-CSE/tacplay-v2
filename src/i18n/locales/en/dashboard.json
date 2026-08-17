@@ -35,6 +35,7 @@
     "bookingList": "Booking List",
     "bookings": "Bookings",
     "earnings": "Earnings",
+    "analytics": "Analytics",
     "fieldProfile": "Field Profile",
     "upgradeToPremium": "Upgrade to Premium",
     "currentPlan": "Current plan: {{plan}}",
@@ -697,5 +698,37 @@
         "Coming Soon & blend Out"
       ]
     }
+  },
+  "analytics": {
+    "title": "Analytics report",
+    "subtitle": "Analytics support form 2025 to 2026",
+    "exportReport": "Export Report",
+    "totalRevenue": "Total Revenue",
+    "totalBooking": "Total Booking",
+    "totalPlayer": "Total Player",
+    "checkinRate": "Check-in Rate",
+    "avgRevenue": "Avg. Revenue",
+    "allTime": "All time",
+    "vsLastMonth": "vs last month",
+    "revenueOverTime": "Revenue Over time",
+    "bookingVsCheckins": "Booking vs Check-ins",
+    "revenueSource": "Revenue Source",
+    "bookings": "Bookings",
+    "checkins": "Check-ins",
+    "month": "Month",
+    "day": "Day",
+    "week": "Week",
+    "topPerformingPackages": "Top Performing Packages",
+    "viewAllPackages": "View All Packages",
+    "package": "Package",
+    "booking": "Booking",
+    "revenue": "Revenue",
+    "player": "Player",
+    "conversionRate": "Conversion Rate",
+    "checkIn": "Check In",
+    "walkin": "Walk-in",
+    "onlineBooking": "Online Booking",
+    "packageLabel": "Package",
+    "other": "Other"
   }
 }

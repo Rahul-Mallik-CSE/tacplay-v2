@@ -244,6 +244,62 @@ export interface ManageCoverImagesModalProps {
   existingMedia?: ArenaMedia[]
 }
 
+// ============================================================================
+// Analytics Types
+// ============================================================================
+
+/** Single stat card data */
+export interface AnalyticsStatCard {
+  title: string
+  value: string | number
+  subtitle: string
+  change?: string
+  icon: React.ElementType
+}
+
+/** Revenue over time data point */
+export interface RevenueOverTimeData {
+  month: string
+  revenue: number
+}
+
+/** Booking vs Check-ins data point */
+export interface BookingCheckinData {
+  month: string
+  bookings: number
+  checkins: number
+}
+
+/** Revenue source segment */
+export interface RevenueSourceItem {
+  name: string
+  value: number
+  amount: string
+  percentage: string
+  color: string
+}
+
+/** Top performing package row */
+export interface TopPackageRow {
+  id: number
+  packageName: string
+  description: string
+  booking: number
+  bookingChange: number
+  revenue: string
+  player: number
+  conversionRate: number
+}
+
+/** Analytics page data */
+export interface AnalyticsData {
+  stats: AnalyticsStatCard[]
+  revenueOverTime: RevenueOverTimeData[]
+  bookingVsCheckins: BookingCheckinData[]
+  revenueSources: RevenueSourceItem[]
+  topPackages: TopPackageRow[]
+}
+
 /** Props for Package List Table component */
 export interface PackageListTableProps {
   packages: PackageItem[]

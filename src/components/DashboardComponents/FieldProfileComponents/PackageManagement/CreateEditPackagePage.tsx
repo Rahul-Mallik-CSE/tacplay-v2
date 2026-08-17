@@ -91,7 +91,7 @@ export default function CreateEditPackagePage() {
       <div className="flex items-center gap-4">
         <button
           onClick={() => router.push("/dashboard/field-profile/package-management")}
-          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+          className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           {t("arena.packagesTab.backToPackages")}

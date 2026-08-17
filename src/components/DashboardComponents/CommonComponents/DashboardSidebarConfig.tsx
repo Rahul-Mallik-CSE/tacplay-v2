@@ -2,7 +2,7 @@
 
 "use client";
 
-import { LayoutGrid, Settings } from "lucide-react";
+import { LayoutGrid, Settings, BarChart3 } from "lucide-react";
 import { CiTrophy } from "react-icons/ci";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BiMoneyWithdraw } from "react-icons/bi";
@@ -35,6 +35,11 @@ export function useDashboardNavItems(): NavItemConfig[] {
       href: "/dashboard/earnings",
       icon: BiMoneyWithdraw,
       label: t("sidebar.earnings"),
+    },
+    {
+      href: "/dashboard/analytics",
+      icon: BarChart3,
+      label: t("sidebar.analytics"),
     },
     {
       href: "/dashboard/field-profile",

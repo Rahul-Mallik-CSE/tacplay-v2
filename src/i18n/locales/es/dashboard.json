@@ -34,6 +34,7 @@
     "bookingList": "Lista de reservas",
     "bookings": "Reservas",
     "earnings": "Ganancias",
+    "analytics": "Analiticas",
     "fieldProfile": "Perfil del campo",
     "upgradeToPremium": "Mejorar a Premium",
     "currentPlan": "Plan actual: {{plan}}",
@@ -696,5 +697,37 @@
         "Próximamente y destacar"
       ]
     }
+  },
+  "analytics": {
+    "title": "Informe de analitica",
+    "subtitle": "Soporte analitico de 2025 a 2026",
+    "exportReport": "Exportar reporte",
+    "totalRevenue": "Ingresos totales",
+    "totalBooking": "Reservas totales",
+    "totalPlayer": "Jugadores totales",
+    "checkinRate": "Tasa de check-in",
+    "avgRevenue": "Ingreso promedio",
+    "allTime": "Todo el tiempo",
+    "vsLastMonth": "vs mes pasado",
+    "revenueOverTime": "Ingresos a lo largo del tiempo",
+    "bookingVsCheckins": "Reservas vs Check-ins",
+    "revenueSource": "Fuente de ingresos",
+    "bookings": "Reservas",
+    "checkins": "Check-ins",
+    "month": "Mes",
+    "day": "Dia",
+    "week": "Semana",
+    "topPerformingPackages": "Mejores paquetes",
+    "viewAllPackages": "Ver todos los paquetes",
+    "package": "Paquete",
+    "booking": "Reservas",
+    "revenue": "Ingresos",
+    "player": "Jugadores",
+    "conversionRate": "Tasa de conversion",
+    "checkIn": "Check In",
+    "walkin": "Walk-in",
+    "onlineBooking": "Reserva en linea",
+    "packageLabel": "Paquete",
+    "other": "Otro"
   }
 }
