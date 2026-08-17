@@ -3,38 +3,30 @@
 /**
  * OpeningHoursPage.tsx
  * Page component for managing field opening hours.
- * Allows setting operating hours for each day of the week.
+ * Allows setting operating hours for each day of the week with multiple time slots.
  */
 
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Input } from "@/components/ui/input"
-import { Switch } from "@/components/ui/switch"
+import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
-import EditSaveHeader from "../EditSaveHeader"
+import DayScheduleRow, { type DayScheduleItem } from "./DayScheduleRow"
 
-interface DaySchedule {
-  day: string
-  isOpen: boolean
-  openTime: string
-  closeTime: string
-}
-
-const DEFAULT_SCHEDULE: DaySchedule[] = [
-  { day: "Monday", isOpen: true, openTime: "09:00", closeTime: "21:00" },
-  { day: "Tuesday", isOpen: true, openTime: "09:00", closeTime: "21:00" },
-  { day: "Wednesday", isOpen: true, openTime: "09:00", closeTime: "21:00" },
-  { day: "Thursday", isOpen: true, openTime: "09:00", closeTime: "21:00" },
-  { day: "Friday", isOpen: true, openTime: "09:00", closeTime: "22:00" },
-  { day: "Saturday", isOpen: true, openTime: "08:00", closeTime: "22:00" },
-  { day: "Sunday", isOpen: true, openTime: "08:00", closeTime: "20:00" },
+const DEFAULT_SCHEDULE: DayScheduleItem[] = [
+  { day: "Monday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "21:00" }] },
+  { day: "Tuesday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "21:00" }] },
+  { day: "Wednesday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "21:00" }] },
+  { day: "Thursday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "21:00" }] },
+  { day: "Friday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "22:00" }] },
+  { day: "Saturday", isOpen: true, timeSlots: [{ openTime: "08:00", closeTime: "22:00" }] },
+  { day: "Sunday", isOpen: true, timeSlots: [{ openTime: "08:00", closeTime: "20:00" }] },
 ]
 
 export default function OpeningHoursPage() {
   const { t } = useTranslation("dashboard")
+  const [schedule, setSchedule] = useState<DayScheduleItem[]>(DEFAULT_SCHEDULE)
   const [isEditing, setIsEditing] = useState(false)
-  const [schedule, setSchedule] = useState<DaySchedule[]>(DEFAULT_SCHEDULE)
-  const [draft, setDraft] = useState<DaySchedule[] | null>(null)
+  const [draft, setDraft] = useState<DayScheduleItem[] | null>(null)
   const [isSaving, setIsSaving] = useState(false)
 
   const currentSchedule = isEditing ? (draft ?? schedule) : schedule
@@ -45,7 +37,7 @@ export default function OpeningHoursPage() {
       setIsEditing(false)
       return
     }
-    setDraft(schedule)
+    setDraft(schedule.map((d) => ({ ...d, timeSlots: d.timeSlots.map((s) => ({ ...s })) })))
     setIsEditing(true)
   }
 
@@ -57,88 +49,101 @@ export default function OpeningHoursPage() {
       setSchedule(draft)
       setDraft(null)
       setIsEditing(false)
-      toast.success("Opening hours updated successfully.")
+      toast.success(t("arena.openingHoursTab.updated"))
     } catch {
-      toast.error("Failed to update opening hours.")
+      toast.error(t("arena.openingHoursTab.updateFailed"))
     } finally {
       setIsSaving(false)
     }
   }
 
-  const updateDay = (index: number, patch: Partial<DaySchedule>) => {
+  const updateDay = (dayIndex: number, patch: Partial<DayScheduleItem>) => {
     setDraft((prev) => {
       if (!prev) return prev
-      return prev.map((item, i) =>
-        i === index ? { ...item, ...patch } : item
-      )
+      return prev.map((item, i) => (i === dayIndex ? { ...item, ...patch } : item))
+    })
+  }
+
+  const updateTimeSlot = (dayIndex: number, slotIndex: number, field: "openTime" | "closeTime", value: string) => {
+    setDraft((prev) => {
+      if (!prev) return prev
+      return prev.map((item, i) => {
+        if (i !== dayIndex) return item
+        return {
+          ...item,
+          timeSlots: item.timeSlots.map((slot, si) =>
+            si === slotIndex ? { ...slot, [field]: value } : slot
+          ),
+        }
+      })
+    })
+  }
+
+  const addTimeSlot = (dayIndex: number) => {
+    setDraft((prev) => {
+      if (!prev) return prev
+      return prev.map((item, i) => {
+        if (i !== dayIndex) return item
+        return {
+          ...item,
+          timeSlots: [...item.timeSlots, { openTime: "09:00", closeTime: "17:00" }],
+        }
+      })
     })
   }
 
   return (
     <div className="space-y-6">
-      <EditSaveHeader
-        title="Opening Hours"
-        subtitle="Set your field's operating hours for each day of the week."
-        isEditing={isEditing}
-        isSaving={isSaving}
-        onToggleEdit={handleToggleEdit}
-        onSave={handleSave}
-      />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold text-primary">
+            {t("arena.openingHoursTab.title")}
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            {t("arena.openingHoursTab.subtitle")}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {isEditing ? (
+            <>
+              <Button variant="ghost" size="sm" onClick={handleToggleEdit}>
+                {t("arena.cancelEdit")}
+              </Button>
+              <Button variant="default" size="sm" onClick={handleSave} disabled={isSaving}>
+                {isSaving ? (
+                  <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                ) : null}
+                {t("arena.openingHoursTab.saveChanges")}
+              </Button>
+            </>
+          ) : (
+            <Button variant="default" size="sm" onClick={handleToggleEdit}>
+              {t("arena.editInfo")}
+            </Button>
+          )}
+        </div>
+      </div>
 
       <div className="space-y-4">
         {currentSchedule.map((day, index) => (
-          <div
+          <DayScheduleRow
             key={day.day}
-            className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-lg bg-white/5 border border-white/10"
-          >
-            <div className="flex items-center gap-3 sm:w-40">
-              <Switch
-                checked={day.isOpen}
-                onCheckedChange={(checked) =>
-                  updateDay(index, { isOpen: checked })
-                }
-                disabled={!isEditing}
-              />
-              <span className="text-sm font-medium text-primary">
-                {day.day}
-              </span>
-            </div>
-
-            {day.isOpen ? (
-              <div className="flex items-center gap-3 flex-1">
-                <div className="flex items-center gap-2">
-                  <label className="text-xs text-muted-foreground">From</label>
-                  <Input
-                    type="time"
-                    value={day.openTime}
-                    onChange={(e) =>
-                      updateDay(index, { openTime: e.target.value })
-                    }
-                    disabled={!isEditing}
-                    className="w-32 bg-input/30 border-white/10 text-primary h-10"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <label className="text-xs text-muted-foreground">To</label>
-                  <Input
-                    type="time"
-                    value={day.closeTime}
-                    onChange={(e) =>
-                      updateDay(index, { closeTime: e.target.value })
-                    }
-                    disabled={!isEditing}
-                    className="w-32 bg-input/30 border-white/10 text-primary h-10"
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="flex-1 text-sm text-muted-foreground">
-                Closed
-              </div>
-            )}
-          </div>
+            schedule={day}
+            isEditing={isEditing}
+            onToggleDay={(checked) => updateDay(index, { isOpen: checked })}
+            onUpdateTimeSlot={(slotIndex, field, value) => updateTimeSlot(index, slotIndex, field, value)}
+            onAddTimeSlot={() => addTimeSlot(index)}
+          />
         ))}
       </div>
+
+      {isEditing && (
+        <div className="flex justify-end">
+          <Button variant="destructive" size="sm" onClick={handleSave} disabled={isSaving}>
+            {t("arena.openingHoursTab.saveChanges")}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

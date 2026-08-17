@@ -63,6 +63,11 @@ export interface PackageItem {
   package_fee: string
   include_items: string[]
   is_active: boolean
+  date_time?: string
+  type?: "Public" | "Private" | "Ranked"
+  paint_count?: string
+  booking_count?: number
+  booking_change?: number
 }
 
 /** Wrapper for package management data */
@@ -151,6 +156,11 @@ export type PackageForm = {
   package_fee: string
   include_items: string[]
   is_active: boolean
+  date_time?: string
+  type?: "Public" | "Private" | "Ranked"
+  paint_count?: string
+  booking_count?: number
+  booking_change?: number
 }
 
 /** Props for Package Management tab component */
@@ -232,4 +242,14 @@ export interface ManageCoverImagesModalProps {
   isOpen: boolean
   onClose: () => void
   existingMedia?: ArenaMedia[]
+}
+
+/** Props for Package List Table component */
+export interface PackageListTableProps {
+  packages: PackageItem[]
+  onEdit: (pkg: PackageItem) => void
+  onDelete: (pkg: PackageItem) => void
+  onDuplicate: (pkg: PackageItem) => void
+  onDeactivate: (pkg: PackageItem) => void
+  onCreatePackage: () => void
 }

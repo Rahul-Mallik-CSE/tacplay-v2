@@ -2,74 +2,49 @@
 
 /**
  * BillingsTable.tsx
- * HTML table rendering billing history rows with invoice ID, date,
- * plan, price, and status badge. Uses getPlanDisplayName utility.
+ * Billing history table using CustomTable component.
+ * Displays invoice ID, date, plan, price, and status badge.
  */
 
 import { useTranslation } from "react-i18next"
 import { getPlanDisplayName } from "@/lib/utils"
 import type { BillingHistoryItem, BillingsTableProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import StatusBadge from "../StatusBadge"
+import CustomTable from "@/components/SharedComponents/CustomTable"
+
+type BillingRow = BillingHistoryItem & Record<string, unknown>
 
 export default function BillingsTable({ data }: BillingsTableProps) {
   const { t } = useTranslation("dashboard")
 
-  const formatPrice = (billing: BillingHistoryItem) =>
-    `${billing.currency} ${billing.price}`
+  const columns = [
+    {
+      header: t("arena.billingsTab.invoiceId"),
+      accessor: "invoice_id" as const,
+    },
+    {
+      header: t("arena.billingsTab.date"),
+      accessor: "date" as const,
+    },
+    {
+      header: t("arena.billingsTab.plan"),
+      accessor: (row: BillingRow) => getPlanDisplayName(row.plan as string, t),
+    },
+    {
+      header: t("arena.billingsTab.price"),
+      accessor: (row: BillingRow) => `${row.currency} ${row.price}`,
+    },
+    {
+      header: t("arena.billingsTab.status"),
+      accessor: (row: BillingRow) => <StatusBadge status={row.payment_status as string} />,
+    },
+  ]
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-white/5">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-white/10 bg-muted/30">
-            <th className="p-3 text-left">
-              <div className="flex items-center gap-1 text-muted-foreground font-medium">
-                {t("arena.billingsTab.invoiceId")}
-              </div>
-            </th>
-            <th className="p-3 text-left">
-              <div className="flex items-center gap-1 text-muted-foreground font-medium">
-                {t("arena.billingsTab.date")}
-              </div>
-            </th>
-            <th className="p-3 text-left">
-              <div className="flex items-center gap-1 text-muted-foreground font-medium">
-                {t("arena.billingsTab.plan")}
-              </div>
-            </th>
-            <th className="p-3 text-left">
-              <div className="flex items-center gap-1 text-muted-foreground font-medium">
-                {t("arena.billingsTab.price")}
-              </div>
-            </th>
-            <th className="p-3 text-left">
-              <div className="flex items-center gap-1 text-muted-foreground font-medium">
-                {t("arena.billingsTab.status")}
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr
-              key={index}
-              className="border-b border-white/5 hover:bg-muted/20 transition-colors"
-            >
-              <td className="p-3 text-primary font-medium">{item.invoice_id}</td>
-              <td className="p-3 text-muted-foreground">{item.date}</td>
-              <td className="p-3 text-muted-foreground">
-                {getPlanDisplayName(item.plan, t)}
-              </td>
-              <td className="p-3 text-primary font-medium">
-                {formatPrice(item)}
-              </td>
-              <td className="p-3 text-primary font-medium">
-                <StatusBadge status={item.payment_status} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <CustomTable<BillingRow>
+      data={data as BillingRow[]}
+      columns={columns}
+      itemsPerPage={10}
+    />
   )
 }

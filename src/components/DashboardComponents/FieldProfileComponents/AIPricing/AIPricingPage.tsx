@@ -3,211 +3,153 @@
 /**
  * AIPricingPage.tsx
  * Page component for AI-powered pricing settings.
- * Allows configuring dynamic pricing rules and AI recommendations.
+ * Features date picker, AI suggest button, extras charge, and session selection modal.
  */
 
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
+import { Calendar, Sparkles, ChevronRight } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
 import { toast } from "react-toastify"
-import EditSaveHeader from "../EditSaveHeader"
-import ToggleField from "../ToggleField"
+import SelectSessionModal from "./SelectSessionModal"
 
 interface AIPricingSettings {
-  enableDynamicPricing: boolean
-  demandMultiplier: number
-  peakHourSurcharge: number
-  earlyBirdDiscount: number
-  lastMinuteDiscount: number
-  minimumPrice: number
-  maximumPrice: number
+  enabled: boolean
+  selectedDate: string
+  extrasCharge: string
+  selectedSession: string
 }
 
 const DEFAULT_SETTINGS: AIPricingSettings = {
-  enableDynamicPricing: false,
-  demandMultiplier: 1.2,
-  peakHourSurcharge: 15,
-  earlyBirdDiscount: 10,
-  lastMinuteDiscount: 20,
-  minimumPrice: 20,
-  maximumPrice: 100,
+  enabled: true,
+  selectedDate: "",
+  extrasCharge: "20%",
+  selectedSession: "",
 }
 
 export default function AIPricingPage() {
   const { t } = useTranslation("dashboard")
-  const [isEditing, setIsEditing] = useState(false)
   const [settings, setSettings] = useState<AIPricingSettings>(DEFAULT_SETTINGS)
-  const [draft, setDraft] = useState<AIPricingSettings | null>(null)
+  const [isSessionModalOpen, setIsSessionModalOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
 
-  const currentSettings = isEditing ? (draft ?? settings) : settings
-
-  const handleToggleEdit = () => {
-    if (isEditing) {
-      setDraft(null)
-      setIsEditing(false)
-      return
-    }
-    setDraft(settings)
-    setIsEditing(true)
+  const updateField = <K extends keyof AIPricingSettings>(key: K, value: AIPricingSettings[K]) => {
+    setSettings((prev) => ({ ...prev, [key]: value }))
   }
 
   const handleSave = async () => {
-    if (!draft) return
     setIsSaving(true)
     try {
       await new Promise((resolve) => setTimeout(resolve, 800))
-      setSettings(draft)
-      setDraft(null)
-      setIsEditing(false)
-      toast.success("AI pricing settings updated successfully.")
+      toast.success(t("arena.aiPricingTab.saved"))
     } catch {
-      toast.error("Failed to update AI pricing settings.")
+      toast.error(t("arena.aiPricingTab.saveFailed"))
     } finally {
       setIsSaving(false)
     }
   }
 
-  const updateField = <K extends keyof AIPricingSettings>(
-    key: K,
-    value: AIPricingSettings[K]
-  ) => {
-    setDraft((prev) => (prev ? { ...prev, [key]: value } : prev))
+  const handleSessionSelect = (session: { sessionName: string }) => {
+    updateField("selectedSession", session.sessionName)
   }
 
   return (
     <div className="space-y-6">
-      <EditSaveHeader
-        title="AI Pricing"
-        subtitle="Configure AI-powered dynamic pricing rules to maximize your revenue."
-        isEditing={isEditing}
-        isSaving={isSaving}
-        onToggleEdit={handleToggleEdit}
-        onSave={handleSave}
-      />
-
-      <div className="space-y-5">
-        <ToggleField
-          label="Enable Dynamic Pricing"
-          checked={currentSettings.enableDynamicPricing}
-          disabled={!isEditing}
-          onCheckedChange={(checked) =>
-            updateField("enableDynamicPricing", checked)
-          }
-        />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              Demand Multiplier
-            </label>
-            <Input
-              type="number"
-              step="0.1"
-              value={currentSettings.demandMultiplier}
-              onChange={(e) =>
-                updateField("demandMultiplier", Number(e.target.value))
-              }
-              disabled={!isEditing}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
-            <p className="text-xs text-muted-foreground">
-              Multiplier applied during high-demand periods
-            </p>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              Peak Hour Surcharge (%)
-            </label>
-            <Input
-              type="number"
-              value={currentSettings.peakHourSurcharge}
-              onChange={(e) =>
-                updateField("peakHourSurcharge", Number(e.target.value))
-              }
-              disabled={!isEditing}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
-            <p className="text-xs text-muted-foreground">
-              Extra charge during peak hours (6PM - 9PM)
-            </p>
-          </div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold text-primary">
+            {t("arena.aiPricingTab.title")}
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            {t("arena.aiPricingTab.subtitle")}
+          </p>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              Early Bird Discount (%)
-            </label>
-            <Input
-              type="number"
-              value={currentSettings.earlyBirdDiscount}
-              onChange={(e) =>
-                updateField("earlyBirdDiscount", Number(e.target.value))
-              }
-              disabled={!isEditing}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
-            <p className="text-xs text-muted-foreground">
-              Discount for bookings made 7+ days in advance
-            </p>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              Last Minute Discount (%)
-            </label>
-            <Input
-              type="number"
-              value={currentSettings.lastMinuteDiscount}
-              onChange={(e) =>
-                updateField("lastMinuteDiscount", Number(e.target.value))
-              }
-              disabled={!isEditing}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
-            <p className="text-xs text-muted-foreground">
-              Discount for bookings within 2 hours of session
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              Minimum Price ($)
-            </label>
-            <Input
-              type="number"
-              value={currentSettings.minimumPrice}
-              onChange={(e) =>
-                updateField("minimumPrice", Number(e.target.value))
-              }
-              disabled={!isEditing}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
-            <p className="text-xs text-muted-foreground">
-              Floor price for AI pricing adjustments
-            </p>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              Maximum Price ($)
-            </label>
-            <Input
-              type="number"
-              value={currentSettings.maximumPrice}
-              onChange={(e) =>
-                updateField("maximumPrice", Number(e.target.value))
-              }
-              disabled={!isEditing}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
-            <p className="text-xs text-muted-foreground">
-              Ceiling price for AI pricing adjustments
-            </p>
-          </div>
+        <div className="flex items-center gap-3">
+          <Switch
+            checked={settings.enabled}
+            onCheckedChange={(checked) => updateField("enabled", checked)}
+            className="data-[state=checked]:bg-custom-yellow"
+          />
         </div>
       </div>
+
+      <div className="h-px bg-gradient-to-r from-emerald-500 via-emerald-500 to-emerald-500" />
+
+      <div className="space-y-5">
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-primary">
+            {t("arena.aiPricingTab.selectDate")}
+          </label>
+          <div className="flex items-center gap-3">
+            <div className="relative flex-1">
+              <Input
+                type="datetime-local"
+                value={settings.selectedDate}
+                onChange={(e) => updateField("selectedDate", e.target.value)}
+                className="bg-input/30 border-white/10 text-primary h-11 pr-10"
+              />
+              <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+            </div>
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 border-white/10 h-11 px-6"
+            >
+              <Sparkles className="w-4 h-4" />
+              {t("arena.aiPricingTab.aiSuggest")}
+            </Button>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-primary">
+            {t("arena.aiPricingTab.extrasCharge")}
+          </label>
+          <Input
+            type="text"
+            value={settings.extrasCharge}
+            onChange={(e) => updateField("extrasCharge", e.target.value)}
+            placeholder={t("arena.aiPricingTab.extrasChargePlaceholder")}
+            className="bg-input/30 border-white/10 text-primary h-11"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-primary">
+            {t("arena.aiPricingTab.selectSession")}
+          </label>
+          <button
+            onClick={() => setIsSessionModalOpen(true)}
+            className="w-full flex items-center justify-between p-3 bg-input/30 border border-white/10 rounded-lg text-left hover:bg-input/50 transition-colors"
+          >
+            <span className={`text-sm ${settings.selectedSession ? "text-primary" : "text-muted-foreground"}`}>
+              {settings.selectedSession || t("arena.aiPricingTab.registeredCompany")}
+            </span>
+            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+          </button>
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={handleSave}
+          disabled={isSaving}
+        >
+          {isSaving ? (
+            <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          ) : null}
+          {t("common.save")}
+        </Button>
+      </div>
+
+      <SelectSessionModal
+        isOpen={isSessionModalOpen}
+        onClose={() => setIsSessionModalOpen(false)}
+        onSelect={handleSessionSelect}
+      />
     </div>
   )
 }

@@ -161,6 +161,23 @@ const FieldSetupTab = ({ fieldSetup = mockFieldSetup }: FieldSetupTabProps) => {
           </div>
         </div>
 
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-primary">
+            {t("arena.fieldSetupTab.basePrice")}
+          </label>
+          <Input
+            type="text"
+            value={form.base_price_per_player ? `$${form.base_price_per_player}` : ""}
+            onChange={(e) => {
+              const raw = e.target.value.replace(/^\$/, "").trim()
+              updateField("base_price_per_player", raw)
+            }}
+            readOnly={!isEditing}
+            placeholder="$0.00"
+            className="bg-input/30 border-white/10 text-primary h-11"
+          />
+        </div>
+
         <ToggleField
           label={t("onboardingFields.business.allowSocial")}
           checked={form.allow_social_matches}
