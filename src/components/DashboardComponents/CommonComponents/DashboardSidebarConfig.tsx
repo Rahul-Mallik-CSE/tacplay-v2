@@ -2,7 +2,7 @@
 
 "use client";
 
-import { LayoutGrid, Settings, BarChart3 } from "lucide-react";
+import { LayoutGrid, Settings, BarChart3, CircleHelp } from "lucide-react";
 import { CiTrophy } from "react-icons/ci";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BiMoneyWithdraw } from "react-icons/bi";
@@ -82,6 +82,11 @@ export function useDashboardNavItems(): NavItemConfig[] {
           label: t("arena.tabs.billings"),
         },
       ],
+    },
+    {
+      href: "/dashboard/help-support",
+      icon: CircleHelp,
+      label: t("sidebar.helpSupport"),
     },
     {
       href: "/dashboard/settings",

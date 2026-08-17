@@ -37,6 +37,7 @@
     "earnings": "Earnings",
     "analytics": "Analytics",
     "fieldProfile": "Field Profile",
+    "helpSupport": "Help & Support",
     "upgradeToPremium": "Upgrade to Premium",
     "currentPlan": "Current plan: {{plan}}",
     "active": "Active",
@@ -730,5 +731,94 @@
     "onlineBooking": "Online Booking",
     "packageLabel": "Package",
     "other": "Other"
+  },
+  "helpSupport": {
+    "title": "Support & Help",
+    "subtitle": "Get help, submit ticket and find answer",
+    "submitTicket": "Submit a Ticket",
+    "viewAllTickets": "View All Tickets",
+    "browseHelpCenter": "Browse Help Center",
+    "supportInfo": "Support Informaton",
+    "popularTopics": "Popular Help Topics",
+    "recentTickets": "My Recent Ticket",
+    "channels": {
+      "email": "Email Support",
+      "emailValue": "Support@tacply.com",
+      "liveChat": "Live Chat",
+      "liveChatValue": "Available in Portal",
+      "phone": "Phone Support",
+      "phoneValue": "+34 900 123 234"
+    },
+    "info": {
+      "responseTime": "Response Time",
+      "responseTimeDesc": "We typically respond within 2-3 hours during business hours.",
+      "supportHours": "Support Hours",
+      "supportHoursDesc": "Monday - Friday\n9:00 AM - 6:00 PM (CET)",
+      "prioritySupport": "Priority Support",
+      "prioritySupportDesc": "Gold subscribers receive priority handling in our support queue.",
+      "escalationProcess": "Escalation Process",
+      "escalationProcessDesc": "Complex issues are escalated to senior support managers."
+    },
+    "topics": {
+      "booking": "Booking",
+      "bookingDesc": "Manage Bookings, cancellations and schedules.",
+      "billing": "Billing & Payments",
+      "billingDesc": "Invoices, payments, subscriptions and refunds.",
+      "account": "Account Access",
+      "accountDesc": "Manage team access, roles and account security.",
+      "fieldProfile": "Field Profile",
+      "fieldProfileDesc": "Update field details, photos and amenities.",
+      "technical": "Technical Issues",
+      "technicalDesc": "Troubleshoot common problems and errors.",
+      "guides": "Feature Guides",
+      "guidesDesc": "Learn how to use TACPLAY features effectively."
+    },
+    "table": {
+      "ticketId": "Ticket ID",
+      "subject": "Subject",
+      "category": "Category",
+      "status": "Status",
+      "priority": "Priority",
+      "lastUpdate": "Last Update",
+      "action": "Action"
+    },
+    "status": {
+      "open": "Open",
+      "inProgress": "In progress",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "submit": {
+      "title": "Submit a Support Ticket",
+      "subtitle": "This message will be displayed to players as they explore and reserve sessions at your venue.",
+      "selectCategory": "Select Category",
+      "categoryPlaceholder": "Select a Category",
+      "subject": "Subject",
+      "subjectPlaceholder": "Enter ticket subject",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your issue in detail...",
+      "attachment": "Attachment (Optional)",
+      "attachmentDesc": "Png & Jpg formats are supported across the platform.",
+      "uploadButton": "Upload Logo",
+      "chooseFile": "Choose a file or upload it here.",
+      "cancel": "Cancel",
+      "submitTicket": "Submit Ticket",
+      "submitting": "Submitting...",
+      "uploadComplete": "Complete",
+      "validation": {
+        "categoryRequired": "Category is required.",
+        "subjectRequired": "Subject is required.",
+        "descriptionRequired": "Description is required."
+      },
+      "messages": {
+        "success": "Ticket submitted successfully.",
+        "failed": "Failed to submit ticket."
+      }
+    }
   }
 }

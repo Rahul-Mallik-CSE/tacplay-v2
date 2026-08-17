@@ -36,6 +36,7 @@
     "earnings": "Einnahmen",
     "analytics": "Analysen",
     "fieldProfile": "Feldprofil",
+    "helpSupport": "Hilfe & Support",
     "upgradeToPremium": "Auf Premium upgraden",
     "currentPlan": "Aktueller Plan: {{plan}}",
     "active": "Aktiv",
@@ -729,5 +730,94 @@
     "onlineBooking": "Online-Buchung",
     "packageLabel": "Paket",
     "other": "Sonstiges"
+  },
+  "helpSupport": {
+    "title": "Support & Hilfe",
+    "subtitle": "Hilfe erhalten, Ticket einreichen und Antworten finden",
+    "submitTicket": "Ticket einreichen",
+    "viewAllTickets": "Alle Tickets anzeigen",
+    "browseHelpCenter": "Hilfe-Center durchsuchen",
+    "supportInfo": "Support-Informationen",
+    "popularTopics": "Beliebte Hilfe-Themen",
+    "recentTickets": "Meine letzten Tickets",
+    "channels": {
+      "email": "E-Mail-Support",
+      "emailValue": "Support@tacply.com",
+      "liveChat": "Live-Chat",
+      "liveChatValue": "Im Portal verfügbar",
+      "phone": "Telefon-Support",
+      "phoneValue": "+34 900 123 234"
+    },
+    "info": {
+      "responseTime": "Antwortzeit",
+      "responseTimeDesc": "Wir antworten in der Regel innerhalb von 2-3 Stunden während der Geschäftszeiten.",
+      "supportHours": "Support-Zeiten",
+      "supportHoursDesc": "Montag - Freitag\n9:00 - 18:00 (CET)",
+      "prioritySupport": "Prioritäts-Support",
+      "prioritySupportDesc": "Gold-Abonnenten erhalten bevorzugte Behandlung in unserer Support-Schlange.",
+      "escalationProcess": "Eskalationsprozess",
+      "escalationProcessDesc": "Komplexe Probleme werden an leitende Support-Manager eskaliert."
+    },
+    "topics": {
+      "booking": "Buchung",
+      "bookingDesc": "Buchungen, Stornierungen und Zeitpläne verwalten.",
+      "billing": "Abrechnung & Zahlungen",
+      "billingDesc": "Rechnungen, Zahlungen, Abonnements und Erstattungen.",
+      "account": "Kontozugang",
+      "accountDesc": "Team-Zugang, Rollen und Kontosicherheit verwalten.",
+      "fieldProfile": "Feldprofil",
+      "fieldProfileDesc": "Felddetails, Fotos und Ausstattung aktualisieren.",
+      "technical": "Technische Probleme",
+      "technicalDesc": "Häufige Probleme und Fehler beheben.",
+      "guides": "Funktionsanleitungen",
+      "guidesDesc": "Erfahren Sie, wie Sie TACPLAY-Funktionen effektiv nutzen."
+    },
+    "table": {
+      "ticketId": "Ticket-ID",
+      "subject": "Betreff",
+      "category": "Kategorie",
+      "status": "Status",
+      "priority": "Priorität",
+      "lastUpdate": "Letzte Aktualisierung",
+      "action": "Aktion"
+    },
+    "status": {
+      "open": "Offen",
+      "inProgress": "In Bearbeitung",
+      "resolved": "Gelöst",
+      "closed": "Geschlossen"
+    },
+    "priority": {
+      "low": "Niedrig",
+      "medium": "Mittel",
+      "high": "Hoch"
+    },
+    "submit": {
+      "title": "Support-Ticket einreichen",
+      "subtitle": "Diese Nachricht wird den Spielern angezeigt, wenn sie Sessions in Ihrem Veranstaltungsort erkunden und reservieren.",
+      "selectCategory": "Kategorie auswählen",
+      "categoryPlaceholder": "Kategorie auswählen",
+      "subject": "Betreff",
+      "subjectPlaceholder": "Ticket-Betreff eingeben",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Beschreiben Sie Ihr Problem detailliert...",
+      "attachment": "Anhang (Optional)",
+      "attachmentDesc": "Png- & Jpg-Formate werden auf der ganzen Plattform unterstützt.",
+      "uploadButton": "Logo hochladen",
+      "chooseFile": "Wählen Sie eine Datei oder laden Sie sie hier hoch.",
+      "cancel": "Abbrechen",
+      "submitTicket": "Ticket einreichen",
+      "submitting": "Wird eingereicht...",
+      "uploadComplete": "Vollständig",
+      "validation": {
+        "categoryRequired": "Kategorie ist erforderlich.",
+        "subjectRequired": "Betreff ist erforderlich.",
+        "descriptionRequired": "Beschreibung ist erforderlich."
+      },
+      "messages": {
+        "success": "Ticket erfolgreich eingereicht.",
+        "failed": "Ticket konnte nicht eingereicht werden."
+      }
+    }
   }
 }

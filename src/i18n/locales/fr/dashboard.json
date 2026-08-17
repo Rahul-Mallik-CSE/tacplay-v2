@@ -36,6 +36,7 @@
     "earnings": "Revenus",
     "analytics": "Analyses",
     "fieldProfile": "Profil du terrain",
+    "helpSupport": "Aide & Support",
     "upgradeToPremium": "Passer en Premium",
     "currentPlan": "Forfait actuel : {{plan}}",
     "active": "Actif",
@@ -729,5 +730,94 @@
     "onlineBooking": "Reservation en ligne",
     "packageLabel": "Forfait",
     "other": "Autre"
+  },
+  "helpSupport": {
+    "title": "Support & Aide",
+    "subtitle": "Obtenez de l'aide, soumettez un ticket et trouvez des reponses",
+    "submitTicket": "Soumettre un ticket",
+    "viewAllTickets": "Voir tous les tickets",
+    "browseHelpCenter": "Parcourir le centre d'aide",
+    "supportInfo": "Informations de support",
+    "popularTopics": "Sujets d'aide populaires",
+    "recentTickets": "Mes tickets recents",
+    "channels": {
+      "email": "Support par e-mail",
+      "emailValue": "Support@tacply.com",
+      "liveChat": "Chat en direct",
+      "liveChatValue": "Disponible dans le portail",
+      "phone": "Support telephonique",
+      "phoneValue": "+34 900 123 234"
+    },
+    "info": {
+      "responseTime": "Temps de reponse",
+      "responseTimeDesc": "Nous repondons generalement dans les 2-3 heures pendant les heures ouvrables.",
+      "supportHours": "Heures de support",
+      "supportHoursDesc": "Lundi - Vendredi\n9h00 - 18h00 (CET)",
+      "prioritySupport": "Support prioritaire",
+      "prioritySupportDesc": "Les abonnes Gold beneficient d'un traitement prioritaire dans notre file de support.",
+      "escalationProcess": "Processus d'escalade",
+      "escalationProcessDesc": "Les problemes complexes sont escalades aux manageurs de support seniors."
+    },
+    "topics": {
+      "booking": "Reservation",
+      "bookingDesc": "Gerez les reservations, annulations et emplois du temps.",
+      "billing": "Facturation & Paiements",
+      "billingDesc": "Factures, paiements, abonnements et remboursements.",
+      "account": "Acces au compte",
+      "accountDesc": "Gerez l'acces de l'equipe, les roles et la securite du compte.",
+      "fieldProfile": "Profil du terrain",
+      "fieldProfileDesc": "Mise a jour des details du terrain, photos et equipements.",
+      "technical": "Problemes techniques",
+      "technicalDesc": "Resolvez les problemes et erreurs courants.",
+      "guides": "Guides de fonctionnalites",
+      "guidesDesc": "Apprenez a utiliser les fonctionnalites TACPLAY efficacement."
+    },
+    "table": {
+      "ticketId": "ID du ticket",
+      "subject": "Sujet",
+      "category": "Categorie",
+      "status": "Statut",
+      "priority": "Priorite",
+      "lastUpdate": "Derniere mise a jour",
+      "action": "Action"
+    },
+    "status": {
+      "open": "Ouvert",
+      "inProgress": "En cours",
+      "resolved": "Resolu",
+      "closed": "Ferme"
+    },
+    "priority": {
+      "low": "Basse",
+      "medium": "Moyenne",
+      "high": "Haute"
+    },
+    "submit": {
+      "title": "Soumettre un ticket de support",
+      "subtitle": "Ce message sera affiche aux joueurs lorsqu'ils explorent et reservent des sessions dans votre lieu.",
+      "selectCategory": "Selectionner une categorie",
+      "categoryPlaceholder": "Selectionner une categorie",
+      "subject": "Sujet",
+      "subjectPlaceholder": "Entrez le sujet du ticket",
+      "description": "Description",
+      "descriptionPlaceholder": "Decrivez votre probleme en detail...",
+      "attachment": "Piece jointe (Optionnel)",
+      "attachmentDesc": "Les formats Png & Jpg sont supportes sur toute la plateforme.",
+      "uploadButton": "Telecharger le logo",
+      "chooseFile": "Choisissez un fichier ou telechargez-le ici.",
+      "cancel": "Annuler",
+      "submitTicket": "Soumettre le ticket",
+      "submitting": "Soumission...",
+      "uploadComplete": "Termine",
+      "validation": {
+        "categoryRequired": "La categorie est obligatoire.",
+        "subjectRequired": "Le sujet est obligatoire.",
+        "descriptionRequired": "La description est obligatoire."
+      },
+      "messages": {
+        "success": "Ticket soumis avec succes.",
+        "failed": "Echec de la soumission du ticket."
+      }
+    }
   }
 }

@@ -36,6 +36,7 @@
     "earnings": "Ganancias",
     "analytics": "Analiticas",
     "fieldProfile": "Perfil del campo",
+    "helpSupport": "Ayuda y Soporte",
     "upgradeToPremium": "Mejorar a Premium",
     "currentPlan": "Plan actual: {{plan}}",
     "active": "Activo",
@@ -729,5 +730,94 @@
     "onlineBooking": "Reserva en linea",
     "packageLabel": "Paquete",
     "other": "Otro"
+  },
+  "helpSupport": {
+    "title": "Soporte y Ayuda",
+    "subtitle": "Obtenga ayuda, envie un ticket y encuentre respuestas",
+    "submitTicket": "Enviar un ticket",
+    "viewAllTickets": "Ver todos los tickets",
+    "browseHelpCenter": "Explorar centro de ayuda",
+    "supportInfo": "Informacion de soporte",
+    "popularTopics": "Temas de ayuda populares",
+    "recentTickets": "Mis tickets recientes",
+    "channels": {
+      "email": "Soporte por email",
+      "emailValue": "Support@tacply.com",
+      "liveChat": "Chat en vivo",
+      "liveChatValue": "Disponible en el portal",
+      "phone": "Soporte telefonico",
+      "phoneValue": "+34 900 123 234"
+    },
+    "info": {
+      "responseTime": "Tiempo de respuesta",
+      "responseTimeDesc": "Normalmente respondemos dentro de 2-3 horas durante el horario laboral.",
+      "supportHours": "Horario de soporte",
+      "supportHoursDesc": "Lunes - Viernes\n9:00 AM - 6:00 PM (CET)",
+      "prioritySupport": "Soporte prioritario",
+      "prioritySupportDesc": "Los suscriptores Gold reciben atencion prioritaria en nuestra cola de soporte.",
+      "escalationProcess": "Proceso de escalacion",
+      "escalationProcessDesc": "Los problemas complejos se escalan a gerentes de soporte senior."
+    },
+    "topics": {
+      "booking": "Reservas",
+      "bookingDesc": "Gestione reservas, cancelaciones y horarios.",
+      "billing": "Facturacion y Pagos",
+      "billingDesc": "Facturas, pagos, suscripciones y reembolsos.",
+      "account": "Acceso a la cuenta",
+      "accountDesc": "Gestione el acceso del equipo, roles y seguridad de la cuenta.",
+      "fieldProfile": "Perfil del campo",
+      "fieldProfileDesc": "Actualice detalles del campo, fotos y comodidades.",
+      "technical": "Problemas tecnicos",
+      "technicalDesc": "Solucione problemas y errores comunes.",
+      "guides": "Guias de funciones",
+      "guidesDesc": "Aprenda a usar las funciones de TACPLAY eficazmente."
+    },
+    "table": {
+      "ticketId": "ID del ticket",
+      "subject": "Asunto",
+      "category": "Categoria",
+      "status": "Estado",
+      "priority": "Prioridad",
+      "lastUpdate": "Ultima actualizacion",
+      "action": "Accion"
+    },
+    "status": {
+      "open": "Abierto",
+      "inProgress": "En progreso",
+      "resolved": "Resuelto",
+      "closed": "Cerrado"
+    },
+    "priority": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "submit": {
+      "title": "Enviar un ticket de soporte",
+      "subtitle": "Este mensaje se mostrara a los jugadores cuando exploren y reserven sesiones en su lugar.",
+      "selectCategory": "Seleccionar categoria",
+      "categoryPlaceholder": "Seleccionar una categoria",
+      "subject": "Asunto",
+      "subjectPlaceholder": "Ingrese el asunto del ticket",
+      "description": "Descripcion",
+      "descriptionPlaceholder": "Describe tu problema en detalle...",
+      "attachment": "Adjunto (Opcional)",
+      "attachmentDesc": "Los formatos Png y Jpg son compatibles en toda la plataforma.",
+      "uploadButton": "Subir logo",
+      "chooseFile": "Elija un archivo o subalo aqui.",
+      "cancel": "Cancelar",
+      "submitTicket": "Enviar ticket",
+      "submitting": "Enviando...",
+      "uploadComplete": "Completo",
+      "validation": {
+        "categoryRequired": "La categoria es obligatoria.",
+        "subjectRequired": "El asunto es obligatorio.",
+        "descriptionRequired": "La descripcion es obligatoria."
+      },
+      "messages": {
+        "success": "Ticket enviado exitosamente.",
+        "failed": "Error al enviar el ticket."
+      }
+    }
   }
 }
