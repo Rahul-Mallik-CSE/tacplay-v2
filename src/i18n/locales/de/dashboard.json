@@ -819,5 +819,61 @@
         "failed": "Ticket konnte nicht eingereicht werden."
       }
     }
+  },
+  "subscription": {
+    "title": "Abonnement",
+    "subtitle": "Verwalten Sie Ihren Tarif, Abrechnung und Nutzung",
+    "tabs": {
+      "overview": "Übersicht",
+      "billingHistory": "Rechnungsverlauf",
+      "paymentMethods": "Zahlungsmethoden"
+    },
+    "overview": {
+      "currentPlanTitle": "Sie sind im {{plan}}",
+      "active": "Aktiv",
+      "nextBilling": "Ihre nächste Abrechnung erfolgt am {{date}}",
+      "planDescription": "Genießen Sie alle Premium-Funktionen und Prioritäts-Support.",
+      "manageBilling": "Abrechnung verwalten",
+      "upgradePlan": "Tarif upgraden",
+      "choosePlanTitle": "Wählen Sie Ihren Tarif",
+      "choosePlanSubtitle": "Upgraden oder downgraden Sie Ihren Tarif jederzeit",
+      "monthly": "Monatlich",
+      "annual": "Jährlich",
+      "saveUpTo": "Bis zu 30% sparen",
+      "perMonth": "/pro Monat",
+      "includedFeatures": "Enthaltene Funktionen:",
+      "seeAll": "Alle anzeigen",
+      "activeBronze": "Aktives Bronze",
+      "upgradeToSilver": "Auf Silver upgraden",
+      "goGold": "Gold wählen",
+      "popular": "Beliebt",
+      "annualBannerTitle": "Sparen Sie mit jährlicher Abrechnung!",
+      "annualBannerSubtitle": "Wechseln Sie zur jährlichen Abrechnung und sparen Sie bis zu 30%.",
+      "switchToAnnual": "Zu jährlich wechseln",
+      "save20": "20% sparen"
+    },
+    "billingHistory": {
+      "title": "Rechnungsverlauf",
+      "columns": {
+        "date": "Datum",
+        "description": "Beschreibung",
+        "amount": "Betrag",
+        "status": "Status",
+        "invoice": "Rechnung",
+        "action": "Aktion"
+      },
+      "download": "Herunterladen"
+    },
+    "paymentMethod": {
+      "title": "Zahlungsmethode",
+      "primary": "Primäre Zahlungsmethode",
+      "other": "Andere Zahlungsmethode",
+      "default": "Standard",
+      "expires": "Läuft ab: {{date}}",
+      "billingName": "Rechnungsname",
+      "billingAddress": "Rechnungsadresse",
+      "updateCard": "Karte aktualisieren",
+      "addNewCard": "Neue Karte hinzufügen"
+    }
   }
 }

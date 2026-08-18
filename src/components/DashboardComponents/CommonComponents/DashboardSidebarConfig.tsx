@@ -2,7 +2,7 @@
 
 "use client";
 
-import { LayoutGrid, Settings, BarChart3, CircleHelp } from "lucide-react";
+import { LayoutGrid, Settings, BarChart3, CircleHelp, Package } from "lucide-react";
 import { CiTrophy } from "react-icons/ci";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BiMoneyWithdraw } from "react-icons/bi";
@@ -40,6 +40,28 @@ export function useDashboardNavItems(): NavItemConfig[] {
       href: "/dashboard/analytics",
       icon: BarChart3,
       label: t("sidebar.analytics"),
+    },
+    {
+      href: "/dashboard/subscription",
+      icon: Package,
+      label: t("subscription.title"),
+      children: [
+        {
+          href: "/dashboard/subscription/overview",
+          icon: Package,
+          label: t("subscription.tabs.overview"),
+        },
+        {
+          href: "/dashboard/subscription/billing-history",
+          icon: Package,
+          label: t("subscription.tabs.billingHistory"),
+        },
+        {
+          href: "/dashboard/subscription/payment-methods",
+          icon: Package,
+          label: t("subscription.tabs.paymentMethods"),
+        },
+      ],
     },
     {
       href: "/dashboard/field-profile",

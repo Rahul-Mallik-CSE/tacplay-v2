@@ -819,5 +819,61 @@
         "failed": "Echec de la soumission du ticket."
       }
     }
+  },
+  "subscription": {
+    "title": "Abonnement",
+    "subtitle": "Gerez votre forfait, facturation et utilisation",
+    "tabs": {
+      "overview": "Apercu",
+      "billingHistory": "Historique de facturation",
+      "paymentMethods": "Methodes de paiement"
+    },
+    "overview": {
+      "currentPlanTitle": "Vous etes sur le {{plan}}",
+      "active": "Actif",
+      "nextBilling": "Votre prochaine facturation est le {{date}}",
+      "planDescription": "Profitez de toutes les fonctionnalites premium et du support prioritaire.",
+      "manageBilling": "Gerer la facturation",
+      "upgradePlan": "Upgrade de forfait",
+      "choosePlanTitle": "Choisissez votre forfait",
+      "choosePlanSubtitle": "Passez a un forfait superieur ou inferieur a tout moment",
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "saveUpTo": "Economisez jusqu'a 30%",
+      "perMonth": "/par mois",
+      "includedFeatures": "Fonctionnalites incluses :",
+      "seeAll": "Voir tout",
+      "activeBronze": "Bronze actif",
+      "upgradeToSilver": "Passer a Silver",
+      "goGold": "Choisir Gold",
+      "popular": "Populaire",
+      "annualBannerTitle": "Economisez avec la facturation annuelle !",
+      "annualBannerSubtitle": "Passez a la facturation annuelle et economisez jusqu'a 30% sur votre abonnement.",
+      "switchToAnnual": "Passer a l'annuel",
+      "save20": "Economisez 20%"
+    },
+    "billingHistory": {
+      "title": "Historique de facturation",
+      "columns": {
+        "date": "Date",
+        "description": "Description",
+        "amount": "Montant",
+        "status": "Statut",
+        "invoice": "Facture",
+        "action": "Action"
+      },
+      "download": "Telecharger"
+    },
+    "paymentMethod": {
+      "title": "Methode de paiement",
+      "primary": "Methode de paiement principale",
+      "other": "Autre methode de paiement",
+      "default": "Par defaut",
+      "expires": "Expire le : {{date}}",
+      "billingName": "Nom de facturation",
+      "billingAddress": "Adresse de facturation",
+      "updateCard": "Mettre a jour la carte",
+      "addNewCard": "Ajouter une nouvelle carte"
+    }
   }
 }

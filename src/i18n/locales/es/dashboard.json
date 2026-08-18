@@ -819,5 +819,61 @@
         "failed": "Error al enviar el ticket."
       }
     }
+  },
+  "subscription": {
+    "title": "Suscripcion",
+    "subtitle": "Administra tu plan, facturacion y uso",
+    "tabs": {
+      "overview": "Resumen",
+      "billingHistory": "Historial de facturacion",
+      "paymentMethods": "Metodos de pago"
+    },
+    "overview": {
+      "currentPlanTitle": "Estas en {{plan}}",
+      "active": "Activo",
+      "nextBilling": "Tu proxima facturacion es el {{date}}",
+      "planDescription": "Disfruta de todas las funciones premium y soporte prioritario.",
+      "manageBilling": "Administrar facturacion",
+      "upgradePlan": "Mejorar plan",
+      "choosePlanTitle": "Elige tu plan",
+      "choosePlanSubtitle": "Mejora o cambia tu plan en cualquier momento",
+      "monthly": "Mensual",
+      "annual": "Anual",
+      "saveUpTo": "Ahorra hasta 30%",
+      "perMonth": "/por mes",
+      "includedFeatures": "Funciones incluidas:",
+      "seeAll": "Ver todo",
+      "activeBronze": "Bronce activo",
+      "upgradeToSilver": "Mejorar a Silver",
+      "goGold": "Elegir Gold",
+      "popular": "Popular",
+      "annualBannerTitle": "¡Ahorra con facturacion anual!",
+      "annualBannerSubtitle": "Cambia a facturacion anual y ahorra hasta el 30% en tu suscripcion.",
+      "switchToAnnual": "Cambiar a anual",
+      "save20": "Ahorra 20%"
+    },
+    "billingHistory": {
+      "title": "Historial de facturacion",
+      "columns": {
+        "date": "Fecha",
+        "description": "Descripcion",
+        "amount": "Monto",
+        "status": "Estado",
+        "invoice": "Factura",
+        "action": "Accion"
+      },
+      "download": "Descargar"
+    },
+    "paymentMethod": {
+      "title": "Metodo de pago",
+      "primary": "Metodo de pago principal",
+      "other": "Otro metodo de pago",
+      "default": "Predeterminado",
+      "expires": "Vence: {{date}}",
+      "billingName": "Nombre de facturacion",
+      "billingAddress": "Direccion de facturacion",
+      "updateCard": "Actualizar tarjeta",
+      "addNewCard": "Agregar nueva tarjeta"
+    }
   }
 }

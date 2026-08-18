@@ -820,5 +820,61 @@
         "failed": "Failed to submit ticket."
       }
     }
+  },
+  "subscription": {
+    "title": "Subscription",
+    "subtitle": "Manage you plan, billing and usage",
+    "tabs": {
+      "overview": "Overview",
+      "billingHistory": "Billing History",
+      "paymentMethods": "Payment Methods"
+    },
+    "overview": {
+      "currentPlanTitle": "You're on {{plan}}",
+      "active": "Active",
+      "nextBilling": "Your next billing is on {{date}}",
+      "planDescription": "Enjoy All premium features and priority support.",
+      "manageBilling": "Manage Billing",
+      "upgradePlan": "Upgrade Plan",
+      "choosePlanTitle": "Choose Your Plan",
+      "choosePlanSubtitle": "Upgrade or downgrade you plan anytime",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "saveUpTo": "Save up to 30%",
+      "perMonth": "/per month",
+      "includedFeatures": "Included Features:",
+      "seeAll": "See All",
+      "activeBronze": "Active Bronze",
+      "upgradeToSilver": "Upgrade to Silver",
+      "goGold": "Go Gold",
+      "popular": "Popular",
+      "annualBannerTitle": "Save with Annual Billing!",
+      "annualBannerSubtitle": "Switch to annual billing and save up to 30% on your subscripton.",
+      "switchToAnnual": "Switch to Annual",
+      "save20": "Save 20%"
+    },
+    "billingHistory": {
+      "title": "Billing History",
+      "columns": {
+        "date": "Date",
+        "description": "Descriiton",
+        "amount": "Amount",
+        "status": "Status",
+        "invoice": "Invoice",
+        "action": "Action"
+      },
+      "download": "Download"
+    },
+    "paymentMethod": {
+      "title": "Payment Method",
+      "primary": "Primary Payment method",
+      "other": "Other Payment method",
+      "default": "Default",
+      "expires": "Expires: {{date}}",
+      "billingName": "Billing Name",
+      "billingAddress": "Billing Address",
+      "updateCard": "Update Card",
+      "addNewCard": "Add Now Card"
+    }
   }
 }
