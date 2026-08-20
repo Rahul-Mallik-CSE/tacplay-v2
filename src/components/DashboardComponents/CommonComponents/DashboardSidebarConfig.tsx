@@ -2,7 +2,7 @@
 
 "use client";
 
-import { LayoutGrid, Settings, BarChart3, CircleHelp, Package } from "lucide-react";
+import { LayoutGrid, Settings, BarChart3, CircleHelp, Package, Users } from "lucide-react";
 import { CiTrophy } from "react-icons/ci";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BiMoneyWithdraw } from "react-icons/bi";
@@ -102,6 +102,23 @@ export function useDashboardNavItems(): NavItemConfig[] {
           href: "/dashboard/field-profile/billings",
           icon: GrUserManager,
           label: t("arena.tabs.billings"),
+        },
+      ],
+    },
+    {
+      href: "/dashboard/staff",
+      icon: Users,
+      label: t("sidebar.staff"),
+      children: [
+        {
+          href: "/dashboard/staff/staff-management",
+          icon: Users,
+          label: t("sidebar.staffManagement"),
+        },
+        {
+          href: "/dashboard/staff/role-management",
+          icon: Users,
+          label: t("sidebar.roleManagement"),
         },
       ],
     },

@@ -1,0 +1,332 @@
+/**
+ * staff-mock-data.ts
+ * Mock data for the Staff Management feature.
+ */
+
+import type {
+  StaffMember,
+  StaffDetails,
+  StaffRole,
+  PermissionCategory,
+} from "@/types/DashboardTypes/StaffTypes"
+
+// ============================================================================
+// Staff List Data
+// ============================================================================
+
+export const mockStaffListData: StaffMember[] = [
+  {
+    staff_id: 1,
+    display_staff_id: "STF-001",
+    full_name: "Smith Johan",
+    email: "smithjonah@gmail.com",
+    phone: "+123 1234 123445",
+    avatar: "https://i.pravatar.cc/150?img=1",
+    role: "Owner",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Active",
+    scanner_access: "Scanner",
+    joined_date: "Apr 12, 2024",
+  },
+  {
+    staff_id: 2,
+    display_staff_id: "STF-002",
+    full_name: "Emily Davis",
+    email: "emily.davis@gmail.com",
+    phone: "+123 1234 123446",
+    avatar: "https://i.pravatar.cc/150?img=2",
+    role: "Manager",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Active",
+    scanner_access: "Scanner",
+    joined_date: "May 20, 2024",
+  },
+  {
+    staff_id: 3,
+    display_staff_id: "STF-003",
+    full_name: "Michael Brown",
+    email: "michael.brown@gmail.com",
+    phone: "+123 1234 123447",
+    avatar: "https://i.pravatar.cc/150?img=3",
+    role: "Umpire",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Inactive",
+    scanner_access: "Scanner",
+    joined_date: "Jun 5, 2024",
+  },
+  {
+    staff_id: 4,
+    display_staff_id: "STF-004",
+    full_name: "Sarah Wilson",
+    email: "sarah.wilson@gmail.com",
+    phone: "+123 1234 123448",
+    avatar: "https://i.pravatar.cc/150?img=4",
+    role: "Scanner",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Inactive",
+    scanner_access: "Scanner",
+    joined_date: "Jul 15, 2024",
+  },
+  {
+    staff_id: 5,
+    display_staff_id: "STF-005",
+    full_name: "James Anderson",
+    email: "james.anderson@gmail.com",
+    phone: "+123 1234 123449",
+    avatar: "https://i.pravatar.cc/150?img=5",
+    role: "Scanner",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Active",
+    scanner_access: "Scanner",
+    joined_date: "Aug 1, 2024",
+  },
+  {
+    staff_id: 6,
+    display_staff_id: "STF-006",
+    full_name: "Jessica Martinez",
+    email: "jessica.martinez@gmail.com",
+    phone: "+123 1234 123450",
+    avatar: "https://i.pravatar.cc/150?img=6",
+    role: "Manager",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Active",
+    scanner_access: "Scanner",
+    joined_date: "Sep 10, 2024",
+  },
+  {
+    staff_id: 7,
+    display_staff_id: "STF-007",
+    full_name: "David Taylor",
+    email: "david.taylor@gmail.com",
+    phone: "+123 1234 123451",
+    avatar: "https://i.pravatar.cc/150?img=7",
+    role: "Scanner",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Active",
+    scanner_access: "Scanner",
+    joined_date: "Oct 5, 2024",
+  },
+  {
+    staff_id: 8,
+    display_staff_id: "STF-008",
+    full_name: "Amanda Garcia",
+    email: "amanda.garcia@gmail.com",
+    phone: "+123 1234 123452",
+    avatar: "https://i.pravatar.cc/150?img=8",
+    role: "Scanner",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Inactive",
+    scanner_access: "Scanner",
+    joined_date: "Nov 20, 2024",
+  },
+  {
+    staff_id: 9,
+    display_staff_id: "STF-009",
+    full_name: "Chris Lee",
+    email: "chris.lee@gmail.com",
+    phone: "+123 1234 123453",
+    avatar: "https://i.pravatar.cc/150?img=9",
+    role: "Umpire",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Active",
+    scanner_access: "Scanner",
+    joined_date: "Dec 1, 2024",
+  },
+  {
+    staff_id: 10,
+    display_staff_id: "STF-010",
+    full_name: "Laura Hernandez",
+    email: "laura.hernandez@gmail.com",
+    phone: "+123 1234 123454",
+    avatar: "https://i.pravatar.cc/150?img=10",
+    role: "Scanner",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Inactive",
+    scanner_access: "Scanner",
+    joined_date: "Jan 15, 2025",
+  },
+  {
+    staff_id: 11,
+    display_staff_id: "STF-011",
+    full_name: "Kevin White",
+    email: "kevin.white@gmail.com",
+    phone: "+123 1234 123455",
+    avatar: "https://i.pravatar.cc/150?img=11",
+    role: "Manager",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Active",
+    scanner_access: "Scanner",
+    joined_date: "Feb 10, 2025",
+  },
+  {
+    staff_id: 12,
+    display_staff_id: "STF-012",
+    full_name: "Nicole Clark",
+    email: "nicole.clark@gmail.com",
+    phone: "+123 1234 123456",
+    avatar: "https://i.pravatar.cc/150?img=12",
+    role: "Scanner",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Active",
+    scanner_access: "Scanner",
+    joined_date: "Mar 5, 2025",
+  },
+]
+
+// ============================================================================
+// Staff Details (for the detail sheet)
+// ============================================================================
+
+export const mockStaffDetails: StaffDetails = {
+  staff: {
+    staff_id: 1,
+    display_staff_id: "STF-001",
+    full_name: "Smith Johan",
+    email: "smithjonah@gmail.com",
+    phone: "+123 1234 123445",
+    avatar: "https://i.pravatar.cc/150?img=1",
+    role: "Owner",
+    assigned_sessions: 3,
+    checked_in_today: 43,
+    last_login: "Today, 09:15 AM",
+    status: "Active",
+    scanner_access: "Scanner",
+    joined_date: "Apr 12, 2024",
+  },
+  assigned_sessions_today: [
+    { time: "10:00 AM", session_name: "Beginner Walk-On", players: "22/30", status: "Ongoing" },
+    { time: "10:00 AM", session_name: "Beginner Walk-On", players: "22/30", status: "Ongoing" },
+    { time: "10:00 AM", session_name: "Beginner Walk-On", players: "22/30", status: "Upcoming" },
+  ],
+}
+
+// ============================================================================
+// Roles
+// ============================================================================
+
+export const mockRoles: StaffRole[] = [
+  { id: 1, name: "Owner" },
+  { id: 2, name: "Manager" },
+  { id: 3, name: "Umpire" },
+  { id: 4, name: "Scanner" },
+  { id: 5, name: "Role 01" },
+  { id: 6, name: "Role 02" },
+  { id: 7, name: "Role 03" },
+]
+
+// ============================================================================
+// Permission Categories (for role creation)
+// ============================================================================
+
+export const mockPermissionCategories: PermissionCategory[] = [
+  {
+    id: "dashboard-overview",
+    name: "Dashboard & Overview",
+    icon: "LayoutGrid",
+    enabled: true,
+    permissions: [
+      { id: "view-field-overview", name: "View Field Overview", enabled: true },
+      { id: "view-analytics", name: "View Analytics", enabled: false },
+    ],
+  },
+  {
+    id: "booking-session",
+    name: "Booking & Session",
+    icon: "Calendar",
+    enabled: true,
+    permissions: [
+      { id: "view-bookings", name: "View Bookings", enabled: true },
+      { id: "create-bookings", name: "Create Bookings", enabled: true },
+      { id: "manage-sessions", name: "Manage Sessions", enabled: false },
+      { id: "view-session-details", name: "View Session Details", enabled: false },
+    ],
+  },
+  {
+    id: "scanner-checkin",
+    name: "Scanner & Check-In",
+    icon: "QrCode",
+    enabled: true,
+    permissions: [
+      { id: "access-scanner-mode", name: "Access Scanner Mode", enabled: true },
+      { id: "scan-player-qr-codes", name: "Scan Player QR Codes", enabled: true },
+      { id: "view-attendance", name: "View Attendance", enabled: false },
+      { id: "mark-no-show", name: "Mark No-Show", enabled: false },
+    ],
+  },
+  {
+    id: "scores-matches",
+    name: "Scores & Matches",
+    icon: "Trophy",
+    enabled: true,
+    permissions: [
+      { id: "view-matches", name: "View Matches", enabled: true },
+      { id: "submit-verify-scores", name: "Submit/Verify Scores", enabled: true },
+      { id: "edit-scores", name: "Edit Scores", enabled: false },
+    ],
+  },
+  {
+    id: "management",
+    name: "Management",
+    icon: "Users",
+    enabled: true,
+    permissions: [
+      { id: "staff-management", name: "Staff Management", enabled: true },
+      { id: "role-permission-settings", name: "Role & Permission Settings", enabled: true },
+      { id: "field-settings", name: "Field Settings", enabled: false },
+    ],
+  },
+  {
+    id: "billing-subscription",
+    name: "Billing & Subscription",
+    icon: "CreditCard",
+    enabled: true,
+    permissions: [
+      { id: "view-subscription-billing", name: "View Subscription & Billing", enabled: true },
+      { id: "manage-payments", name: "Manage Payments", enabled: true },
+    ],
+  },
+  {
+    id: "marketing-permissions",
+    name: "Marketing & Permissions",
+    icon: "Megaphone",
+    enabled: true,
+    permissions: [
+      { id: "access-marketing-tools", name: "Access Marketing Tools", enabled: true },
+      { id: "create-campaigns", name: "Create Campaigns", enabled: true },
+    ],
+  },
+  {
+    id: "other",
+    name: "Other",
+    icon: "HelpCircle",
+    enabled: true,
+    permissions: [
+      { id: "settings-preferences", name: "Settings & Preferences", enabled: true },
+      { id: "help-support", name: "Help & Support", enabled: true },
+    ],
+  },
+]

@@ -1,0 +1,138 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
+import { useRouter, useParams } from "next/navigation"
+import SelectRoleDropdown from "../AddStaffComponents/SelectRoleDropdown"
+import { mockStaffListData, mockRoles } from "../../../../mock-data/DashboardMockData/staff-mock-data"
+
+function EditStaffForm() {
+  const { t } = useTranslation("dashboard")
+  const router = useRouter()
+  const params = useParams()
+  const staffId = params.staffId as string
+
+  const [staffName, setStaffName] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [selectedRole, setSelectedRole] = useState("")
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    const staff = mockStaffListData.find((s) => s.staff_id === Number(staffId))
+    if (staff) {
+      setStaffName(staff.full_name)
+      setEmail(staff.email)
+      setPhone(staff.phone)
+      setSelectedRole(staff.role)
+    }
+  }, [staffId])
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {}
+    if (!staffName.trim()) newErrors.staffName = t("staff.validation.staffNameRequired")
+    if (!email.trim()) newErrors.email = t("staff.validation.emailRequired")
+    if (!phone.trim()) newErrors.phone = t("staff.validation.phoneRequired")
+    if (!selectedRole) newErrors.role = t("staff.validation.roleRequired")
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (validate()) {
+      router.push("/dashboard/staff/staff-management")
+    }
+  }
+
+  const handleCreateNewRole = () => {
+    router.push("/dashboard/staff/role-management")
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl md:text-3xl font-bold text-primary">
+          {t("staff.editStaffTitle")}
+        </h1>
+        <p className="text-secondary text-sm mt-1">
+          {t("staff.addNewStaffSubtitle")}
+        </p>
+        <div className="h-px bg-white/10 mt-4" />
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
+        <div>
+          <label className="block text-sm font-medium text-primary mb-2">
+            {t("staff.columns.staff")}
+          </label>
+          <input
+            type="text"
+            value={staffName}
+            onChange={(e) => setStaffName(e.target.value)}
+            placeholder={t("staff.columns.staff")}
+            className="w-full px-4 py-3 rounded-lg bg-muted border border-white/10 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
+          />
+          {errors.staffName && (
+            <p className="text-xs text-custom-red mt-1">{errors.staffName}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-primary mb-2">
+            Email
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Subject...."
+            className="w-full px-4 py-3 rounded-lg bg-muted border border-white/10 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
+          />
+          {errors.email && (
+            <p className="text-xs text-custom-red mt-1">{errors.email}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-primary mb-2">
+            Phone
+          </label>
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="Phone"
+            className="w-full px-4 py-3 rounded-lg bg-muted border border-white/10 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
+          />
+          {errors.phone && (
+            <p className="text-xs text-custom-red mt-1">{errors.phone}</p>
+          )}
+        </div>
+
+        <div>
+          <SelectRoleDropdown
+            value={selectedRole}
+            onChange={setSelectedRole}
+            roles={mockRoles}
+            onCreateNewRole={handleCreateNewRole}
+          />
+          {errors.role && (
+            <p className="text-xs text-custom-red mt-1">{errors.role}</p>
+          )}
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="px-8 py-2.5 rounded-lg bg-custom-red text-white text-sm font-medium hover:bg-custom-red/80 transition-colors cursor-pointer"
+          >
+            {t("common.saveChanges")}
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+export default EditStaffForm
