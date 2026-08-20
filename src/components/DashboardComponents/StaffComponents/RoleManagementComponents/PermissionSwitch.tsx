@@ -11,8 +11,8 @@ function PermissionSwitch({ label, checked, onCheckedChange }: PermissionSwitchP
       <Switch
         checked={checked}
         onCheckedChange={onCheckedChange}
-        size="sm"
-        className="data-[state=checked]:bg-custom-yellow data-[state=unchecked]:bg-input"
+        size="default"
+        className="data-[state=checked]:bg-custom-yellow data-[state=unchecked]:bg-white cursor-pointer"
       />
       <span className="text-sm text-primary">{label}</span>
     </div>

@@ -49,7 +49,7 @@ function PermissionCategorySection({
       </div>
 
       {category.enabled && (
-        <div className="px-4 py-3 flex flex-wrap gap-6">
+        <div className="px-4 py-3 flex flex-wrap gap-6 md:gap-8 lg:gap-10 xl:gap-12">
           {category.permissions.map((permission) => (
             <PermissionSwitch
               key={permission.id}

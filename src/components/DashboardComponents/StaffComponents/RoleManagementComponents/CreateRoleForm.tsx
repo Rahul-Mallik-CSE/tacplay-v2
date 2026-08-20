@@ -82,7 +82,7 @@ function CreateRoleForm() {
         <div className="h-px bg-white/10 mt-4" />
       </div>
 
-      <div className="space-y-6 max-w-4xl">
+      <div className="space-y-6 ">
         <div>
           <label className="block text-sm font-medium text-primary mb-2">
             {t("staff.roleName")}
