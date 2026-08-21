@@ -13,7 +13,7 @@ export default function OverviewContainer() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly")
 
   const handleManageBilling = () => {
-    window.location.href = "/dashboard/subscription/billing-history"
+    window.location.href = "/dashboard/subscription/overview/manage-billing"
   }
 
   const handleUpgradePlan = () => {

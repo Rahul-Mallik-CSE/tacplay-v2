@@ -878,6 +878,29 @@
       "billingAddress": "Adresse de facturation",
       "updateCard": "Mettre a jour la carte",
       "addNewCard": "Ajouter une nouvelle carte"
+    },
+    "manageBilling": {
+      "cancelSubscription": "Annuler l'abonnement",
+      "primaryPayment": "Methode de paiement principale",
+      "currentPlan": "Plan actuel",
+      "nextBillingDate": "Prochaine date de facturation",
+      "amount": "Montant",
+      "warningTitle": "Votre abonnement restera actif jusqu'au {{date}}",
+      "warningDesc": "Vous pouvez continuer a utiliser les fonctionnalites premium jusqu'a la fin de votre periode de facturation",
+      "cancelReason": "Raison de l'annulation",
+      "cancelReasonDesc": "Veuillez selectionner une raison pour l'annulation",
+      "additionalFeedback": "Commentaires supplementaires (Optionnel)",
+      "feedbackPlaceholder": "C'est un peu au-dessus de mon budget en ce moment.",
+      "whatHappensNext": "Que se passe-t-il ensuite?",
+      "nextStep1": "Votre abonnement reste actif jusqu'au",
+      "nextStep2": "Apres l'annulation, votre profil de terrain restera visible.",
+      "nextStep3": "Les reservations seront suspendues et les fonctionnalites avancees seront desactivees apres l'expiration de votre plan.",
+      "nextStep4": "Vous recevrez un e-mail de confirmation sous peu.",
+      "needHelp": "Besoin d'aide?",
+      "needHelpDesc": "Notre equipe d'assistance est la pour vous aider si vous changez d'avis.",
+      "contactSupport": "Contacter le support",
+      "keepSubscription": "Conserver l'abonnement",
+      "confirmCancellation": "Confirmer l'annulation"
     }
   },
   "staff": {

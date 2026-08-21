@@ -879,6 +879,29 @@
       "billingAddress": "Billing Address",
       "updateCard": "Update Card",
       "addNewCard": "Add Now Card"
+    },
+    "manageBilling": {
+      "cancelSubscription": "Cancel Subscription",
+      "primaryPayment": "Primary Payment method",
+      "currentPlan": "Current Plan",
+      "nextBillingDate": "Next Billing Date",
+      "amount": "Amount",
+      "warningTitle": "Your subscription will remain active until {{date}}",
+      "warningDesc": "You can continue using at premium features untill the end of your billing period",
+      "cancelReason": "Cancelation Reason",
+      "cancelReasonDesc": "Pleases select a reason for cancelling",
+      "additionalFeedback": "Additional Feedback (Optional)",
+      "feedbackPlaceholder": "It's a bit cover my budget right now.",
+      "whatHappensNext": "What happens next?",
+      "nextStep1": "Your subscripton remains active until",
+      "nextStep2": "After cancellation, your field profile will remain visible.",
+      "nextStep3": "Bookings will be paused and advanced features will be disable after your plan expires.",
+      "nextStep4": "you'll receive a confirmation email shortly.",
+      "needHelp": "Need Help?",
+      "needHelpDesc": "Our support team is here to help if you changes your mind.",
+      "contactSupport": "Contact Support",
+      "keepSubscription": "Keep Subscription",
+      "confirmCancellation": "Confirm Cancellation"
     }
   },
   "staff": {

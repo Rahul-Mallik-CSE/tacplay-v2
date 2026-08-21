@@ -878,6 +878,29 @@
       "billingAddress": "Direccion de facturacion",
       "updateCard": "Actualizar tarjeta",
       "addNewCard": "Agregar nueva tarjeta"
+    },
+    "manageBilling": {
+      "cancelSubscription": "Cancelar suscripcion",
+      "primaryPayment": "Metodo de pago principal",
+      "currentPlan": "Plan actual",
+      "nextBillingDate": "Proxima fecha de facturacion",
+      "amount": "Monto",
+      "warningTitle": "Su suscripcion permanecera activa hasta el {{date}}",
+      "warningDesc": "Puede seguir usando las funciones premium hasta el final de su periodo de facturacion",
+      "cancelReason": "Razon de cancelacion",
+      "cancelReasonDesc": "Por favor seleccione una razon para cancelar",
+      "additionalFeedback": "Comentarios adicionales (Opcional)",
+      "feedbackPlaceholder": "Un poco fuera de mi presupuesto ahora.",
+      "whatHappensNext": "Que sucede despues?",
+      "nextStep1": "Su suscripcion permanecera activa hasta",
+      "nextStep2": "Despues de la cancelacion, su perfil del campo permanecera visible.",
+      "nextStep3": "Las reservas se pausaran y las funciones avanzadas se desactivaran despues de que expire su plan.",
+      "nextStep4": "Recibira un correo de confirmacion en breve.",
+      "needHelp": "Necesita ayuda?",
+      "needHelpDesc": "Nuestro equipo de soporte esta aqui para ayudarle si cambia de opinion.",
+      "contactSupport": "Contactar soporte",
+      "keepSubscription": "Mantener suscripcion",
+      "confirmCancellation": "Confirmar cancelacion"
     }
   },
   "staff": {

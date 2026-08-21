@@ -878,6 +878,29 @@
       "billingAddress": "Rechnungsadresse",
       "updateCard": "Karte aktualisieren",
       "addNewCard": "Neue Karte hinzufügen"
+    },
+    "manageBilling": {
+      "cancelSubscription": "Abonnement kundigen",
+      "primaryPayment": "Primare Zahlungsmethode",
+      "currentPlan": "Aktueller Plan",
+      "nextBillingDate": "Nastechstes Abrechnungsdatum",
+      "amount": "Betrag",
+      "warningTitle": "Ihr Abonnement bleibt bis zum {{date}} aktiv",
+      "warningDesc": "Sie konnen weiterhin Premium-Funktionen bis zum Ende Ihres Abrechnungszeitraums nutzen",
+      "cancelReason": "Kundigungsgrund",
+      "cancelReasonDesc": "Bitte wahlen Sie einen Grund fur die Kundigung",
+      "additionalFeedback": "Zusatzliches Feedback (Optional)",
+      "feedbackPlaceholder": "Es ubersteigt gerade mein Budget.",
+      "whatHappensNext": "Was passiert als nachstes?",
+      "nextStep1": "Ihr Abonnement bleibt aktiv bis",
+      "nextStep2": "Nach der Kundigung bleibt Ihr Feldprofil sichtbar.",
+      "nextStep3": "Buchungen werden angehalten und erweiterte Funktionen werden nach Ablauf Ihres Plans deaktiviert.",
+      "nextStep4": "Sie erhalten in Kurze eine Bestatigungs-E-Mail.",
+      "needHelp": "Brauchen Sie Hilfe?",
+      "needHelpDesc": "Unser Support-Team ist hier um zu helfen, falls Sie es sich anders uberlegen.",
+      "contactSupport": "Support kontaktieren",
+      "keepSubscription": "Abonnement beibehalten",
+      "confirmCancellation": "Kundigung bestatigen"
     }
   },
   "staff": {
