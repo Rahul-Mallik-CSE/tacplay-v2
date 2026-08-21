@@ -2,10 +2,12 @@
 
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Calendar, ChevronRight } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Calendar, ChevronRight, ArrowLeft } from "lucide-react"
 
 export default function CreateVoucher() {
   const { t } = useTranslation("dashboard")
+  const router = useRouter()
   const [formData, setFormData] = useState({
     voucher_code: "",
     select_session: "",
@@ -23,11 +25,19 @@ export default function CreateVoucher() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl md:text-2xl font-bold text-primary">
-          {t("marketing.createVoucherDiscount")}
-        </h1>
-        <p className="text-sm text-secondary mt-1">{t("marketing.form.subtitle")}</p>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => router.back()}
+          className="p-2 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+        >
+          <ArrowLeft className="w-5 h-5 text-primary" />
+        </button>
+        <div>
+          <h1 className="text-xl md:text-2xl font-bold text-primary">
+            {t("marketing.createVoucherDiscount")}
+          </h1>
+          <p className="text-sm text-secondary mt-1">{t("marketing.form.subtitle")}</p>
+        </div>
       </div>
 
       {/* Voucher Details */}

@@ -2,11 +2,13 @@
 
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Upload, Sparkles } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Upload, Sparkles, ArrowLeft } from "lucide-react"
 import AudienceFilterDropdown from "../CommonComponents/AudienceFilterDropdown"
 
 export default function CreateEmailCampaign() {
   const { t } = useTranslation("dashboard")
+  const router = useRouter()
   const [formData, setFormData] = useState({
     campaign_name: "",
     email_subject: "",
@@ -24,11 +26,19 @@ export default function CreateEmailCampaign() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl md:text-2xl font-bold text-primary">
-          {t("marketing.createEmailCampaign")}
-        </h1>
-        <p className="text-sm text-secondary mt-1">{t("marketing.form.subtitle")}</p>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => router.back()}
+          className="p-2 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+        >
+          <ArrowLeft className="w-5 h-5 text-primary" />
+        </button>
+        <div>
+          <h1 className="text-xl md:text-2xl font-bold text-primary">
+            {t("marketing.createEmailCampaign")}
+          </h1>
+          <p className="text-sm text-secondary mt-1">{t("marketing.form.subtitle")}</p>
+        </div>
       </div>
 
       {/* Email Preview */}
