@@ -736,6 +736,16 @@
     "packageLabel": "Paquete",
     "other": "Otro"
   },
+  "chat": {
+    "title": "Chats",
+    "placeholder": "Escribe un mensaje....",
+    "searchPlaceholder": "Buscar conversaciones...",
+    "active": "Activo",
+    "online": "En linea",
+    "offline": "Fuera de linea",
+    "noMessages": "Aun no hay mensajes",
+    "sendMessage": "Enviar un mensaje"
+  },
   "helpSupport": {
     "title": "Soporte y Ayuda",
     "subtitle": "Obtenga ayuda, envie un ticket y encuentre respuestas",

@@ -736,6 +736,16 @@
     "packageLabel": "Forfait",
     "other": "Autre"
   },
+  "chat": {
+    "title": "Discussions",
+    "placeholder": "Ecrivez un message....",
+    "searchPlaceholder": "Rechercher des conversations...",
+    "active": "Actif",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "noMessages": "Pas encore de messages",
+    "sendMessage": "Envoyer un message"
+  },
   "helpSupport": {
     "title": "Support & Aide",
     "subtitle": "Obtenez de l'aide, soumettez un ticket et trouvez des reponses",
