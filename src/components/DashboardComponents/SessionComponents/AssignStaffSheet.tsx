@@ -26,52 +26,40 @@ function AssignStaffSheet({ open, onOpenChange, sessionName }: AssignStaffSheetP
   const [selectedStaff, setSelectedStaff] = useState<Set<number>>(new Set([1, 3, 4]))
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [pendingStaffId, setPendingStaffId] = useState<number | null>(null)
+  const [confirmType, setConfirmType] = useState<"assign" | "cancel">("assign")
 
   const staffData = mockStaffListData
-
-  // Handle staff selection toggle
-  const handleStaffSelect = (staffId: number) => {
-    const newSelected = new Set(selectedStaff)
-    if (newSelected.has(staffId)) {
-      newSelected.delete(staffId)
-    } else {
-      newSelected.add(staffId)
-    }
-    setSelectedStaff(newSelected)
-  }
 
   // Handle assign button click - open confirmation
   const handleAssignClick = (staffId: number) => {
     if (selectedStaff.has(staffId)) {
       // If already selected, unassign
       setPendingStaffId(staffId)
+      setConfirmType("cancel")
       setConfirmOpen(true)
     } else {
-      // If not selected, assign directly
-      const newSelected = new Set(selectedStaff)
-      newSelected.add(staffId)
-      setSelectedStaff(newSelected)
+      // If not selected, assign
+      setPendingStaffId(staffId)
+      setConfirmType("assign")
+      setConfirmOpen(true)
     }
   }
 
   // Handle confirm assign/cancel
   const handleConfirm = () => {
     if (pendingStaffId !== null) {
-      const newSelected = new Set(selectedStaff)
-      newSelected.delete(pendingStaffId)
-      setSelectedStaff(newSelected)
+      if (confirmType === "assign") {
+        const newSelected = new Set(selectedStaff)
+        newSelected.add(pendingStaffId)
+        setSelectedStaff(newSelected)
+      } else {
+        const newSelected = new Set(selectedStaff)
+        newSelected.delete(pendingStaffId)
+        setSelectedStaff(newSelected)
+      }
     }
     setConfirmOpen(false)
     setPendingStaffId(null)
-  }
-
-  // Handle select all
-  const handleSelectAll = () => {
-    if (selectedStaff.size === staffData.length) {
-      setSelectedStaff(new Set())
-    } else {
-      setSelectedStaff(new Set(staffData.map((s) => s.staff_id)))
-    }
   }
 
   return (
@@ -101,30 +89,22 @@ function AssignStaffSheet({ open, onOpenChange, sessionName }: AssignStaffSheetP
           </SheetHeader>
 
           {/* Staff Table */}
-          <div className="px-5 pt-4">
+          <div className="px-4 pt-4">
             <div className="rounded-xl overflow-hidden border border-white/5">
               <div className="overflow-x-auto">
-                <table className="w-full text-sm">
+                <table className="w-full text-xs">
                   <thead>
                     <tr className="bg-muted/50 border-b border-white/5">
-                      <th className="font-medium text-secondary text-xs py-3 px-4 text-center w-10">
-                        <input
-                          type="checkbox"
-                          checked={selectedStaff.size === staffData.length}
-                          onChange={handleSelectAll}
-                          className="cursor-pointer accent-custom-yellow w-4 h-4"
-                        />
-                      </th>
-                      <th className="font-medium text-secondary text-xs py-3 px-4 text-left whitespace-nowrap">
+                      <th className="font-medium text-secondary text-xs py-2.5 px-3 text-left">
                         {t("sessions.assignStaff.staffName")}
                       </th>
-                      <th className="font-medium text-secondary text-xs py-3 px-4 text-left whitespace-nowrap">
+                      <th className="font-medium text-secondary text-xs py-2.5 px-2 text-left whitespace-nowrap">
                         {t("sessions.assignStaff.role")}
                       </th>
-                      <th className="font-medium text-secondary text-xs py-3 px-4 text-center whitespace-nowrap">
+                      <th className="font-medium text-secondary text-xs py-2.5 px-2 text-center whitespace-nowrap">
                         {t("sessions.assignStaff.activeSession")}
                       </th>
-                      <th className="font-medium text-secondary text-xs py-3 px-4 text-center whitespace-nowrap">
+                      <th className="font-medium text-secondary text-xs py-2.5 px-3 text-center whitespace-nowrap">
                         {t("sessions.assignStaff.status")}
                       </th>
                     </tr>
@@ -135,44 +115,36 @@ function AssignStaffSheet({ open, onOpenChange, sessionName }: AssignStaffSheetP
                         key={staff.staff_id}
                         className="border-b border-white/5 hover:bg-muted/30 transition-colors"
                       >
-                        <td className="py-3 px-4 text-center">
-                          <input
-                            type="checkbox"
-                            checked={selectedStaff.has(staff.staff_id)}
-                            onChange={() => handleStaffSelect(staff.staff_id)}
-                            className="cursor-pointer accent-custom-yellow w-4 h-4"
-                          />
-                        </td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-center gap-3">
+                        <td className="py-2.5 px-3">
+                          <div className="flex items-center gap-2.5">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={staff.avatar}
                               alt={staff.full_name}
-                              className="w-10 h-10 rounded-full object-cover bg-muted"
+                              className="w-8 h-8 rounded-full object-cover bg-muted shrink-0"
                             />
-                            <div>
-                              <p className="text-sm font-medium text-primary">{staff.full_name}</p>
-                              <p className="text-xs text-secondary">{staff.email}</p>
+                            <div className="min-w-0">
+                              <p className="text-xs font-medium text-primary truncate">{staff.full_name}</p>
+                              <p className="text-[10px] text-secondary truncate">{staff.email}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="text-primary/80 py-3 px-4 text-xs whitespace-nowrap">
+                        <td className="text-primary/80 py-2.5 px-2 whitespace-nowrap">
                           {staff.role}
                         </td>
-                        <td className="text-primary/80 py-3 px-4 text-xs text-center whitespace-nowrap">
+                        <td className="text-primary/80 py-2.5 px-2 text-center whitespace-nowrap">
                           {staff.assigned_sessions}
                         </td>
-                        <td className="py-3 px-4 text-center">
+                        <td className="py-2.5 px-3 text-center">
                           <button
                             onClick={() => handleAssignClick(staff.staff_id)}
-                            className={`cursor-pointer p-2 rounded-lg transition-colors ${
+                            className={`cursor-pointer p-1.5 rounded-lg transition-colors ${
                               selectedStaff.has(staff.staff_id)
                                 ? "bg-custom-red hover:bg-custom-red/80 text-white"
                                 : "bg-custom-red/20 hover:bg-custom-red/30 text-custom-red"
                             }`}
                           >
-                            <UserPlus className="w-4 h-4" />
+                            <UserPlus className="w-3.5 h-3.5" />
                           </button>
                         </td>
                       </tr>
@@ -190,7 +162,7 @@ function AssignStaffSheet({ open, onOpenChange, sessionName }: AssignStaffSheetP
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
         onConfirm={handleConfirm}
-        type="cancel"
+        type={confirmType}
       />
     </>
   )
