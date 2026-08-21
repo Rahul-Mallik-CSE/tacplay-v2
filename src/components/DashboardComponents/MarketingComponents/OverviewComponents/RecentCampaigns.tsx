@@ -1,0 +1,106 @@
+"use client"
+
+import { useTranslation } from "react-i18next"
+import { useRouter } from "next/navigation"
+import CustomTable from "@/components/SharedComponents/CustomTable"
+import CampaignActionMenu from "../CommonComponents/CampaignActionMenu"
+import CampaignTypeBadge from "../CommonComponents/CampaignTypeBadge"
+import CampaignStatusBadge from "../CommonComponents/CampaignStatusBadge"
+import { mockCampaigns } from "@/mock-data/DashboardMockData/marketing-mock-data"
+import type { Campaign } from "@/types/DashboardTypes/MarketingTypes"
+
+export default function RecentCampaigns() {
+  const { t } = useTranslation("dashboard")
+  const router = useRouter()
+
+  const recentCampaigns = mockCampaigns.slice(0, 5)
+
+  const columns = [
+    {
+      header: t("marketing.columns.campaigns"),
+      accessor: (row: Campaign) => (
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-white/10 rounded-lg flex-shrink-0" />
+          <div>
+            <p className="text-sm font-medium text-primary">{row.name}</p>
+            <p className="text-xs text-secondary">{row.description}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      header: t("marketing.columns.type"),
+      accessor: (row: Campaign) => <CampaignTypeBadge type={row.type} />,
+    },
+    {
+      header: t("marketing.columns.audience"),
+      accessor: (row: Campaign) => <span>{row.audience}</span>,
+    },
+    {
+      header: t("marketing.columns.scheduled"),
+      accessor: (row: Campaign) => (
+        <div>
+          <p className="text-sm">{row.scheduled_date}</p>
+          <p className="text-xs text-secondary">{row.scheduled_time}</p>
+        </div>
+      ),
+    },
+    {
+      header: t("marketing.columns.booking"),
+      accessor: (row: Campaign) => (
+        <div>
+          <p className="text-sm">{row.booking_count}</p>
+          <p className="text-xs text-green-400">+{row.booking_change}%</p>
+        </div>
+      ),
+    },
+    {
+      header: t("marketing.columns.revenue"),
+      accessor: (row: Campaign) => <span>€{row.revenue.toLocaleString()}</span>,
+    },
+    {
+      header: t("marketing.columns.status"),
+      accessor: (row: Campaign) => <CampaignStatusBadge status={row.status} />,
+    },
+  ]
+
+  const handleDelete = (id: number) => {
+    console.log("Delete", id)
+  }
+
+  const handleEdit = (id: number) => {
+    console.log("Edit", id)
+  }
+
+  const handleDuplicate = (id: number) => {
+    console.log("Duplicate", id)
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl md:text-2xl font-bold text-primary">
+          {t("marketing.recentCampaigns")}
+        </h2>
+        <button
+          onClick={() => router.push("/dashboard/marketing/campaigns")}
+          className="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+        >
+          {t("marketing.viewAllCampaigns")}
+        </button>
+      </div>
+      <CustomTable
+        data={recentCampaigns as unknown as Record<string, unknown>[]}
+        columns={columns as never}
+        actionRenderer={(row) => (
+          <CampaignActionMenu
+            campaign={row as unknown as Campaign}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            onDuplicate={handleDuplicate}
+          />
+        )}
+      />
+    </div>
+  )
+}

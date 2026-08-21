@@ -2,7 +2,7 @@
 
 "use client";
 
-import { LayoutGrid, Settings, BarChart3, CircleHelp, Package, Users } from "lucide-react";
+import { LayoutGrid, Settings, BarChart3, CircleHelp, Package, Users, Megaphone } from "lucide-react";
 import { CiTrophy } from "react-icons/ci";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BiMoneyWithdraw } from "react-icons/bi";
@@ -40,6 +40,43 @@ export function useDashboardNavItems(): NavItemConfig[] {
       href: "/dashboard/analytics",
       icon: BarChart3,
       label: t("sidebar.analytics"),
+    },
+    {
+      href: "/dashboard/marketing",
+      icon: Megaphone,
+      label: t("sidebar.marketing"),
+      children: [
+        {
+          href: "/dashboard/marketing/overview",
+          icon: Megaphone,
+          label: t("marketing.overview"),
+        },
+        {
+          href: "/dashboard/marketing/campaigns",
+          icon: Megaphone,
+          label: t("marketing.campaigns"),
+        },
+        {
+          href: "/dashboard/marketing/email",
+          icon: Megaphone,
+          label: t("marketing.email"),
+        },
+        {
+          href: "/dashboard/marketing/sms",
+          icon: Megaphone,
+          label: t("marketing.sms"),
+        },
+        {
+          href: "/dashboard/marketing/push-notification",
+          icon: Megaphone,
+          label: t("marketing.pushNotification"),
+        },
+        {
+          href: "/dashboard/marketing/vouchers",
+          icon: Megaphone,
+          label: t("marketing.vouchers"),
+        },
+      ],
     },
     {
       href: "/dashboard/subscription",
