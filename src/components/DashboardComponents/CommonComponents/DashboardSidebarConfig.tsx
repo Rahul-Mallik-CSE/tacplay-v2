@@ -2,10 +2,9 @@
 
 "use client";
 
-import { LayoutGrid, Settings, BarChart3, CircleHelp, Package, Users, Megaphone } from "lucide-react";
+import { LayoutGrid, Settings, BarChart3, CircleHelp, Package, Users, Megaphone, MessageCircle } from "lucide-react";
 import { CiTrophy } from "react-icons/ci";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { BiMoneyWithdraw } from "react-icons/bi";
 import { GrUserManager } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
 import type { NavItemConfig } from "@/components/SharedComponents/NavItem";
@@ -30,81 +29,11 @@ export function useDashboardNavItems(): NavItemConfig[] {
       icon: CiTrophy,
       label: t("sidebar.sessions"),
     },
-    
-    {
-      href: "/dashboard/earnings",
-      icon: BiMoneyWithdraw,
-      label: t("sidebar.earnings"),
-    },
-    {
-      href: "/dashboard/analytics",
-      icon: BarChart3,
-      label: t("sidebar.analytics"),
-    },
-    {
-      href: "/dashboard/marketing",
-      icon: Megaphone,
-      label: t("sidebar.marketing"),
-      children: [
-        {
-          href: "/dashboard/marketing/overview",
-          icon: Megaphone,
-          label: t("marketing.overview"),
-        },
-        {
-          href: "/dashboard/marketing/campaigns",
-          icon: Megaphone,
-          label: t("marketing.campaigns"),
-        },
-        {
-          href: "/dashboard/marketing/email",
-          icon: Megaphone,
-          label: t("marketing.email"),
-        },
-        {
-          href: "/dashboard/marketing/sms",
-          icon: Megaphone,
-          label: t("marketing.sms"),
-        },
-        {
-          href: "/dashboard/marketing/push-notification",
-          icon: Megaphone,
-          label: t("marketing.pushNotification"),
-        },
-        {
-          href: "/dashboard/marketing/vouchers",
-          icon: Megaphone,
-          label: t("marketing.vouchers"),
-        },
-      ],
-    },
-    {
-      href: "/dashboard/subscription",
-      icon: Package,
-      label: t("subscription.title"),
-      children: [
-        {
-          href: "/dashboard/subscription/overview",
-          icon: Package,
-          label: t("subscription.tabs.overview"),
-        },
-        {
-          href: "/dashboard/subscription/billing-history",
-          icon: Package,
-          label: t("subscription.tabs.billingHistory"),
-        },
-        {
-          href: "/dashboard/subscription/payment-methods",
-          icon: Package,
-          label: t("subscription.tabs.paymentMethods"),
-        },
-      ],
-    },
     {
       href: "/dashboard/field-profile",
       icon: GrUserManager,
       label: t("sidebar.fieldProfile"),
-      children: [
+      subItems: [
         {
           href: "/dashboard/field-profile/field-details",
           icon: GrUserManager,
@@ -141,23 +70,84 @@ export function useDashboardNavItems(): NavItemConfig[] {
           label: t("arena.tabs.billings"),
         },
       ],
+      
+    },
+    {
+      href: "/dashboard/marketing",
+      icon: Megaphone,
+      label: t("sidebar.marketing"),
+      subItems: [
+        {
+          href: "/dashboard/marketing/overview",
+          icon: Megaphone,
+          label: t("marketing.overview"),
+        },
+        {
+          href: "/dashboard/marketing/campaigns",
+          icon: Megaphone,
+          label: t("marketing.campaigns"),
+        },
+        {
+          href: "/dashboard/marketing/email",
+          icon: Megaphone,
+          label: t("marketing.email"),
+        },
+        {
+          href: "/dashboard/marketing/sms",
+          icon: Megaphone,
+          label: t("marketing.sms"),
+        },
+        {
+          href: "/dashboard/marketing/push-notification",
+          icon: Megaphone,
+          label: t("marketing.pushNotification"),
+        },
+        {
+          href: "/dashboard/marketing/vouchers",
+          icon: Megaphone,
+          label: t("marketing.vouchers"),
+        },
+      ],
+      separator: true,
     },
     {
       href: "/dashboard/staff",
       icon: Users,
       label: t("sidebar.staff"),
-      children: [
+    },
+    {
+      href: "/dashboard/analytics",
+      icon: BarChart3,
+      label: t("sidebar.analytics"),
+    },
+    {
+      href: "/dashboard/subscription",
+      icon: Package,
+      label: t("subscription.title"),
+      subItems: [
         {
-          href: "/dashboard/staff/staff-management",
-          icon: Users,
-          label: t("sidebar.staffManagement"),
+          href: "/dashboard/subscription/overview",
+          icon: Package,
+          label: t("subscription.tabs.overview"),
         },
         {
-          href: "/dashboard/staff/role-management",
-          icon: Users,
-          label: t("sidebar.roleManagement"),
+          href: "/dashboard/subscription/billing-history",
+          icon: Package,
+          label: t("subscription.tabs.billingHistory"),
+        },
+        {
+          href: "/dashboard/subscription/payment-methods",
+          icon: Package,
+          label: t("subscription.tabs.paymentMethods"),
         },
       ],
+      
+    },
+    {
+      href: "/dashboard/chat",
+      icon: MessageCircle,
+      label: t("sidebar.chat"),
+      separator: true,
     },
     {
       href: "/dashboard/help-support",

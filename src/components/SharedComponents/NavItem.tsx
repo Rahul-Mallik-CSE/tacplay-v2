@@ -17,7 +17,8 @@ export interface NavItemConfig {
   icon: React.ElementType;
   label: string;
   exact?: boolean;
-  children?: NavItemConfig[];
+  subItems?: NavItemConfig[];
+  separator?: boolean;
 }
 
 interface NavItemProps extends NavItemConfig {
@@ -31,12 +32,12 @@ export default function NavItem({
   label,
   active,
   collapsed = false,
-  children,
+  subItems,
 }: NavItemProps) {
   const pathname = usePathname();
-  const hasChildren = children && children.length > 0;
+  const hasSubItems = subItems && subItems.length > 0;
 
-  const isChildActive = children?.some(
+  const isChildActive = subItems?.some(
     (child: NavItemConfig) =>
       pathname === child.href || pathname?.startsWith(child.href + "/")
   );
@@ -49,7 +50,7 @@ export default function NavItem({
     }
   }, [isChildActive]);
 
-  if (hasChildren) {
+  if (hasSubItems) {
     return (
       <SidebarMenuItem>
         <div className="relative">
@@ -83,7 +84,7 @@ export default function NavItem({
             <div className="ml-5 mt-1 mb-2 relative">
               <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-white/20" />
               <div className="space-y-0">
-                {children.map((child: NavItemConfig) => {
+                {subItems.map((child: NavItemConfig) => {
                   const isChildItemActive =
                     pathname === child.href ||
                     pathname?.startsWith(child.href + "/");

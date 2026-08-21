@@ -98,29 +98,33 @@ export default function AppSidebar({
             }
           >
             {navItems.map((item) => (
-              <NavItem
-                key={item.href}
-                href={item.href}
-                icon={item.icon}
-                label={item.label}
-                exact={item.exact}
-                children={item.children}
-                active={
-                  item.exact
-                    ? pathname === item.href
-                    : !!(
-                        pathname === item.href ||
-                        pathname?.startsWith(item.href + "/")
-                      )
-                }
-                collapsed={isCollapsed}
-              />
+              <React.Fragment key={item.href}>
+                {item.separator && (
+                  <div className="my-2 mx-2 border-t border-white/10" />
+                )}
+                <NavItem
+                  href={item.href}
+                  icon={item.icon}
+                  label={item.label}
+                  exact={item.exact}
+                  subItems={item.subItems}
+                  active={
+                    item.exact
+                      ? pathname === item.href
+                      : !!(
+                          pathname === item.href ||
+                          pathname?.startsWith(item.href + "/")
+                        )
+                  }
+                  collapsed={isCollapsed}
+                />
+              </React.Fragment>
             ))}
           </SidebarMenu>
         </SidebarContent>
 
         {/* Footer */}
-        <SidebarFooter className="pb-16 bg-background rounded-b-4xl border-r-2 border-b-2 border-l-2 border-[#2C2740] shadow-neutral-600">
+        <SidebarFooter className="pb-2 bg-background rounded-b-4xl border-r-2 border-b-2 border-l-2 border-[#2C2740] shadow-neutral-600">
           {showUpgradeBanner && (
             isCollapsed ? (
               <div className="flex justify-center mb-2">
