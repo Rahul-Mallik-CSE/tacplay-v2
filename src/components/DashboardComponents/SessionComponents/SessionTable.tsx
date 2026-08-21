@@ -3,24 +3,22 @@
 /**
  * SessionTable.tsx
  * Main sessions list table component with filters, pagination,
- * and row click to navigate to session details.
+ * action dropdown menu, and row click to navigate to session details.
  * Uses mock data for demonstration without API integration.
  */
 
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useRef, useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Plus } from "lucide-react"
+import { Plus, Search, Calendar, Filter, MoreVertical, Pencil, Copy, Users, Eye } from "lucide-react"
 import Link from "next/link"
 import { useTranslation } from "react-i18next"
-import SessionFilters from "./SessionFilters"
 import SessionMatchTypeDot from "./SessionMatchTypeDot"
 import SessionStatusBadge from "./SessionStatusBadge"
-import SessionLoading from "./SessionLoading"
+import { Switch } from "@/components/ui/switch"
 import { mockSessionsListData } from "@/mock-data/DashboardMockData/sessions-mock-data"
+import AssignStaffSheet from "./AssignStaffSheet"
 import type {
   SessionsListItem,
-  SessionStatusFilter,
-  SessionMatchTypeFilter,
 } from "@/types/DashboardTypes/SessionTypes"
 
 /** Items per page options */
@@ -31,36 +29,45 @@ function SessionTable() {
   const router = useRouter()
 
   // Local state for filters, pagination
-  const [status, setStatus] = useState<SessionStatusFilter>("all")
-  const [matchType, setMatchType] = useState<SessionMatchTypeFilter>("all")
+  const [search, setSearch] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
+  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set())
+  const [openActionId, setOpenActionId] = useState<number | null>(null)
+  const [disabledSessions, setDisabledSessions] = useState<Set<number>>(new Set())
+  const [assignSheetOpen, setAssignSheetOpen] = useState(false)
+  const [assignSheetSessionId, setAssignSheetSessionId] = useState<number | null>(null)
+  const [assignSheetSessionName, setAssignSheetSessionName] = useState("")
+  const actionMenuRef = useRef<HTMLDivElement>(null)
+
+  // Close action menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (actionMenuRef.current && !actionMenuRef.current.contains(event.target as Node)) {
+        setOpenActionId(null)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   // Filter and paginate mock data
   const filteredData = useMemo(() => {
     return mockSessionsListData.filter((item) => {
-      const statusMatch = status === "all" || item.status === status
-      const matchTypeMatch =
-        matchType === "all" || item.match_type === matchType
-      return statusMatch && matchTypeMatch
+      if (!search.trim()) return true
+      const query = search.toLowerCase()
+      return (
+        item.session_name.toLowerCase().includes(query) ||
+        item.session_id.toLowerCase().includes(query) ||
+        item.assign_staff.toLowerCase().includes(query)
+      )
     })
-  }, [status, matchType])
+  }, [search])
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage)
   const endIndex = startIndex + currentData.length
-
-  // Handle filter changes with page reset
-  const handleStatusChange = (value: SessionStatusFilter) => {
-    setStatus(value)
-    setCurrentPage(1)
-  }
-
-  const handleMatchTypeChange = (value: SessionMatchTypeFilter) => {
-    setMatchType(value)
-    setCurrentPage(1)
-  }
 
   // Handle row click to navigate to session details
   const handleRowClick = (row: SessionsListItem) => {
@@ -72,6 +79,45 @@ function SessionTable() {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page)
     }
+  }
+
+  // Handle select all
+  const handleSelectAll = () => {
+    if (selectedRows.size === currentData.length) {
+      setSelectedRows(new Set())
+    } else {
+      setSelectedRows(new Set(currentData.map((row) => row.id)))
+    }
+  }
+
+  // Handle individual row select
+  const handleRowSelect = (id: number) => {
+    const newSelected = new Set(selectedRows)
+    if (newSelected.has(id)) {
+      newSelected.delete(id)
+    } else {
+      newSelected.add(id)
+    }
+    setSelectedRows(newSelected)
+  }
+
+  // Handle disable toggle
+  const handleDisableToggle = (id: number) => {
+    const newDisabled = new Set(disabledSessions)
+    if (newDisabled.has(id)) {
+      newDisabled.delete(id)
+    } else {
+      newDisabled.add(id)
+    }
+    setDisabledSessions(newDisabled)
+  }
+
+  // Handle assign staff from action menu
+  const handleAssignStaff = (row: SessionsListItem) => {
+    setAssignSheetSessionId(row.id)
+    setAssignSheetSessionName(row.session_name)
+    setAssignSheetOpen(true)
+    setOpenActionId(null)
   }
 
   // Generate page numbers for pagination
@@ -106,60 +152,94 @@ function SessionTable() {
 
   return (
     <div className="w-full space-y-6">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-primary">
-          {t("sessions.title")}
-        </h1>
-      </div>
+      
 
-      {/* Filters & Create Button */}
+      {/* Search, Filter, Calendar, Create Button */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <SessionFilters
-          status={status}
-          matchType={matchType}
-          onStatusChange={handleStatusChange}
-          onMatchTypeChange={handleMatchTypeChange}
-        />
+        {/* Page Header */}
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary">
+            {t("sessions.title")}
+          </h1>
+        </div>
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          {/* Search Box */}
+          <div className="relative flex-1 sm:flex-none">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary" />
+            <input
+              type="text"
+              placeholder={t("common.search")}
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value)
+                setCurrentPage(1)
+              }}
+              className="w-full sm:w-64 bg-muted border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-primary outline-none placeholder:text-secondary"
+            />
+          </div>
 
-        {/* Create New Session */}
-        <Link href="/dashboard/sessions/create-session">
-          <button className="flex cursor-pointer items-center gap-2 bg-custom-red hover:bg-custom-red/80 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors">
-            <Plus className="w-4 h-4" />
-            {t("sessions.createNew")}
+          {/* Filter Button */}
+          <button className="flex items-center gap-2 bg-muted border border-white/10 rounded-lg px-4 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer">
+            <Filter className="w-4 h-4" />
+            <span className="hidden sm:inline">{t("common.filter")}</span>
           </button>
-        </Link>
+
+          {/* Calendar Button */}
+          <button className="flex items-center gap-2 bg-muted border border-white/10 rounded-lg px-4 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer">
+            <Calendar className="w-4 h-4" />
+          </button>
+          {/* Create New Session */}
+          <Link href="/dashboard/sessions/create-session">
+            <button className="flex cursor-pointer items-center gap-2 bg-custom-red hover:bg-custom-red/80 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors">
+              <Plus className="w-4 h-4" />
+              {t("sessions.createNew")}
+            </button>
+          </Link>
+        </div>
+
+        
       </div>
 
       {/* Table */}
       <div className="w-full space-y-3 sm:space-y-4 overflow-x-auto">
         <div className="rounded-xl overflow-hidden border border-white/5">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm min-w-[800px]">
+            <table className="w-full text-sm min-w-[900px]">
               <thead>
                 <tr className="bg-muted/50 hover:bg-muted/50 border-b border-white/5">
+                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-center whitespace-nowrap w-10">
+                    <input
+                      type="checkbox"
+                      checked={selectedRows.size === currentData.length && currentData.length > 0}
+                      onChange={handleSelectAll}
+                      className="cursor-pointer accent-custom-yellow w-4 h-4"
+                    />
+                  </th>
                   <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
                     {t("sessions.columns.sessionName")}
                   </th>
                   <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
-                    {t("sessions.columns.date")}
+                    {t("sessions.columns.dateTime")}
                   </th>
                   <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
-                    {t("sessions.columns.time")}
+                    {t("sessions.columns.assignStaff")}
                   </th>
                   <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
                     {t("sessions.columns.matchType")}
                   </th>
-                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
+                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-center whitespace-nowrap">
                     {t("sessions.columns.players")}
                   </th>
-                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
+                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-center whitespace-nowrap">
                     {t("sessions.columns.booked")}
                   </th>
-                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-left whitespace-nowrap">
+                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-right whitespace-nowrap">
+                    {t("sessions.columns.price")}
+                  </th>
+                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-center whitespace-nowrap">
                     {t("sessions.columns.status")}
                   </th>
-                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-right whitespace-nowrap">
+                  <th className="font-medium text-secondary text-xs sm:text-sm py-3 sm:py-4 px-4 text-center whitespace-nowrap">
                     {t("common.action")}
                   </th>
                 </tr>
@@ -171,55 +251,111 @@ function SessionTable() {
                     className="border-b border-white/5 hover:bg-muted/30 transition-colors cursor-pointer"
                     onClick={() => handleRowClick(row)}
                   >
-                    <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
+                    <td className="py-3 sm:py-4 px-4 text-center" onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        checked={selectedRows.has(row.id)}
+                        onChange={() => handleRowSelect(row.id)}
+                        className="cursor-pointer accent-custom-yellow w-4 h-4"
+                      />
+                    </td>
+                    <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap font-medium">
                       {row.session_name}
                     </td>
-                    <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
-                      {row.date}
+                    <td className="py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
+                      <div className="text-primary/80">
+                        {row.date_time.split("\n").map((line, i) => (
+                          <div key={i}>{line}</div>
+                        ))}
+                      </div>
                     </td>
                     <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
-                      {row.time}
+                      {row.assign_staff}
                     </td>
                     <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
                       <SessionMatchTypeDot type={row.match_type_display} />
                     </td>
-                    <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
+                    <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap text-center">
                       {row.player}
                     </td>
-                    <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
+                    <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap text-center">
                       {row.booked}
                     </td>
-                    <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap">
+                    <td className="text-primary/80 py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap text-right">
+                      ${row.price}
+                    </td>
+                    <td className="py-3 sm:py-4 px-4 text-xs sm:text-sm whitespace-nowrap text-center">
                       <SessionStatusBadge status={row.status_display} />
                     </td>
-                    <td className="text-right py-3 sm:py-4 px-4">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleRowClick(row)
-                        }}
-                        className="cursor-pointer p-1.5 sm:p-2 hover:bg-white/5 rounded-full transition-colors inline-flex items-center justify-center"
-                      >
-                        <svg
-                          className="w-4 h-4 sm:w-5 sm:h-5 text-custom-yellow"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                    <td className="py-3 sm:py-4 px-4 text-center" onClick={(e) => e.stopPropagation()}>
+                      <div className="relative inline-block" ref={openActionId === row.id ? actionMenuRef : undefined}>
+                        <button
+                          onClick={() => setOpenActionId(openActionId === row.id ? null : row.id)}
+                          className="cursor-pointer p-1.5 sm:p-2 hover:bg-white/5 rounded-full transition-colors inline-flex items-center justify-center"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                          />
-                        </svg>
-                      </button>
+                          <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-secondary" />
+                        </button>
+
+                        {/* Action Dropdown Menu */}
+                        {openActionId === row.id && (
+                          <div className="absolute right-0 top-full mt-1 z-50 w-48 bg-card border border-white/10 rounded-lg shadow-xl py-1">
+                            {/* Disable Toggle */}
+                            <div className="flex items-center justify-between px-4 py-2.5 hover:bg-white/5">
+                              <span className="flex items-center gap-2 text-sm text-primary">
+                                <Pencil className="w-4 h-4" />
+                                {t("sessions.actions.disable")}
+                              </span>
+                              <Switch
+                                size="sm"
+                                checked={!disabledSessions.has(row.id)}
+                                onCheckedChange={() => handleDisableToggle(row.id)}
+                              />
+                            </div>
+
+                            {/* Edit Session */}
+                            <button
+                              onClick={() => {
+                                setOpenActionId(null)
+                                router.push(`/dashboard/sessions/${row.id}`)
+                              }}
+                              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+                            >
+                              <Pencil className="w-4 h-4" />
+                              {t("sessions.actions.editSession")}
+                            </button>
+
+                            {/* Duplicate */}
+                            <button
+                              onClick={() => setOpenActionId(null)}
+                              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+                            >
+                              <Copy className="w-4 h-4" />
+                              {t("sessions.actions.duplicate")}
+                            </button>
+
+                            {/* Assign Staff */}
+                            <button
+                              onClick={() => handleAssignStaff(row)}
+                              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+                            >
+                              <Users className="w-4 h-4" />
+                              {t("sessions.actions.assignStaff")}
+                            </button>
+
+                            {/* View Details */}
+                            <button
+                              onClick={() => {
+                                setOpenActionId(null)
+                                router.push(`/dashboard/sessions/${row.id}`)
+                              }}
+                              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+                            >
+                              <Eye className="w-4 h-4" />
+                              {t("sessions.actions.viewDetails")}
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -230,86 +366,90 @@ function SessionTable() {
 
         {/* Pagination */}
         <div className="flex items-center justify-between px-2 gap-3 flex-wrap">
-          <p className="text-xs text-secondary">
-            {t("table.showing", {
-              from: filteredData.length === 0 ? 0 : startIndex + 1,
-              to: Math.min(endIndex, filteredData.length),
-              total: filteredData.length,
-            })}
-          </p>
-          <div className="flex items-center gap-2">
-            {/* Previous button */}
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={`text-xs sm:text-sm h-8 sm:h-10 px-2 sm:px-4 text-secondary hover:text-primary transition-colors cursor-pointer ${
-                currentPage === 1 ? "pointer-events-none opacity-50" : ""
-              }`}
-            >
-              &laquo; Prev
-            </button>
+          {/* Page Numbers */}
+          <div className="flex items-center gap-1">
+            {getPageNumbers().map((page, index) => (
+              <span key={index}>
+                {page === "..." ? (
+                  <span className="text-xs sm:text-sm h-8 sm:h-10 w-8 sm:w-10 flex items-center justify-center text-secondary">
+                    ...
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => handlePageChange(page as number)}
+                    className={`text-xs sm:text-sm h-8 sm:h-10 w-8 sm:w-10 flex items-center justify-center rounded-md transition-colors cursor-pointer ${
+                      currentPage === page
+                        ? "bg-custom-red text-white hover:bg-custom-red/80"
+                        : "text-secondary hover:text-primary"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                )}
+              </span>
+            ))}
+          </div>
 
-            {/* Page numbers */}
-            <div className="hidden sm:flex items-center gap-1">
-              {getPageNumbers().map((page, index) => (
-                <span key={index}>
-                  {page === "..." ? (
-                    <span className="text-xs sm:text-sm h-8 sm:h-10 w-8 sm:w-10 flex items-center justify-center text-secondary">
-                      ...
-                    </span>
-                  ) : (
-                    <button
-                      onClick={() => handlePageChange(page as number)}
-                      className={`text-xs sm:text-sm h-8 sm:h-10 w-8 sm:w-10 flex items-center justify-center rounded-md transition-colors cursor-pointer ${
-                        currentPage === page
-                          ? "bg-custom-red text-white hover:bg-custom-red/80"
-                          : "text-secondary hover:text-primary"
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  )}
-                </span>
-              ))}
-            </div>
-
-            {/* Mobile current page */}
-            <span className="sm:hidden text-xs h-8 w-8 flex items-center justify-center bg-custom-red text-white rounded-md">
-              {currentPage}
-            </span>
-
-            {/* Next button */}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className={`text-xs sm:text-sm h-8 sm:h-10 px-2 sm:px-4 text-secondary hover:text-primary transition-colors cursor-pointer ${
-                currentPage === totalPages
-                  ? "pointer-events-none opacity-50"
-                  : ""
-              }`}
-            >
-              Next &raquo;
-            </button>
+          {/* Showing info + Items per page */}
+          <div className="flex items-center gap-3">
+            <p className="text-xs text-secondary">
+              {t("table.showing", {
+                from: filteredData.length === 0 ? 0 : startIndex + 1,
+                to: Math.min(endIndex, filteredData.length),
+                total: filteredData.length,
+              })}
+            </p>
 
             {/* Items per page select */}
-            <select
-              className="bg-muted border border-white/10 text-primary text-xs rounded-md px-2 py-1.5 outline-none"
-              value={itemsPerPage}
-              onChange={(event) => {
-                setItemsPerPage(Number(event.target.value))
-                setCurrentPage(1)
-              }}
-            >
-              {PAGE_SIZE_OPTIONS.map((size) => (
-                <option key={size} value={size}>
-                  {t("common.show")} {size}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                className="bg-muted border border-white/10 text-primary text-xs rounded-md px-3 py-2 pr-8 outline-none appearance-none cursor-pointer"
+                value={itemsPerPage}
+                onChange={(event) => {
+                  setItemsPerPage(Number(event.target.value))
+                  setCurrentPage(1)
+                }}
+              >
+                {PAGE_SIZE_OPTIONS.map((size) => (
+                  <option key={size} value={size}>
+                    {t("common.show")} {size}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-secondary pointer-events-none" />
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Assign Staff Sheet */}
+      <AssignStaffSheet
+        open={assignSheetOpen}
+        onOpenChange={setAssignSheetOpen}
+        sessionId={assignSheetSessionId}
+        sessionName={assignSheetSessionName}
+      />
     </div>
+  )
+}
+
+/** ChevronDown icon for select dropdown */
+function ChevronDown({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
   )
 }
 

@@ -13,7 +13,6 @@ import SessionDetailsHeader from "./SessionDetailsHeader"
 import SessionScoreboard from "./SessionScoreboard"
 import SessionPlayerCard from "./SessionPlayerCard"
 import SessionInfoSheet from "./SessionInfoSheet"
-import EditSessionSheet from "./EditSessionSheet"
 import PlayerDetailsSheet from "./PlayerDetailsSheet"
 import type { SessionPlayerCardModel } from "./SessionPlayerCard"
 import { mockSessionDetails } from "@/mock-data/DashboardMockData/sessions-mock-data"
@@ -23,7 +22,6 @@ function SessionDetailsContainer() {
 
   // Local state for sheets
   const [sessionInfoOpen, setSessionInfoOpen] = useState(false)
-  const [editOpen, setEditOpen] = useState(false)
   const [playerDetailsOpen, setPlayerDetailsOpen] = useState(false)
   const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null)
 
@@ -71,7 +69,6 @@ function SessionDetailsContainer() {
     <div className="space-y-4 md:space-y-6">
       {/* Header */}
       <SessionDetailsHeader
-        onEdit={() => setEditOpen(true)}
         onViewInfo={() => setSessionInfoOpen(true)}
       />
 
@@ -123,11 +120,6 @@ function SessionDetailsContainer() {
       <SessionInfoSheet
         open={sessionInfoOpen}
         onOpenChange={setSessionInfoOpen}
-        sessionId={1}
-      />
-      <EditSessionSheet
-        open={editOpen}
-        onOpenChange={setEditOpen}
         sessionId={1}
       />
       <PlayerDetailsSheet

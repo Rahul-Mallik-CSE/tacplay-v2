@@ -3,8 +3,8 @@
 /**
  * SessionScoreboard.tsx
  * Scoreboard component displaying team logos, names, scores, and capacity.
- * Features a styled design with skewed red box for session info
- * and a bordered scoreboard with team details.
+ * Features a skewed red box for session info/timer and diagonal red lines
+ * separating scoreboard sections, matching the Image 5 design.
  */
 
 import React from "react"
@@ -67,17 +67,27 @@ function SessionScoreboard({
                 <span className="text-white text-xs sm:text-sm font-medium tabular-nums">
                   {time}
                 </span>
+                {/* Progress bar */}
+                <div className="w-16 h-1.5 bg-white/30 rounded-full overflow-hidden">
+                  <div className="h-full w-2/3 bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 rounded-full" />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Scoreboard */}
-        <div className="relative border-4 border-border/20 rounded-4xl shadow-4xl shadow-amber-700">
-          <div className="grid grid-cols-5 items-center px-3 py-5 sm:px-6 sm:py-8">
+        <div className="relative border-4 border-border/20 rounded-4xl shadow-4xl shadow-amber-700 mt-2">
+          <div className="grid grid-cols-5 items-center px-3 py-5 sm:px-6 sm:py-8 relative">
+            {/* Diagonal Red Lines */}
+            <div className="absolute right-[80%] top-0 bottom-0 w-px bg-linear-to-b from-transparent via-red-600 to-transparent transform -skew-x-20" />
+            <div className="absolute right-[60%] top-0 bottom-0 w-px bg-linear-to-b from-transparent via-red-600 to-transparent transform -skew-x-20" />
+            <div className="absolute right-[40%] top-0 bottom-0 w-px bg-linear-to-b from-transparent via-red-600 to-transparent transform -skew-x-20" />
+            <div className="absolute right-[20%] top-0 bottom-0 w-px bg-linear-to-b from-transparent via-red-600 to-transparent transform -skew-x-20" />
+
             {/* Team A Logo + Name */}
             <div className="flex flex-col items-center gap-2 text-center">
-              <div className="w-6 h-6 md:w-16 md:h-16 rounded-full overflow-hidden relative shrink-0">
+              <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-full overflow-hidden relative shrink-0">
                 {teamA.logo ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -93,7 +103,6 @@ function SessionScoreboard({
                 </p>
               </div>
             </div>
-            <div className="absolute right-[80%] top-0 bottom-0 w-px bg-linear-to-b from-transparent via-red-600 to-transparent transform -skew-x-20" />
 
             {/* Team A Score */}
             <div className="text-center">
@@ -104,7 +113,6 @@ function SessionScoreboard({
                 {t("sessions.details.score")}
               </p>
             </div>
-            <div className="absolute right-[60%] top-0 bottom-0 w-px bg-linear-to-b from-transparent via-red-600 to-transparent transform -skew-x-20" />
 
             {/* Center - Team Full */}
             <div className="text-center">
@@ -115,7 +123,6 @@ function SessionScoreboard({
                 {t("sessions.details.teamFull")}
               </p>
             </div>
-            <div className="absolute right-[40%] top-0 bottom-0 w-px bg-linear-to-b from-transparent via-red-600 to-transparent transform -skew-x-20" />
 
             {/* Team B Score */}
             <div className="text-center">
@@ -126,11 +133,10 @@ function SessionScoreboard({
                 {t("sessions.details.score")}
               </p>
             </div>
-            <div className="absolute right-[20%] top-0 bottom-0 w-px bg-linear-to-b from-transparent via-red-600 to-transparent transform -skew-x-20" />
 
             {/* Team B Logo + Name */}
             <div className="flex flex-col items-center gap-2 text-center">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden relative shrink-0">
+              <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-full overflow-hidden relative shrink-0">
                 {teamB.logo ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img

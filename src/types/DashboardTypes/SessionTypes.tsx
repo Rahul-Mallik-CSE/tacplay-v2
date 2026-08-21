@@ -10,6 +10,7 @@ export type SessionStatusFilter =
   | "open"
   | "ongoing"
   | "completed"
+  | "full"
   | "cancelled"
 
 /** Match type filter options for session list */
@@ -30,12 +31,16 @@ export type SessionsListItem = {
   session_name: string
   date: string
   time: string
+  date_time: string
   match_type: string
   match_type_display: string
+  assign_staff: string
   player: string
   booked: string
+  price: number
   status: string
   status_display: string
+  disabled: boolean
 }
 
 /** API response structure for sessions list */
@@ -365,4 +370,20 @@ export interface PlayerDetailsSheetProps {
   onOpenChange: (open: boolean) => void
   sessionId: number | null
   bookingId: number | null
+}
+
+/** Props for AssignStaffSheet component */
+export interface AssignStaffSheetProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  sessionId: number | null
+  sessionName?: string
+}
+
+/** Props for SessionConfirmModal component */
+export interface SessionConfirmModalProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onConfirm: () => void
+  type: "assign" | "cancel"
 }

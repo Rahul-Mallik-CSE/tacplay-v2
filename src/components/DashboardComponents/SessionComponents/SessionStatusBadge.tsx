@@ -15,6 +15,8 @@ const STATUS_COLORS: Record<string, string> = {
   open: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
   ongoing: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
   completed: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  complete: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  full: "bg-custom-red/20 text-red-400 border-custom-red/30",
   cancelled: "bg-custom-red/20 text-red-400 border-custom-red/30",
 }
 
