@@ -11,11 +11,7 @@ import SessionTable from "@/components/DashboardComponents/SessionComponents/Ses
 
 function SessionsPage() {
   return (
-    <div className="w-full p-3 md:p-4">
-      <div className="max-w-625 mx-auto">
         <SessionTable />
-      </div>
-    </div>
   )
 }
 

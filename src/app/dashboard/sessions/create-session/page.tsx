@@ -11,11 +11,7 @@ import CreateSessionContainer from "@/components/DashboardComponents/SessionComp
 
 function CreateSessionPage() {
   return (
-    <div className="w-full p-3 md:p-4">
-      <div className="max-w-625 mx-auto">
         <CreateSessionContainer />
-      </div>
-    </div>
   )
 }
 

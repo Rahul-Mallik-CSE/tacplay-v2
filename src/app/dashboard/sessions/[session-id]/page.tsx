@@ -11,11 +11,7 @@ import SessionDetailsContainer from "@/components/DashboardComponents/SessionCom
 
 function SessionDetailsPage() {
   return (
-    <div className="w-full p-3 md:p-4">
-      <div className="max-w-625 mx-auto">
         <SessionDetailsContainer />
-      </div>
-    </div>
   )
 }
 

@@ -11,8 +11,8 @@ export default function SubscriptionLayout({ children }: SubscriptionLayoutProps
   const { t } = useTranslation("dashboard")
 
   return (
-    <div className="w-full p-3 md:p-4">
-      <div className="max-w-625 mx-auto space-y-6">
+
+      <div className=" space-y-6">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-primary">
             {t("subscription.title")}
@@ -23,6 +23,6 @@ export default function SubscriptionLayout({ children }: SubscriptionLayoutProps
         </div>
         {children}
       </div>
-    </div>
+
   )
 }

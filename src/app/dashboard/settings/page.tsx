@@ -7,15 +7,11 @@
  */
 
 import React from "react"
-import SettingsContainer from "@/components/DashboardComponents/SettingComponents/SettingsContainer"
+import SettingsContainer from "@/components/CommonPagesComponents/SettingComponents/SettingsContainer"
 
 function SettingsPage() {
   return (
-    <div className="w-full p-3 md:p-4">
-      <div className="max-w-625 mx-auto">
         <SettingsContainer />
-      </div>
-    </div>
   )
 }
 
