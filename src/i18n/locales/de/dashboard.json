@@ -55,7 +55,12 @@
     "overview": "Übersicht",
     "users": "Benutzer",
     "arenas": "Arenen",
-    "analytics": "Analysen"
+    "analytics": "Analysen",
+    "fieldManagement": "Feldverwaltung",
+    "playerManagement": "Spielerverwaltung",
+    "earning": "Einnahmen",
+    "commissionManagement": "Provisionsverwaltung",
+    "subscriptionManagement": "Abonnementsverwaltung"
   },
   "home": {
     "analyticsReport": "Analysebericht",

@@ -1,12 +1,10 @@
-/** @format */
+"use client"
 
-"use client";
-
-import React from "react";
-import { useTranslation } from "react-i18next";
+import React from "react"
+import { useTranslation } from "react-i18next"
 
 export default function AdminSettingsPage() {
-  const { t } = useTranslation("dashboard");
+  const { t } = useTranslation("dashboard")
 
   return (
     <div className="w-full p-3 md:p-4">
@@ -21,5 +19,5 @@ export default function AdminSettingsPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

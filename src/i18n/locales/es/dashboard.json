@@ -55,7 +55,12 @@
     "overview": "Resumen",
     "users": "Usuarios",
     "arenas": "Arenas",
-    "analytics": "Analiticas"
+    "analytics": "Analiticas",
+    "fieldManagement": "Gestion de campos",
+    "playerManagement": "Gestion de jugadores",
+    "earning": "Ganancias",
+    "commissionManagement": "Gestion de comisiones",
+    "subscriptionManagement": "Gestion de suscripciones"
   },
   "home": {
     "analyticsReport": "Informe de analitica",
