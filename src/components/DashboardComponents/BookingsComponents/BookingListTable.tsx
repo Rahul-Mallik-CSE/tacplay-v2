@@ -171,10 +171,10 @@ function BookingListTable() {
   type TableRow = BookingListItem & Record<string, unknown>
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 ">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-primary">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary">
             {t("bookings.title")}
           </h1>
           <p className="text-sm text-secondary mt-1">{t("bookings.subtitle")}</p>

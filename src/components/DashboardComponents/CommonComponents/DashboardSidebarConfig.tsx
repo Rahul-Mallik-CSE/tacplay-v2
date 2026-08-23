@@ -114,6 +114,18 @@ export function useDashboardNavItems(): NavItemConfig[] {
       href: "/dashboard/staff",
       icon: Users,
       label: t("sidebar.staff"),
+      subItems: [
+        {
+          href: "/dashboard/staff/staff-management",
+          icon: Users,
+          label: t("sidebar.staffManagement"),
+        },
+        {
+          href: "/dashboard/staff/role-management",
+          icon: Users,
+          label: t("sidebar.roleManagement"),
+        },
+      ],
     },
     {
       href: "/dashboard/analytics",

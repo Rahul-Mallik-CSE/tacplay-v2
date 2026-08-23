@@ -19,7 +19,7 @@ export default function AnalyticsPage() {
   const data = mockAnalyticsData
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-3 md:p-4">
       <AnalyticsHeader />
 
       <StatCards stats={data.stats} />

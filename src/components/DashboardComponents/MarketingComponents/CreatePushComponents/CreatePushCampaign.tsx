@@ -32,7 +32,7 @@ export default function CreatePushCampaign() {
           <ArrowLeft className="w-5 h-5 text-primary" />
         </button>
         <div>
-          <h1 className="text-xl md:text-2xl font-bold text-primary">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary">
             {t("marketing.createPushCampaign")}
           </h1>
           <p className="text-sm text-secondary mt-1">{t("marketing.form.subtitle")}</p>

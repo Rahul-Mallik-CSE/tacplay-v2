@@ -76,7 +76,7 @@ export default function CampaignsTable() {
   return (
     <div className="space-y-4 md:space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-xl md:text-2xl font-bold text-primary">
+        <h1 className="text-2xl md:text-3xl font-bold text-primary">
           {t("marketing.allCampaigns")}
         </h1>
         <div className="relative w-full sm:w-64">

@@ -27,7 +27,7 @@ function SubmitTicketContainer() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-primary">
+        <h1 className="text-2xl md:text-3xl font-bold text-primary">
           {t("helpSupport.submit.title")}
         </h1>
         <p className="text-sm text-secondary mt-1">
