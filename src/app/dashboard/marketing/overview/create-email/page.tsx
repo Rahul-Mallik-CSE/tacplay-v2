@@ -1,6 +1,6 @@
 "use client"
 
-import CreateEmailCampaign from "@/components/DashboardComponents/MarketingComponents/CreateEmailComponents"
+import CreateEmailCampaign from "@/components/CommonPagesComponents/MarketingComponents/CreateEmailComponents"
 
 export default function CreateEmailPage() {
   return (

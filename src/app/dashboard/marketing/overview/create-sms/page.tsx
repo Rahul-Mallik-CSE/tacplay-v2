@@ -1,6 +1,6 @@
 "use client"
 
-import CreateSmsCampaign from "@/components/DashboardComponents/MarketingComponents/CreateSmsComponents"
+import CreateSmsCampaign from "@/components/CommonPagesComponents/MarketingComponents/CreateSmsComponents"
 
 export default function CreateSmsPage() {
   return (

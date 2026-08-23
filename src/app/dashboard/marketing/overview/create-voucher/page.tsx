@@ -1,6 +1,6 @@
 "use client"
 
-import CreateVoucher from "@/components/DashboardComponents/MarketingComponents/CreateVoucherComponents"
+import CreateVoucher from "@/components/CommonPagesComponents/MarketingComponents/CreateVoucherComponents"
 
 export default function CreateVoucherPage() {
   return (

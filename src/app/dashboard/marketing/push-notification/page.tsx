@@ -1,6 +1,6 @@
 "use client"
 
-import PushCampaignsTable from "@/components/DashboardComponents/MarketingComponents/PushComponents"
+import PushCampaignsTable from "@/components/CommonPagesComponents/MarketingComponents/PushComponents"
 
 export default function PushNotificationPage() {
   return (
