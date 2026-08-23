@@ -62,6 +62,37 @@
     "commissionManagement": "Gestion de comisiones",
     "subscriptionManagement": "Gestion de suscripciones"
   },
+  "subscriptionManagement": {
+    "title": "Lista de suscripciones",
+    "columns": {
+      "subscriber": "Suscriptor",
+      "type": "Tipo",
+      "plan": "Plan",
+      "country": "Pais",
+      "amount": "Monto",
+      "billingCycle": "Ciclo de facturacion",
+      "status": "Estado",
+      "nextBillingDate": "Fecha de proxima facturacion"
+    },
+    "actions": {
+      "viewDetails": "Ver detalles",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    }
+  },
+  "earningPage": {
+    "title": "Lista de ganancias",
+    "columns": {
+      "transactionId": "ID de transaccion",
+      "user": "Usuario",
+      "userId": "ID de usuario",
+      "type": "Tipo",
+      "country": "Pais",
+      "plan": "Plan",
+      "amount": "Monto",
+      "date": "Fecha"
+    }
+  },
   "home": {
     "analyticsReport": "Informe de analitica",
     "analyticsSupport": "Soporte analitico de 2025 a 2026",

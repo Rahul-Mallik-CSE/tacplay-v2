@@ -64,6 +64,37 @@
     "commissionManagement": "Commission Management",
     "subscriptionManagement": "Subscription Management"
   },
+  "subscriptionManagement": {
+    "title": "Subscription List",
+    "columns": {
+      "subscriber": "Subscriber",
+      "type": "Type",
+      "plan": "Plan",
+      "country": "Country",
+      "amount": "Amount",
+      "billingCycle": "Billing Cycle",
+      "status": "Status",
+      "nextBillingDate": "Next Billing Date"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  },
+  "earningPage": {
+    "title": "Earning List",
+    "columns": {
+      "transactionId": "Transaction ID",
+      "user": "User",
+      "userId": "User ID",
+      "type": "Type",
+      "country": "Country",
+      "plan": "Plan",
+      "amount": "Amount",
+      "date": "Date"
+    }
+  },
   "home": {
     "analyticsReport": "Analytics report",
     "analyticsSupport": "Analytics support form 2025 to 2026",

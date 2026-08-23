@@ -4,14 +4,7 @@ import SettingsContainer from "@/components/CommonPagesComponents/SettingCompone
 
 
 export default function AdminSettingsPage() {
-
-
-
      return (
-    <div className="w-full p-3 md:p-4">
-      <div className="max-w-625 mx-auto">
         <SettingsContainer />
-      </div>
-    </div>
   )
 }

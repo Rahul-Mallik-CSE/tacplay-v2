@@ -62,6 +62,37 @@
     "commissionManagement": "Provisionsverwaltung",
     "subscriptionManagement": "Abonnementsverwaltung"
   },
+  "subscriptionManagement": {
+    "title": "Abonnementliste",
+    "columns": {
+      "subscriber": "Abonnent",
+      "type": "Typ",
+      "plan": "Plan",
+      "country": "Land",
+      "amount": "Betrag",
+      "billingCycle": "Abrechnungszyklus",
+      "status": "Status",
+      "nextBillingDate": "Nächstes Abrechnungsdatum"
+    },
+    "actions": {
+      "viewDetails": "Details anzeigen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen"
+    }
+  },
+  "earningPage": {
+    "title": "Einnahmenliste",
+    "columns": {
+      "transactionId": "Transaktions-ID",
+      "user": "Benutzer",
+      "userId": "Benutzer-ID",
+      "type": "Typ",
+      "country": "Land",
+      "plan": "Plan",
+      "amount": "Betrag",
+      "date": "Datum"
+    }
+  },
   "home": {
     "analyticsReport": "Analysebericht",
     "analyticsSupport": "Analytics-Support von 2025 bis 2026",
