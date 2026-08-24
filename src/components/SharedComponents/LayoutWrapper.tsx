@@ -39,8 +39,8 @@ export default function LayoutWrapper({
       <SidebarInset className="overflow-x-hidden">
         <div className="bg-root-bg min-h-screen">
           <NavBar pageTitle={pageTitle} onLogout={onLogout} />
-          <div className="w-full px-3 md:px-4">
-            <div className="max-w-625 mx-auto">
+          <div className="w-full px-3 md:px-5 py-2 md:py-4">
+            <div className="max-w-625 mx-auto ">
               {children}
             </div>
           </div>
