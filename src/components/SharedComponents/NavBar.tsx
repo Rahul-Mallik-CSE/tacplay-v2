@@ -71,6 +71,7 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
   const handleLogout = () => {
     setIsLogoutModalOpen(false);
     onLogout?.();
+    router.push("/sign-in");
   };
 
   return (
