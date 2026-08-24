@@ -53,7 +53,7 @@ export function useAdminNavItems(): NavItemConfig[] {
           label: t("sidebar.roleManagement"),
         },
       ],
-      separator: true,
+      
     },
     {
       href: "/admin/marketing",
@@ -91,6 +91,7 @@ export function useAdminNavItems(): NavItemConfig[] {
           label: t("marketing.vouchers"),
         },
       ],
+      separator: true,
     },
     {
       href: "/admin/analytics",
@@ -102,21 +103,22 @@ export function useAdminNavItems(): NavItemConfig[] {
       icon: DollarSign,
       label: t("adminSidebar.earning"),
     },
-    {
-      href: "/admin/commission-management",
-      icon: Percent,
-      label: t("adminSidebar.commissionManagement"),
-    },
+    // {
+    //   href: "/admin/commission-management",
+    //   icon: Percent,
+    //   label: t("adminSidebar.commissionManagement"),
+    // },
     {
       href: "/admin/subscription-management",
       icon: CreditCard,
       label: t("adminSidebar.subscriptionManagement"),
-      separator: true,
+      
     },
     {
       href: "/admin/settings",
       icon: Settings,
       label: t("common.settings"),
+      separator: true,
     },
   ];
 }
