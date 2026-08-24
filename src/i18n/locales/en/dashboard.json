@@ -863,6 +863,54 @@
     "newReportReceived": "New report recived",
     "newReportDesc": "Marketplace listing reported by user"
   },
+  "playerManagement": {
+    "title": "User Lists",
+    "sortBy": "Sort by",
+    "columns": {
+      "user": "User",
+      "userId": "User ID",
+      "country": "Country",
+      "membership": "Membership",
+      "rank": "Rank",
+      "joined": "Joined",
+      "lastActive": "Last Active",
+      "status": "Status",
+      "action": "Action"
+    },
+    "membership": {
+      "premium": "Premium",
+      "free": "Free"
+    },
+    "status": {
+      "active": "Active",
+      "block": "Block"
+    },
+    "actions": {
+      "blockPlayer": "Block Player",
+      "viewDetails": "View Details",
+      "upgradePlan": "Upgrade Plan"
+    },
+    "details": {
+      "booking": "Booking",
+      "rank": "Rank",
+      "points": "Points",
+      "team": "Team",
+      "playerInfo": "Player Info",
+      "playerName": "Player name",
+      "username": "Username",
+      "playerId": "Player ID",
+      "playerOwner": "Player Owner",
+      "plan": "Plan",
+      "email": "Email",
+      "contactNumber": "Contact Number",
+      "member": "Member"
+    },
+    "upgradeModal": {
+      "title": "Are you sure you want to Upgrade Plan this Player?",
+      "description": "This will upgrade the membership plan for {{name}}.",
+      "confirm": "Yes, I'm sure"
+    }
+  },
   "chat": {
     "title": "Chats",
     "placeholder": "Type a message....",

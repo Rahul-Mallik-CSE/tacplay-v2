@@ -833,6 +833,54 @@
     "newReportReceived": "Nuevo reporte recibido",
     "newReportDesc": "Listado del mercado reportado por usuario"
   },
+  "playerManagement": {
+    "title": "Listas de usuarios",
+    "sortBy": "Ordenar por",
+    "columns": {
+      "user": "Usuario",
+      "userId": "ID de usuario",
+      "country": "Pa\u00eds",
+      "membership": "Membres\u00eda",
+      "rank": "Rango",
+      "joined": "Unido",
+      "lastActive": "\u00daltima actividad",
+      "status": "Estado",
+      "action": "Acci\u00f3n"
+    },
+    "membership": {
+      "premium": "Premium",
+      "free": "Gratis"
+    },
+    "status": {
+      "active": "Activo",
+      "block": "Bloqueado"
+    },
+    "actions": {
+      "blockPlayer": "Bloquear jugador",
+      "viewDetails": "Ver detalles",
+      "upgradePlan": "Actualizar plan"
+    },
+    "details": {
+      "booking": "Reserva",
+      "rank": "Rango",
+      "points": "Puntos",
+      "team": "Equipo",
+      "playerInfo": "Info del jugador",
+      "playerName": "Nombre del jugador",
+      "username": "Nombre de usuario",
+      "playerId": "ID del jugador",
+      "playerOwner": "Propietario del jugador",
+      "plan": "Plan",
+      "email": "Correo electr\u00f3nico",
+      "contactNumber": "N\u00famero de contacto",
+      "member": "Miembro desde"
+    },
+    "upgradeModal": {
+      "title": "\u00bfEst\u00e1 seguro de que desea actualizar el plan de este jugador?",
+      "description": "Esto actualizar\u00e1 el plan de membres\u00eda de {{name}}.",
+      "confirm": "S\u00ed, estoy seguro"
+    }
+  },
   "chat": {
     "title": "Chats",
     "placeholder": "Escribe un mensaje....",

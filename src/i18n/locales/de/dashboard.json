@@ -833,6 +833,54 @@
     "newReportReceived": "Neuer Bericht erhalten",
     "newReportDesc": "Marktplatz-Angebot vom Benutzer gemeldet"
   },
+  "playerManagement": {
+    "title": "Benutzerlisten",
+    "sortBy": "Sortieren",
+    "columns": {
+      "user": "Benutzer",
+      "userId": "Benutzer-ID",
+      "country": "Land",
+      "membership": "Mitgliedschaft",
+      "rank": "Rang",
+      "joined": "Beigetreten",
+      "lastActive": "Zuletzt aktiv",
+      "status": "Status",
+      "action": "Aktion"
+    },
+    "membership": {
+      "premium": "Premium",
+      "free": "Kostenlos"
+    },
+    "status": {
+      "active": "Aktiv",
+      "block": "Gesperrt"
+    },
+    "actions": {
+      "blockPlayer": "Spieler sperren",
+      "viewDetails": "Details anzeigen",
+      "upgradePlan": "Plan aktualisieren"
+    },
+    "details": {
+      "booking": "Buchung",
+      "rank": "Rang",
+      "points": "Punkte",
+      "team": "Team",
+      "playerInfo": "Spieler-Info",
+      "playerName": "Spielername",
+      "username": "Benutzername",
+      "playerId": "Spieler-ID",
+      "playerOwner": "Spielerbesitzer",
+      "plan": "Plan",
+      "email": "E-Mail",
+      "contactNumber": "Kontaktnummer",
+      "member": "Mitglied seit"
+    },
+    "upgradeModal": {
+      "title": "M\u00f6chten Sie den Plan dieses Spielers wirklich aktualisieren?",
+      "description": "Dies wird den Mitgliedschaftsplan f\u00fcr {{name}} aktualisieren.",
+      "confirm": "Ja, ich bin sicher"
+    }
+  },
   "chat": {
     "title": "Chats",
     "placeholder": "Nachricht eingeben....",
