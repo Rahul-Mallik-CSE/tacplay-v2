@@ -881,6 +881,91 @@
       "confirm": "Ja, ich bin sicher"
     }
   },
+  "fieldManagement": {
+    "title": "Feldlisten",
+    "sortBy": "Sortieren",
+    "sessionTitle": "Sitzungslisten",
+    "columns": {
+      "field": "Feld",
+      "owner": "Besitzer",
+      "subscription": "Abonnement",
+      "country": "Land",
+      "created": "Erstellt",
+      "booking": "Buchung",
+      "revenue": "Umsatz",
+      "action": "Aktion"
+    },
+    "sessionColumns": {
+      "sessionName": "Sitzungsname",
+      "dateTime": "Datum & Zeit",
+      "assignStaff": "Mitarbeiter zuweisen",
+      "matchType": "Spieltyp",
+      "player": "Spieler",
+      "booked": "Gebucht",
+      "price": "Preis",
+      "status": "Status",
+      "action": "Aktion"
+    },
+    "actions": {
+      "suspendedField": "Feld suspendiert",
+      "viewDetails": "Details anzeigen",
+      "upgradePlan": "Plan aktualisieren",
+      "blockField": "Feld sperren"
+    },
+    "details": {
+      "viewAllSession": "Alle Sitzungen anzeigen",
+      "rating": "Bewertung",
+      "totalBookings": "Gesamtbuchungen",
+      "totalRevenue": "Gesamtumsatz",
+      "checkInRate": "Check-in-Rate",
+      "fieldInfo": "Feld-Info",
+      "fieldName": "Feldname",
+      "fieldId": "Feld-ID",
+      "fieldOwner": "Feldbesitzer",
+      "plan": "Plan",
+      "email": "E-Mail",
+      "contactNumber": "Kontaktnummer",
+      "member": "Mitglied seit"
+    },
+    "upgradeModal": {
+      "title": "M\u00f6chten Sie den Plan dieses Feldes wirklich aktualisieren?",
+      "description": "Dies wird den Plan f\u00fcr {{name}} aktualisieren.",
+      "confirm": "Ja, ich bin sicher"
+    },
+    "sessionStatus": {
+      "failed": "Fehlgeschlagen",
+      "booking": "Buchung",
+      "full": "Voll",
+      "ongoing": "Laufend",
+      "open": "Offen"
+    },
+    "sessionDetails": {
+      "title": "Sitzungsinformationen",
+      "subtitle": "Vollst\u00e4ndige Buchungsinformationen und Transaktionen anzeigen.",
+      "fieldInfo": "Feld-Info",
+      "fieldId": "Feld-ID",
+      "fieldName": "Feldname",
+      "location": "Standort",
+      "contactNumber": "Kontaktnummer",
+      "sessionInfo": "Sitzungs-Info",
+      "sessionId": "Sitzungs-ID",
+      "sessionName": "Sitzungsname",
+      "matchType": "Spieltyp",
+      "sessionDate": "Sitzungsdatum",
+      "time": "Zeit",
+      "sessionType": "Sitzungstyp",
+      "team": "Team",
+      "playerPerTeam": "Spieler pro Team",
+      "packages": "Pakete",
+      "teamInfo": "Team-Info",
+      "teamAName": "Team A Name",
+      "teamAScore": "Team A Punkte",
+      "teamBName": "Team B Name",
+      "teamBScore": "Team B Punkte",
+      "champion": "Meister",
+      "submitFinalResult": "Endergebnis einreichen"
+    }
+  },
   "chat": {
     "title": "Chats",
     "placeholder": "Nachricht eingeben....",

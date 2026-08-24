@@ -911,6 +911,91 @@
       "confirm": "Yes, I'm sure"
     }
   },
+  "fieldManagement": {
+    "title": "Field Lists",
+    "sortBy": "Sort by",
+    "sessionTitle": "Sessions Lists",
+    "columns": {
+      "field": "Field",
+      "owner": "Owner",
+      "subscription": "Subscription",
+      "country": "Country",
+      "created": "Created",
+      "booking": "Booking",
+      "revenue": "Revenue",
+      "action": "Action"
+    },
+    "sessionColumns": {
+      "sessionName": "Session Name",
+      "dateTime": "Date & Time",
+      "assignStaff": "Assign Staff",
+      "matchType": "Match Type",
+      "player": "Player",
+      "booked": "Booked",
+      "price": "Price",
+      "status": "Status",
+      "action": "Action"
+    },
+    "actions": {
+      "suspendedField": "Suspended Field",
+      "viewDetails": "View Details",
+      "upgradePlan": "Upgrade Plan",
+      "blockField": "Block Field"
+    },
+    "details": {
+      "viewAllSession": "View All Session",
+      "rating": "Rating",
+      "totalBookings": "Total Bookings",
+      "totalRevenue": "Total Revenue",
+      "checkInRate": "Check-in-Rata",
+      "fieldInfo": "Field Info",
+      "fieldName": "Field name",
+      "fieldId": "Field ID",
+      "fieldOwner": "Field Owner",
+      "plan": "Plan",
+      "email": "Email",
+      "contactNumber": "Contact Number",
+      "member": "Member"
+    },
+    "upgradeModal": {
+      "title": "Are you sure you want to Upgrade Plan this Field?",
+      "description": "This will upgrade the plan for {{name}}.",
+      "confirm": "Yes, I'm sure"
+    },
+    "sessionStatus": {
+      "failed": "Failed",
+      "booking": "Booking",
+      "full": "Full",
+      "ongoing": "Ongoing",
+      "open": "Open"
+    },
+    "sessionDetails": {
+      "title": "Session Information's",
+      "subtitle": "View full booking information and transaction.",
+      "fieldInfo": "Field Info",
+      "fieldId": "Field ID",
+      "fieldName": "Field Name",
+      "location": "Location",
+      "contactNumber": "Contact Number",
+      "sessionInfo": "Session Info",
+      "sessionId": "Session ID",
+      "sessionName": "Session Name",
+      "matchType": "Match Type",
+      "sessionDate": "Session Date",
+      "time": "Time",
+      "sessionType": "Session Type",
+      "team": "Team",
+      "playerPerTeam": "Player Per Team",
+      "packages": "Packages",
+      "teamInfo": "Team Info",
+      "teamAName": "Team A Name",
+      "teamAScore": "Team A Score",
+      "teamBName": "Team B Name",
+      "teamBScore": "Team B Score",
+      "champion": "Champion",
+      "submitFinalResult": "Submit Final Result"
+    }
+  },
   "chat": {
     "title": "Chats",
     "placeholder": "Type a message....",

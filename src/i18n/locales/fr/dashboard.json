@@ -881,6 +881,91 @@
       "confirm": "Oui, je suis s\u00fbr"
     }
   },
+  "fieldManagement": {
+    "title": "Listes de terrains",
+    "sortBy": "Trier par",
+    "sessionTitle": "Listes de sessions",
+    "columns": {
+      "field": "Terrain",
+      "owner": "Propri\u00e9taire",
+      "subscription": "Abonnement",
+      "country": "Pays",
+      "created": "Cr\u00e9\u00e9",
+      "booking": "R\u00e9servation",
+      "revenue": "Revenu",
+      "action": "Action"
+    },
+    "sessionColumns": {
+      "sessionName": "Nom de la session",
+      "dateTime": "Date & Heure",
+      "assignStaff": "Personnel assign\u00e9",
+      "matchType": "Type de match",
+      "player": "Joueur",
+      "booked": "R\u00e9serv\u00e9",
+      "price": "Prix",
+      "status": "Statut",
+      "action": "Action"
+    },
+    "actions": {
+      "suspendedField": "Terrain suspendu",
+      "viewDetails": "Voir les d\u00e9tails",
+      "upgradePlan": "Mettre \u00e0 niveau le forfait",
+      "blockField": "Bloquer le terrain"
+    },
+    "details": {
+      "viewAllSession": "Voir toutes les sessions",
+      "rating": "Note",
+      "totalBookings": "R\u00e9servations totales",
+      "totalRevenue": "Revenu total",
+      "checkInRate": "Taux de pr\u00e9sence",
+      "fieldInfo": "Info terrain",
+      "fieldName": "Nom du terrain",
+      "fieldId": "ID du terrain",
+      "fieldOwner": "Propri\u00e9taire du terrain",
+      "plan": "Forfait",
+      "email": "E-mail",
+      "contactNumber": "Num\u00e9ro de contact",
+      "member": "Membre depuis"
+    },
+    "upgradeModal": {
+      "title": "\u00cates-vous s\u00fbr de vouloir mettre \u00e0 niveau le forfait de ce terrain?",
+      "description": "Cela mettra \u00e0 niveau le forfait de {{name}}.",
+      "confirm": "Oui, je suis s\u00fbr"
+    },
+    "sessionStatus": {
+      "failed": "\u00c9chou\u00e9",
+      "booking": "R\u00e9servation",
+      "full": "Complet",
+      "ongoing": "En cours",
+      "open": "Ouvert"
+    },
+    "sessionDetails": {
+      "title": "Informations de session",
+      "subtitle": "Voir les informations compl\u00e8tes de r\u00e9servation et la transaction.",
+      "fieldInfo": "Info terrain",
+      "fieldId": "ID du terrain",
+      "fieldName": "Nom du terrain",
+      "location": "Emplacement",
+      "contactNumber": "Num\u00e9ro de contact",
+      "sessionInfo": "Info session",
+      "sessionId": "ID de session",
+      "sessionName": "Nom de la session",
+      "matchType": "Type de match",
+      "sessionDate": "Date de session",
+      "time": "Heure",
+      "sessionType": "Type de session",
+      "team": "\u00c9quipe",
+      "playerPerTeam": "Joueurs par \u00e9quipe",
+      "packages": "Forfaits",
+      "teamInfo": "Info \u00e9quipe",
+      "teamAName": "Nom \u00c9quipe A",
+      "teamAScore": "Score \u00c9quipe A",
+      "teamBName": "Nom \u00c9quipe B",
+      "teamBScore": "Score \u00c9quipe B",
+      "champion": "Champion",
+      "submitFinalResult": "Soumettre le r\u00e9sultat final"
+    }
+  },
   "chat": {
     "title": "Discussions",
     "placeholder": "Ecrivez un message....",

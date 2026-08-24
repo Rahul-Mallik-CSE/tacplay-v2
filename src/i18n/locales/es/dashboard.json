@@ -881,6 +881,91 @@
       "confirm": "S\u00ed, estoy seguro"
     }
   },
+  "fieldManagement": {
+    "title": "Listas de campos",
+    "sortBy": "Ordenar por",
+    "sessionTitle": "Listas de sesiones",
+    "columns": {
+      "field": "Campo",
+      "owner": "Propietario",
+      "subscription": "Suscripci\u00f3n",
+      "country": "Pa\u00eds",
+      "created": "Creado",
+      "booking": "Reserva",
+      "revenue": "Ingresos",
+      "action": "Acci\u00f3n"
+    },
+    "sessionColumns": {
+      "sessionName": "Nombre de sesi\u00f3n",
+      "dateTime": "Fecha y hora",
+      "assignStaff": "Personal asignado",
+      "matchType": "Tipo de partido",
+      "player": "Jugador",
+      "booked": "Reservado",
+      "price": "Precio",
+      "status": "Estado",
+      "action": "Acci\u00f3n"
+    },
+    "actions": {
+      "suspendedField": "Campo suspendido",
+      "viewDetails": "Ver detalles",
+      "upgradePlan": "Actualizar plan",
+      "blockField": "Bloquear campo"
+    },
+    "details": {
+      "viewAllSession": "Ver todas las sesiones",
+      "rating": "Calificaci\u00f3n",
+      "totalBookings": "Reservas totales",
+      "totalRevenue": "Ingresos totales",
+      "checkInRate": "Tasa de registro",
+      "fieldInfo": "Info del campo",
+      "fieldName": "Nombre del campo",
+      "fieldId": "ID del campo",
+      "fieldOwner": "Propietario del campo",
+      "plan": "Plan",
+      "email": "Correo electr\u00f3nico",
+      "contactNumber": "N\u00famero de contacto",
+      "member": "Miembro desde"
+    },
+    "upgradeModal": {
+      "title": "\u00bfEst\u00e1 seguro de que desea actualizar el plan de este campo?",
+      "description": "Esto actualizar\u00e1 el plan de {{name}}.",
+      "confirm": "S\u00ed, estoy seguro"
+    },
+    "sessionStatus": {
+      "failed": "Fallido",
+      "booking": "Reserva",
+      "full": "Lleno",
+      "ongoing": "En curso",
+      "open": "Abierto"
+    },
+    "sessionDetails": {
+      "title": "Informaci\u00f3n de la sesi\u00f3n",
+      "subtitle": "Ver informaci\u00f3n completa de la reserva y transacci\u00f3n.",
+      "fieldInfo": "Info del campo",
+      "fieldId": "ID del campo",
+      "fieldName": "Nombre del campo",
+      "location": "Ubicaci\u00f3n",
+      "contactNumber": "N\u00famero de contacto",
+      "sessionInfo": "Info de sesi\u00f3n",
+      "sessionId": "ID de sesi\u00f3n",
+      "sessionName": "Nombre de sesi\u00f3n",
+      "matchType": "Tipo de partido",
+      "sessionDate": "Fecha de sesi\u00f3n",
+      "time": "Hora",
+      "sessionType": "Tipo de sesi\u00f3n",
+      "team": "Equipo",
+      "playerPerTeam": "Jugadores por equipo",
+      "packages": "Paquetes",
+      "teamInfo": "Info del equipo",
+      "teamAName": "Nombre Equipo A",
+      "teamAScore": "Puntuaci\u00f3n Equipo A",
+      "teamBName": "Nombre Equipo B",
+      "teamBScore": "Puntuaci\u00f3n Equipo B",
+      "champion": "Campe\u00f3n",
+      "submitFinalResult": "Enviar resultado final"
+    }
+  },
   "chat": {
     "title": "Chats",
     "placeholder": "Escribe un mensaje....",
