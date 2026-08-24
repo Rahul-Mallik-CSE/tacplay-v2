@@ -48,8 +48,8 @@
     "upgrade": "Upgrade",
     "staff": "Personnel",
     "staffManagement": "Gestion du personnel",
-      "roleManagement": "Gestion des roles",
-      "marketing": "Marketing"
+    "roleManagement": "Gestion des roles",
+    "marketing": "Marketing"
   },
   "adminSidebar": {
     "overview": "Aperçu",
@@ -108,7 +108,6 @@
     "loadFailed": "Impossible de charger les donnees du tableau de bord.",
     "totalRevenue": "Revenus totaux",
     "totalBookings": "Total des réservations",
-    "upcomingSessions": "Sessions à venir",
     "matchesHosted": "Matchs hébergés",
     "sessionDistribution": "Distribution des sessions",
     "todayAttendances": "Présences du jour",
@@ -795,18 +794,18 @@
     "revenueByCommission": "Revenu par commission",
     "revenueByCampaign": "Revenu par campagne",
     "fieldLabel": "Terrain",
-    "owner": "Propri\u00e9taire",
+    "owner": "Propriétaire",
     "subscription": "Abonnement",
     "country": "Pays",
-    "created": "Cr\u00e9\u00e9",
-    "booking": "R\u00e9servation",
+    "created": "Créé",
+    "booking": "Réservation",
     "revenue": "Revenu",
     "status": "Statut",
     "action": "Action",
     "viewAllField": "Voir tous les terrains",
-    "approved": "Approuv\u00e9",
+    "approved": "Approuvé",
     "pending": "En attente",
-    "beginnerPackage": "Forfait d\u00e9butant",
+    "beginnerPackage": "Forfait débutant",
     "perfectForFirstTime": "Parfait pour les nouveaux joueurs",
     "revenueOverTime": "Revenu au fil du temps",
     "month": "Mois",
@@ -818,23 +817,23 @@
       "ES": "Espagne",
       "DE": "Allemagne",
       "FR": "France",
-      "US": "\u00c9tats-Unis",
+      "US": "États-Unis",
       "IE": "Irlande"
     }
   },
   "adminOverview": {
-    "recentActivity": "Activit\u00e9 r\u00e9cente",
+    "recentActivity": "Activité récente",
     "viewAll": "Tout voir",
-    "recentField": "Terrains r\u00e9cents",
+    "recentField": "Terrains récents",
     "viewAllField": "Voir tous les terrains",
-    "paintballMadridApproved": "Paintball Madrid a approuv\u00e9 un nouveau terrain",
-    "paintballMadridDesc": "Le terrain \"Madrid Paintball Park\" a \u00e9t\u00e9 approuv\u00e9",
+    "paintballMadridApproved": "Paintball Madrid a approuvé un nouveau terrain",
+    "paintballMadridDesc": "Le terrain \"Madrid Paintball Park\" a été approuvé",
     "newPremiumSubscription": "Nouvel abonnement premium",
-    "newPremiumSubDesc": "Le joueur \"Alex Martinex\" a \u00e9t\u00e9 mis \u00e0 niveau en Or",
+    "newPremiumSubDesc": "Le joueur \"Alex Martinex\" a été mis à niveau en Or",
     "newPlayerSubscription": "Nouvel abonnement joueur",
-    "newPlayerSubDesc": "Le terrain \"Madrid Paintball Park\" a \u00e9t\u00e9 approuv\u00e9",
-    "newReportReceived": "Nouveau rapport re\u00e7u",
-    "newReportDesc": "Annonce du march\u00e9 signal\u00e9e par un utilisateur"
+    "newPlayerSubDesc": "Le terrain \"Madrid Paintball Park\" a été approuvé",
+    "newReportReceived": "Nouveau rapport reçu",
+    "newReportDesc": "Annonce du marché signalée par un utilisateur"
   },
   "playerManagement": {
     "title": "Listes d'utilisateurs",
@@ -843,10 +842,10 @@
       "user": "Utilisateur",
       "userId": "ID utilisateur",
       "country": "Pays",
-      "membership": "Adh\u00e9sion",
+      "membership": "Adhésion",
       "rank": "Rang",
       "joined": "Inscrit",
-      "lastActive": "Derni\u00e8re activit\u00e9",
+      "lastActive": "Dernière activité",
       "status": "Statut",
       "action": "Action"
     },
@@ -856,32 +855,32 @@
     },
     "status": {
       "active": "Actif",
-      "block": "Bloqu\u00e9"
+      "block": "Bloqué"
     },
     "actions": {
       "blockPlayer": "Bloquer le joueur",
-      "viewDetails": "Voir les d\u00e9tails",
-      "upgradePlan": "Mettre \u00e0 niveau le forfait"
+      "viewDetails": "Voir les détails",
+      "upgradePlan": "Mettre à niveau le forfait"
     },
     "details": {
-      "booking": "R\u00e9servation",
+      "booking": "Réservation",
       "rank": "Rang",
       "points": "Points",
-      "team": "\u00c9quipe",
+      "team": "Équipe",
       "playerInfo": "Info joueur",
       "playerName": "Nom du joueur",
       "username": "Nom d'utilisateur",
       "playerId": "ID joueur",
-      "playerOwner": "Propri\u00e9taire du joueur",
+      "playerOwner": "Propriétaire du joueur",
       "plan": "Forfait",
       "email": "E-mail",
-      "contactNumber": "Num\u00e9ro de contact",
+      "contactNumber": "Numéro de contact",
       "member": "Membre depuis"
     },
     "upgradeModal": {
-      "title": "\u00cates-vous s\u00fbr de vouloir mettre \u00e0 niveau le forfait de ce joueur?",
-      "description": "Cela mettra \u00e0 niveau le forfait d'adh\u00e9sion de {{name}}.",
-      "confirm": "Oui, je suis s\u00fbr"
+      "title": "Êtes-vous sûr de vouloir mettre à niveau le forfait de ce joueur?",
+      "description": "Cela mettra à niveau le forfait d'adhésion de {{name}}.",
+      "confirm": "Oui, je suis sûr"
     }
   },
   "fieldManagement": {
@@ -890,66 +889,66 @@
     "sessionTitle": "Listes de sessions",
     "columns": {
       "field": "Terrain",
-      "owner": "Propri\u00e9taire",
+      "owner": "Propriétaire",
       "subscription": "Abonnement",
       "country": "Pays",
-      "created": "Cr\u00e9\u00e9",
-      "booking": "R\u00e9servation",
+      "created": "Créé",
+      "booking": "Réservation",
       "revenue": "Revenu",
       "action": "Action"
     },
     "sessionColumns": {
       "sessionName": "Nom de la session",
       "dateTime": "Date & Heure",
-      "assignStaff": "Personnel assign\u00e9",
+      "assignStaff": "Personnel assigné",
       "matchType": "Type de match",
       "player": "Joueur",
-      "booked": "R\u00e9serv\u00e9",
+      "booked": "Réservé",
       "price": "Prix",
       "status": "Statut",
       "action": "Action"
     },
     "actions": {
       "suspendedField": "Terrain suspendu",
-      "viewDetails": "Voir les d\u00e9tails",
-      "upgradePlan": "Mettre \u00e0 niveau le forfait",
+      "viewDetails": "Voir les détails",
+      "upgradePlan": "Mettre à niveau le forfait",
       "blockField": "Bloquer le terrain"
     },
     "details": {
       "viewAllSession": "Voir toutes les sessions",
       "rating": "Note",
-      "totalBookings": "R\u00e9servations totales",
+      "totalBookings": "Réservations totales",
       "totalRevenue": "Revenu total",
-      "checkInRate": "Taux de pr\u00e9sence",
+      "checkInRate": "Taux de présence",
       "fieldInfo": "Info terrain",
       "fieldName": "Nom du terrain",
       "fieldId": "ID du terrain",
-      "fieldOwner": "Propri\u00e9taire du terrain",
+      "fieldOwner": "Propriétaire du terrain",
       "plan": "Forfait",
       "email": "E-mail",
-      "contactNumber": "Num\u00e9ro de contact",
+      "contactNumber": "Numéro de contact",
       "member": "Membre depuis"
     },
     "upgradeModal": {
-      "title": "\u00cates-vous s\u00fbr de vouloir mettre \u00e0 niveau le forfait de ce terrain?",
-      "description": "Cela mettra \u00e0 niveau le forfait de {{name}}.",
-      "confirm": "Oui, je suis s\u00fbr"
+      "title": "Êtes-vous sûr de vouloir mettre à niveau le forfait de ce terrain?",
+      "description": "Cela mettra à niveau le forfait de {{name}}.",
+      "confirm": "Oui, je suis sûr"
     },
     "sessionStatus": {
-      "failed": "\u00c9chou\u00e9",
-      "booking": "R\u00e9servation",
+      "failed": "Échoué",
+      "booking": "Réservation",
       "full": "Complet",
       "ongoing": "En cours",
       "open": "Ouvert"
     },
     "sessionDetails": {
       "title": "Informations de session",
-      "subtitle": "Voir les informations compl\u00e8tes de r\u00e9servation et la transaction.",
+      "subtitle": "Voir les informations complètes de réservation et la transaction.",
       "fieldInfo": "Info terrain",
       "fieldId": "ID du terrain",
       "fieldName": "Nom du terrain",
       "location": "Emplacement",
-      "contactNumber": "Num\u00e9ro de contact",
+      "contactNumber": "Numéro de contact",
       "sessionInfo": "Info session",
       "sessionId": "ID de session",
       "sessionName": "Nom de la session",
@@ -957,16 +956,16 @@
       "sessionDate": "Date de session",
       "time": "Heure",
       "sessionType": "Type de session",
-      "team": "\u00c9quipe",
-      "playerPerTeam": "Joueurs par \u00e9quipe",
+      "team": "Équipe",
+      "playerPerTeam": "Joueurs par équipe",
       "packages": "Forfaits",
-      "teamInfo": "Info \u00e9quipe",
-      "teamAName": "Nom \u00c9quipe A",
-      "teamAScore": "Score \u00c9quipe A",
-      "teamBName": "Nom \u00c9quipe B",
-      "teamBScore": "Score \u00c9quipe B",
+      "teamInfo": "Info équipe",
+      "teamAName": "Nom Équipe A",
+      "teamAScore": "Score Équipe A",
+      "teamBName": "Nom Équipe B",
+      "teamBScore": "Score Équipe B",
       "champion": "Champion",
-      "submitFinalResult": "Soumettre le r\u00e9sultat final"
+      "submitFinalResult": "Soumettre le résultat final"
     }
   },
   "chat": {
@@ -1356,5 +1355,14 @@
       "selectStartAndEndDate": "Selectionner la date de debut et de fin"
     },
     "aiOptimization": "Optimisation IA"
+  },
+  "error": {
+    "pageNotFound": "Page non trouvée",
+    "notFoundDesc": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "somethingWentWrong": "Une erreur s'est produite",
+    "errorDesc": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.",
+    "goHome": "Accueil",
+    "goBack": "Retour",
+    "tryAgain": "Réessayer"
   }
 }

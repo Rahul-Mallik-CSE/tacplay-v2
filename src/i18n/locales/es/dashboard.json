@@ -48,8 +48,8 @@
     "upgrade": "Mejorar",
     "staff": "Personal",
     "staffManagement": "Gestion de personal",
-      "roleManagement": "Gestion de roles",
-      "marketing": "Marketing"
+    "roleManagement": "Gestion de roles",
+    "marketing": "Marketing"
   },
   "adminSidebar": {
     "overview": "Resumen",
@@ -108,7 +108,6 @@
     "loadFailed": "No se pudieron cargar los datos del panel.",
     "totalRevenue": "Ingresos totales",
     "totalBookings": "Reservas totales",
-    "upcomingSessions": "Próximas sesiones",
     "matchesHosted": "Partidas organizadas",
     "sessionDistribution": "Distribución de sesiones",
     "todayAttendances": "Asistencias de hoy",
@@ -781,7 +780,7 @@
     "premiumPlayer": "Jugadores premium",
     "totalRevenue": "Ingresos totales",
     "totalSubscription": "Suscripciones totales",
-    "subscriptionChart": "Gr\u00e1fico de suscripciones",
+    "subscriptionChart": "Gráfico de suscripciones",
     "field": "Campo",
     "player": "Jugador",
     "gold": "Oro",
@@ -791,18 +790,18 @@
     "free": "Gratis",
     "totalFieldLabel": "Campo total",
     "totalPlayerLabel": "Jugadores totales",
-    "revenueByCountry": "Ingresos por pa\u00eds",
-    "revenueByCommission": "Ingresos por comisi\u00f3n",
-    "revenueByCampaign": "Ingresos por campa\u00f1a",
+    "revenueByCountry": "Ingresos por país",
+    "revenueByCommission": "Ingresos por comisión",
+    "revenueByCampaign": "Ingresos por campaña",
     "fieldLabel": "Campo",
     "owner": "Propietario",
-    "subscription": "Suscripci\u00f3n",
-    "country": "Pa\u00eds",
+    "subscription": "Suscripción",
+    "country": "País",
     "created": "Creado",
     "booking": "Reserva",
     "revenue": "Ingresos",
     "status": "Estado",
-    "action": "Acci\u00f3n",
+    "action": "Acción",
     "viewAllField": "Ver todos los campos",
     "approved": "Aprobado",
     "pending": "Pendiente",
@@ -810,12 +809,12 @@
     "perfectForFirstTime": "Perfecto para jugadores nuevos",
     "revenueOverTime": "Ingresos a lo largo del tiempo",
     "month": "Mes",
-    "day": "D\u00eda",
+    "day": "Día",
     "week": "Semana",
     "totalPremium": "Total Premium",
     "fieldId": "ID",
     "countries": {
-      "ES": "Espa\u00f1a",
+      "ES": "España",
       "DE": "Alemania",
       "FR": "Francia",
       "US": "Estados Unidos",
@@ -827,11 +826,11 @@
     "viewAll": "Ver todo",
     "recentField": "Campos recientes",
     "viewAllField": "Ver todos los campos",
-    "paintballMadridApproved": "Paintball Madrid aprob\u00f3 un nuevo campo",
+    "paintballMadridApproved": "Paintball Madrid aprobó un nuevo campo",
     "paintballMadridDesc": "El campo \"Madrid Paintball Park\" ha sido aprobado",
-    "newPremiumSubscription": "Nueva suscripci\u00f3n premium",
+    "newPremiumSubscription": "Nueva suscripción premium",
     "newPremiumSubDesc": "El jugador \"Alex Martinex\" fue actualizado a Oro",
-    "newPlayerSubscription": "Nueva suscripci\u00f3n de jugador",
+    "newPlayerSubscription": "Nueva suscripción de jugador",
     "newPlayerSubDesc": "El campo \"Madrid Paintball Park\" ha sido aprobado",
     "newReportReceived": "Nuevo reporte recibido",
     "newReportDesc": "Listado del mercado reportado por usuario"
@@ -842,13 +841,13 @@
     "columns": {
       "user": "Usuario",
       "userId": "ID de usuario",
-      "country": "Pa\u00eds",
-      "membership": "Membres\u00eda",
+      "country": "País",
+      "membership": "Membresía",
       "rank": "Rango",
       "joined": "Unido",
-      "lastActive": "\u00daltima actividad",
+      "lastActive": "Última actividad",
       "status": "Estado",
-      "action": "Acci\u00f3n"
+      "action": "Acción"
     },
     "membership": {
       "premium": "Premium",
@@ -874,14 +873,14 @@
       "playerId": "ID del jugador",
       "playerOwner": "Propietario del jugador",
       "plan": "Plan",
-      "email": "Correo electr\u00f3nico",
-      "contactNumber": "N\u00famero de contacto",
+      "email": "Correo electrónico",
+      "contactNumber": "Número de contacto",
       "member": "Miembro desde"
     },
     "upgradeModal": {
-      "title": "\u00bfEst\u00e1 seguro de que desea actualizar el plan de este jugador?",
-      "description": "Esto actualizar\u00e1 el plan de membres\u00eda de {{name}}.",
-      "confirm": "S\u00ed, estoy seguro"
+      "title": "¿Está seguro de que desea actualizar el plan de este jugador?",
+      "description": "Esto actualizará el plan de membresía de {{name}}.",
+      "confirm": "Sí, estoy seguro"
     }
   },
   "fieldManagement": {
@@ -891,15 +890,15 @@
     "columns": {
       "field": "Campo",
       "owner": "Propietario",
-      "subscription": "Suscripci\u00f3n",
-      "country": "Pa\u00eds",
+      "subscription": "Suscripción",
+      "country": "País",
       "created": "Creado",
       "booking": "Reserva",
       "revenue": "Ingresos",
-      "action": "Acci\u00f3n"
+      "action": "Acción"
     },
     "sessionColumns": {
-      "sessionName": "Nombre de sesi\u00f3n",
+      "sessionName": "Nombre de sesión",
       "dateTime": "Fecha y hora",
       "assignStaff": "Personal asignado",
       "matchType": "Tipo de partido",
@@ -907,7 +906,7 @@
       "booked": "Reservado",
       "price": "Precio",
       "status": "Estado",
-      "action": "Acci\u00f3n"
+      "action": "Acción"
     },
     "actions": {
       "suspendedField": "Campo suspendido",
@@ -917,7 +916,7 @@
     },
     "details": {
       "viewAllSession": "Ver todas las sesiones",
-      "rating": "Calificaci\u00f3n",
+      "rating": "Calificación",
       "totalBookings": "Reservas totales",
       "totalRevenue": "Ingresos totales",
       "checkInRate": "Tasa de registro",
@@ -926,14 +925,14 @@
       "fieldId": "ID del campo",
       "fieldOwner": "Propietario del campo",
       "plan": "Plan",
-      "email": "Correo electr\u00f3nico",
-      "contactNumber": "N\u00famero de contacto",
+      "email": "Correo electrónico",
+      "contactNumber": "Número de contacto",
       "member": "Miembro desde"
     },
     "upgradeModal": {
-      "title": "\u00bfEst\u00e1 seguro de que desea actualizar el plan de este campo?",
-      "description": "Esto actualizar\u00e1 el plan de {{name}}.",
-      "confirm": "S\u00ed, estoy seguro"
+      "title": "¿Está seguro de que desea actualizar el plan de este campo?",
+      "description": "Esto actualizará el plan de {{name}}.",
+      "confirm": "Sí, estoy seguro"
     },
     "sessionStatus": {
       "failed": "Fallido",
@@ -943,29 +942,29 @@
       "open": "Abierto"
     },
     "sessionDetails": {
-      "title": "Informaci\u00f3n de la sesi\u00f3n",
-      "subtitle": "Ver informaci\u00f3n completa de la reserva y transacci\u00f3n.",
+      "title": "Información de la sesión",
+      "subtitle": "Ver información completa de la reserva y transacción.",
       "fieldInfo": "Info del campo",
       "fieldId": "ID del campo",
       "fieldName": "Nombre del campo",
-      "location": "Ubicaci\u00f3n",
-      "contactNumber": "N\u00famero de contacto",
-      "sessionInfo": "Info de sesi\u00f3n",
-      "sessionId": "ID de sesi\u00f3n",
-      "sessionName": "Nombre de sesi\u00f3n",
+      "location": "Ubicación",
+      "contactNumber": "Número de contacto",
+      "sessionInfo": "Info de sesión",
+      "sessionId": "ID de sesión",
+      "sessionName": "Nombre de sesión",
       "matchType": "Tipo de partido",
-      "sessionDate": "Fecha de sesi\u00f3n",
+      "sessionDate": "Fecha de sesión",
       "time": "Hora",
-      "sessionType": "Tipo de sesi\u00f3n",
+      "sessionType": "Tipo de sesión",
       "team": "Equipo",
       "playerPerTeam": "Jugadores por equipo",
       "packages": "Paquetes",
       "teamInfo": "Info del equipo",
       "teamAName": "Nombre Equipo A",
-      "teamAScore": "Puntuaci\u00f3n Equipo A",
+      "teamAScore": "Puntuación Equipo A",
       "teamBName": "Nombre Equipo B",
-      "teamBScore": "Puntuaci\u00f3n Equipo B",
-      "champion": "Campe\u00f3n",
+      "teamBScore": "Puntuación Equipo B",
+      "champion": "Campeón",
       "submitFinalResult": "Enviar resultado final"
     }
   },
@@ -1356,5 +1355,14 @@
       "selectStartAndEndDate": "Seleccionar fecha de inicio y fin"
     },
     "aiOptimization": "Optimizacion con IA"
+  },
+  "error": {
+    "pageNotFound": "Pagina no encontrada",
+    "notFoundDesc": "La pagina que buscas no existe o ha sido movida.",
+    "somethingWentWrong": "Algo salio mal",
+    "errorDesc": "Ocurrio un error inesperado. Por favor intenta de nuevo mas tarde.",
+    "goHome": "Ir al inicio",
+    "goBack": "Volver",
+    "tryAgain": "Intentar de nuevo"
   }
 }

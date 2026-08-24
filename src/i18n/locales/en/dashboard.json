@@ -1386,5 +1386,14 @@
       "selectStartAndEndDate": "Select start and end Date"
     },
     "aiOptimization": "AI optimization"
+  },
+  "error": {
+    "pageNotFound": "Page Not Found",
+    "notFoundDesc": "The page you are looking for does not exist or has been moved.",
+    "somethingWentWrong": "Something Went Wrong",
+    "errorDesc": "An unexpected error occurred. Please try again later.",
+    "goHome": "Go Home",
+    "goBack": "Go Back",
+    "tryAgain": "Try Again"
   }
 }

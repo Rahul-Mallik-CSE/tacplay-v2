@@ -48,8 +48,8 @@
     "upgrade": "Upgrade",
     "staff": "Personal",
     "staffManagement": "Personalverwaltung",
-      "roleManagement": "Rollenverwaltung",
-      "marketing": "Marketing"
+    "roleManagement": "Rollenverwaltung",
+    "marketing": "Marketing"
   },
   "adminSidebar": {
     "overview": "Übersicht",
@@ -108,7 +108,6 @@
     "loadFailed": "Dashboard-Daten konnten nicht geladen werden.",
     "totalRevenue": "Gesamtumsatz",
     "totalBookings": "Buchungen insgesamt",
-    "upcomingSessions": "Anstehende Sitzungen",
     "matchesHosted": "Ausgerichtete Spiele",
     "sessionDistribution": "Sitzungsverteilung",
     "todayAttendances": "Heutige Anwesenheiten",
@@ -806,8 +805,8 @@
     "viewAllField": "Alle Felder anzeigen",
     "approved": "Genehmigt",
     "pending": "Ausstehend",
-    "beginnerPackage": "Anf\u00e4nger-Paket",
-    "perfectForFirstTime": "Perfekt f\u00fcr Erstspieler",
+    "beginnerPackage": "Anfänger-Paket",
+    "perfectForFirstTime": "Perfekt für Erstspieler",
     "revenueOverTime": "Umsatz im Zeitverlauf",
     "month": "Monat",
     "day": "Tag",
@@ -823,7 +822,7 @@
     }
   },
   "adminOverview": {
-    "recentActivity": "Letzte Aktivit\u00e4t",
+    "recentActivity": "Letzte Aktivität",
     "viewAll": "Alle anzeigen",
     "recentField": "Letzte Felder",
     "viewAllField": "Alle Felder anzeigen",
@@ -879,8 +878,8 @@
       "member": "Mitglied seit"
     },
     "upgradeModal": {
-      "title": "M\u00f6chten Sie den Plan dieses Spielers wirklich aktualisieren?",
-      "description": "Dies wird den Mitgliedschaftsplan f\u00fcr {{name}} aktualisieren.",
+      "title": "Möchten Sie den Plan dieses Spielers wirklich aktualisieren?",
+      "description": "Dies wird den Mitgliedschaftsplan für {{name}} aktualisieren.",
       "confirm": "Ja, ich bin sicher"
     }
   },
@@ -931,8 +930,8 @@
       "member": "Mitglied seit"
     },
     "upgradeModal": {
-      "title": "M\u00f6chten Sie den Plan dieses Feldes wirklich aktualisieren?",
-      "description": "Dies wird den Plan f\u00fcr {{name}} aktualisieren.",
+      "title": "Möchten Sie den Plan dieses Feldes wirklich aktualisieren?",
+      "description": "Dies wird den Plan für {{name}} aktualisieren.",
       "confirm": "Ja, ich bin sicher"
     },
     "sessionStatus": {
@@ -944,7 +943,7 @@
     },
     "sessionDetails": {
       "title": "Sitzungsinformationen",
-      "subtitle": "Vollst\u00e4ndige Buchungsinformationen und Transaktionen anzeigen.",
+      "subtitle": "Vollständige Buchungsinformationen und Transaktionen anzeigen.",
       "fieldInfo": "Feld-Info",
       "fieldId": "Feld-ID",
       "fieldName": "Feldname",
@@ -1356,5 +1355,14 @@
       "selectStartAndEndDate": "Start- und Enddatum auswählen"
     },
     "aiOptimization": "KI-Optimierung"
+  },
+  "error": {
+    "pageNotFound": "Seite nicht gefunden",
+    "notFoundDesc": "Die Seite, nach der Sie suchen, existiert nicht oder wurde verschoben.",
+    "somethingWentWrong": "Etwas ist schiefgelaufen",
+    "errorDesc": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+    "goHome": "Zur Startseite",
+    "goBack": "Zurück",
+    "tryAgain": "Erneut versuchen"
   }
 }
