@@ -155,12 +155,12 @@ export function useDashboardNavItems(): NavItemConfig[] {
       ],
       
     },
-    {
-      href: "/dashboard/chat",
-      icon: MessageCircle,
-      label: t("sidebar.chat"),
-      separator: true,
-    },
+    // {
+    //   href: "/dashboard/chat",
+    //   icon: MessageCircle,
+    //   label: t("sidebar.chat"),
+    //   separator: true,
+    // },
     {
       href: "/dashboard/help-support",
       icon: CircleHelp,
