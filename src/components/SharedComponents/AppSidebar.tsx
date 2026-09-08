@@ -56,18 +56,18 @@ export default function AppSidebar({
   return (
     <>
       <Sidebar
-        className={`shadow-none py-4 bg-root-bg border-r border-none ${isCollapsed ? "px-1" : "px-4"}`}
+        className={`shadow-none py-4 bg-background border-r border-none ${isCollapsed ? "px-1" : "px-2"}`}
         collapsible="icon"
       >
         <SidebarContent
-          className={`bg-background border-t-2 border-l-2 border-r-2 border-[#2C2740] shadow-neutral-600 rounded-t-4xl
-                      ${isCollapsed ? "px-0.5" : "px-2"}`}
+          className={`bg-background 
+                      ${isCollapsed ? "px-0.5" : "px-1"}`}
         >
           {/* Logo */}
           <div
-            className={`mb-6 flex items-center justify-center rounded-md ${
+            className={`mb-1 flex items-center justify-center rounded-md ${
               isCollapsed
-                ? "flex items-center w-full justify-center mx-auto p-1"
+                ? "flex items-center w-full justify-center mx-auto "
                 : "gap-2"
             }`}
           >
@@ -77,13 +77,13 @@ export default function AppSidebar({
               ) : isCollapsed ? (
                 <Image src="/logo.png" alt="Logo" width={40} height={40} />
               ) : (
-                <div className="mt-2 flex items-center gap-2 h-10">
+                <div className="w-full h-16 flex items-center gap-2 pb-2 border-b-2 border-white/10 ">
                   <Image
                     src="/Tacplay-logo-2.png"
                     alt="Logo"
-                    width={120}
-                    height={120}
-                    className="w-40 h-10"
+                    width={520}
+                    height={520}
+                    className="w-52 h-14"
                     priority
                   />
                 </div>
