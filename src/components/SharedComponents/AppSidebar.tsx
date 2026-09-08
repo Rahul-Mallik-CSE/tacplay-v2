@@ -75,7 +75,9 @@ export default function AppSidebar({
               {logo ? (
                 logo
               ) : isCollapsed ? (
-                <Image src="/logo.png" alt="Logo" width={40} height={40} />
+                <Image src="/logo.png" alt="Logo" width={40} height={40} 
+                    className="pb-4 pt-1"
+                    />
               ) : (
                 <div className="w-full h-16 flex items-center gap-2 pb-2 border-b-2 border-white/10 ">
                   <Image
@@ -100,7 +102,7 @@ export default function AppSidebar({
             {navItems.map((item) => (
               <React.Fragment key={item.href}>
                 {item.separator && (
-                  <div className="my-2 mx-2 border-t border-white/10" />
+                  <div className="my-2 mx-2  border-t border-white/10" />
                 )}
                 <NavItem
                   href={item.href}
@@ -124,7 +126,7 @@ export default function AppSidebar({
         </SidebarContent>
 
         {/* Footer */}
-        <SidebarFooter className="pb-2 bg-background rounded-b-4xl border-r-2 border-b-2 border-l-2 border-[#2C2740] shadow-neutral-600">
+        <SidebarFooter className="pb-2 bg-background ">
           {showUpgradeBanner && (
             isCollapsed ? (
               <div className="flex justify-center mb-2">
