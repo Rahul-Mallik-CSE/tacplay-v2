@@ -58,10 +58,10 @@ export default function NavItem({
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
               collapsed
-                ? "flex items-center justify-center px-2 py-3 transition-colors rounded-full w-12 h-10 mx-auto cursor-pointer"
+                ? "flex items-center justify-center px-2 py-3 transition-colors rounded-xl w-12 h-10 mx-auto cursor-pointer"
                 : "flex items-center gap-3 h-11 rounded-xl p-3 transition-colors text-sm w-full cursor-pointer",
               active || isChildActive
-                ? "bg-gradient-to-r from-[#980009]/80 to-[#C00069]/60 text-white hover:text-white! font-medium shadow-md"
+                ? "bg-gradient-to-r from-[#3d0e18] via-[#2a0a12] to-[#1a0810] text-white hover:text-white! font-medium shadow-[inset_0_0_20px_rgba(152,0,9,0.15)] border border-white/5"
                 : "text-secondary hover:bg-transparent! hover:text-primary! font-medium"
             )}
           >
@@ -115,14 +115,14 @@ export default function NavItem({
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild>
-        <Link
+          <Link
           href={href}
           className={cn(
             collapsed
-              ? "flex items-center justify-center px-2 py-3 transition-colors rounded-full w-12 h-10 mx-auto"
-              : "flex items-center gap-3 h-10 md:h-10 rounded-md p-3 transition-colors text-sm",
+              ? "flex items-center justify-center px-2 py-3 transition-colors rounded-xl w-12 h-10 mx-auto"
+              : "flex items-center gap-3 h-10 md:h-10 rounded-lg p-3 transition-colors text-sm",
             active
-              ? "bg-custom-red text-primary hover:bg-custom-red! hover:text-white! font-medium border-4 border-border shadow-md"
+              ? "bg-linear-to-r from-[#232327] via-[#432428] to-[#232327] text-white hover:bg-[#232327]! hover:text-white! font-medium  border-none"
               : "text-secondary hover:bg-transparent! hover:text-primary! font-medium"
           )}
         >

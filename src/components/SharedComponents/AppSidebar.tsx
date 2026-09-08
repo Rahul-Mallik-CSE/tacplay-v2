@@ -139,34 +139,32 @@ export default function AppSidebar({
                 </Button>
               </div>
             ) : (
-              <div className="mx-2 mb-3 rounded-2xl border border-[#C00069] bg-[#100F17] p-3 shadow-[0_0_12px_rgba(192,0,105,0.25)]">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="relative shrink-0">
-                    <div
-                      className="w-12 h-12 bg-[#980009] flex items-center justify-center"
-                      style={{
-                        clipPath:
-                          "polygon(50% 0%,61% 15%,79% 9%,75% 28%,93% 35%,82% 50%,93% 65%,75% 72%,79% 91%,61% 85%,50% 100%,39% 85%,21% 91%,25% 72%,7% 65%,18% 50%,7% 35%,25% 28%,21% 9%,39% 15%)",
-                      }}
-                    >
-                      <Crown size={20} className="text-[#cdba20]" />
+              <div className="mx-2 mb-3 rounded-lg overflow-hidden shadow-lg">
+                <div className="bg-linear-to-b from-[#DC2727] via-[#b80000] to-[#8b0000] p-3 relative">
+                  <div className="mb-2">
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center p-0.5">
+                      <Image
+                        src="/bronze.png"
+                        alt="Bronze Badge"
+                        width={64}
+                        height={64}
+                        className="w-full h-full object-contain rounded-xl"
+                      />
                     </div>
                   </div>
-                  <div>
-                    <p className="text-primary text-sm font-semibold leading-snug mb-0.5">
-                      {t("sidebar.upgradeToSilver")}
-                    </p>
-                    <p className="text-secondary text-xs mb-2">
-                      {t("sidebar.unlockMessage")}
-                    </p>
-                    <Button
-                      onClick={() => setIsUpgradeModalOpen(true)}
-                      className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-[#980009] via-[#C00069] to-[#980009] text-white font-bold py-2.5 rounded-xl text-sm hover:opacity-90 transition-opacity shadow-[0_0_10px_rgba(192,0,105,0.4)]"
-                    >
-                      <Crown size={15} className="text-[#cdba20]" />
-                      {t("sidebar.upgrade")}
-                    </Button>
-                  </div>
+                  <h3 className="text-white text-lg font-semibold ">
+                    Upgrade to Silver!
+                  </h3>
+                  <p className="text-white/80 text-sm mb-2 leading-relaxed">
+                    Upgrade your account and unlock all of the benefits.
+                  </p>
+                  <Button
+                    onClick={() => setIsUpgradeModalOpen(true)}
+                    className="w-full flex items-center justify-center gap-2 bg-white text-gray-900 font-bold py-3 rounded-2xl text-sm hover:bg-gray-100 transition-colors"
+                  >
+                    <Crown size={16} className="text-[#d4a843]" />
+                    Upgrade Now!
+                  </Button>
                 </div>
               </div>
             )
