@@ -266,15 +266,8 @@ const CustomTable = <T extends Record<string, unknown>>({
 
       {/* Pagination */}
       <div className="flex items-center justify-between px-2 gap-3 flex-wrap">
-        <p className="text-xs text-secondary">
-          {t("table.showing", {
-            from: totalEntries === 0 ? 0 : startIndex + 1,
-            to: Math.min(endIndex, totalEntries),
-            total: totalEntries,
-          })}
-        </p>
-        <div className="flex items-center gap-2">
-          <Pagination>
+        <div>
+ <Pagination>
             <PaginationContent className="flex-wrap gap-1">
               <PaginationItem>
                 <PaginationPrevious
@@ -330,6 +323,17 @@ const CustomTable = <T extends Record<string, unknown>>({
               </PaginationItem>
             </PaginationContent>
           </Pagination>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <p className="text-xs text-primary">
+            {t("table.showing", {
+              from: totalEntries === 0 ? 0 : startIndex + 1,
+              to: Math.min(endIndex, totalEntries),
+              total: totalEntries,
+            })}
+          </p>
+         
 
           <select
             className="bg-muted border border-white/10 text-primary text-xs rounded-md px-2 py-1.5 outline-none"
