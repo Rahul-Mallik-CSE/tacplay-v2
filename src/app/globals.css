@@ -58,7 +58,7 @@
   --radius: 0.625rem;
 
   /* ── Brand palette ── */
-  --root-bg: #100f17;
+  --root-bg: #100F17;
   --custom-red: #980009;
   --custom-yellow: #b4971e;
   --border-accent: #cdba20;
@@ -66,7 +66,7 @@
   /* ── Tokens ── */
   --background: #0b0b0f;
   --foreground: #f5f3ff;
-  --card: #100f17;
+  --card: #0b0b0f;
   --card-foreground: #f5f3ff;
   --popover: #100f17;
   --popover-foreground: #f5f3ff;

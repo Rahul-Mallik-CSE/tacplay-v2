@@ -2,15 +2,15 @@
 
 /**
  * RevenueChart.tsx
- * Area chart displaying revenue growth and booking count trends over time.
+ * Line chart displaying revenue growth and booking count trends over time.
  * Includes a range selector dropdown (Week/Month/Year) in the header.
  * Shows a blurred lock overlay with upgrade CTA when isLocked is true.
  */
 
 import { useState } from "react";
 import {
-  AreaChart,
-  Area,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -68,7 +68,7 @@ const RevenueChart = ({
       <div className="flex items-start justify-between mb-6">
         <div>
           <p className="text-sm text-secondary mb-1">{translatedTitle}</p>
-          <h2 className="text-xl md:text-3xl font-bold text-primary flex items-center gap-1">
+          <h2 className="text-xl md:text-2xl font-bold text-primary flex items-center gap-1">
             <Euro className="w-4 h-4" /> {valueDisplay}
           </h2>
         </div>
@@ -116,51 +116,13 @@ const RevenueChart = ({
           )}
         >
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart
+            <LineChart
               data={chartData}
               margin={{ top: 5, right: 5, left: -15, bottom: 0 }}
             >
-              <defs>
-                <linearGradient
-                  id="revenueGradient"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop
-                    offset="5%"
-                    stopColor="#980009"
-                    stopOpacity={0.6}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="#980009"
-                    stopOpacity={0}
-                  />
-                </linearGradient>
-                <linearGradient
-                  id="bookingGradient"
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop
-                    offset="5%"
-                    stopColor="#b4971e"
-                    stopOpacity={0.6}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="#b4971e"
-                    stopOpacity={0}
-                  />
-                </linearGradient>
-              </defs>
               <CartesianGrid
                 strokeDasharray="3 3"
-                stroke="rgba(82,82,115,0.2)"
+                stroke="rgba(82,82,115,0.3)"
                 vertical={false}
               />
               <XAxis
@@ -178,23 +140,25 @@ const RevenueChart = ({
                 }
               />
               <Tooltip content={<ChartTooltip />} />
-              <Area
+              <Line
                 type="monotone"
                 dataKey="booking_count"
                 name={legendB}
-                stroke="#b4971e"
+                stroke="#A98500"
                 strokeWidth={2}
-                fill="url(#bookingGradient)"
+                dot={{ r: 4, fill: "#DDB215", strokeWidth: 0 }}
+                activeDot={{ r: 6, fill: "#DDB215", strokeWidth: 0 }}
               />
-              <Area
+              <Line
                 type="monotone"
                 dataKey="revenue_growth"
                 name={legendA}
-                stroke="#980009"
+                stroke="#E40000"
                 strokeWidth={2}
-                fill="url(#revenueGradient)"
+                dot={{ r: 4, fill: "#FF3131", strokeWidth: 0 }}
+                activeDot={{ r: 6, fill: "#FF3131", strokeWidth: 0 }}
               />
-            </AreaChart>
+            </LineChart>
           </ResponsiveContainer>
         </div>
 
