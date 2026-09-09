@@ -2,7 +2,7 @@
 
 "use client";
 
-import { ChevronDown, Globe } from "lucide-react";
+import { ChevronDown, Globe, Search, Bell, Mail, X } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -77,20 +77,37 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
   return (
     <div className="w-full sticky top-0 z-9 px-3 md:px-4">
       <div className="max-w-625 rounded-2xl mx-auto flex items-center justify-between py-3">
-        <div className="flex gap-2 items-center justify-center">
+        {/* Left side - Welcome message */}
+        <div className="flex items-center gap-2">
           <div className="rounded-sm">
             <SidebarTrigger />
           </div>
           <h1 className="text-sm sm:text-base md:text-lg lg:text-2xl 2xl:text-3xl font-bold text-primary truncate">
-            {computedPageTitle}
+            Welcome back, Rahul 👋
           </h1>
         </div>
 
         {/* Right side */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+          {/* Search Button */}
+          <button className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors cursor-pointer">
+            <Search className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
+          </button>
+
+          {/* Notification Button */}
+          <button className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors relative cursor-pointer">
+            <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
+            <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#1a1a2e]" />
+          </button>
+
+          {/* Email Button */}
+          <button className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors cursor-pointer">
+            <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
+          </button>
+
           {/* Language Dropdown */}
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex cursor-pointer border border-transparent hover:border-secondary items-center gap-2 rounded-lg px-2 py-1 transition-colors shrink-0 text-primary text-xs sm:text-sm">
+            <DropdownMenuTrigger className="flex cursor-pointer border border-transparent hover:border-secondary items-center gap-2 rounded-lg px-2 py-1 transition-colors shrink-0 text-primary text-xs sm:text-sm ">
               <Globe className="w-4 h-4" />
               <span className="hidden sm:inline">{t("language.label")}</span>
               <span className="font-semibold">
@@ -123,16 +140,16 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
 
           {/* Profile Dropdown */}
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex cursor-pointer border border-transparent hover:border-secondary items-center gap-1 sm:gap-2 rounded-lg px-1 sm:px-2 py-1 transition-colors shrink-0">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-red-800 flex items-center justify-center overflow-hidden shrink-0">
-                <span className="text-xs sm:text-sm font-semibold text-primary">
-                  U
+            <DropdownMenuTrigger className="flex cursor-pointer border border-transparent hover:border-secondary items-center gap-2 sm:gap-3 rounded-lg px-1 sm:px-2 py-1 transition-colors shrink-0">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0">
+                <span className="text-sm sm:text-base font-semibold text-gray-700">
+                  SH
                 </span>
               </div>
               <div className="text-left hidden sm:block">
-                <p className="text-sm font-medium text-primary">User</p>
+                <p className="text-sm font-semibold text-primary">Sujon Hossin</p>
+                <p className="text-xs text-gray-400">sujon.hossain456</p>
               </div>
-              <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4 text-primary hidden sm:block" />
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
@@ -155,6 +172,8 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+         
         </div>
       </div>
 

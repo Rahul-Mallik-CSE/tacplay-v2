@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { mockBookingListData } from "../../../mock-data/DashboardMockData/booking-list-mock-data"
 import type { BookingListItem } from "@/types/DashboardTypes/BookingsTypes"
+import { Filter } from "lucide-react"
 
 function BookingListTable() {
   const { t } = useTranslation("dashboard")
@@ -179,9 +180,18 @@ function BookingListTable() {
           </h1>
           <p className="text-sm text-secondary mt-1">{t("bookings.subtitle")}</p>
         </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <BookingSearchBar value={search} onChange={handleSearchChange} />
+        <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <BookingSearchBar value={search} onChange={handleSearchChange} />
+            </div>
+
+            {/* Filter Button */}
+            <button className="flex items-center gap-2 bg-muted border border-white/10 rounded-lg px-4 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer">
+                  <Filter className="w-4 h-4" />
+                  <span className="hidden sm:inline">{t("common.filter")}</span>
+            </button>
         </div>
+        
       </div>
 
       <CustomTable
