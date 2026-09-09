@@ -8,19 +8,20 @@
 import { type ReactNode } from "react";
 import {
   CircleDollarSign,
-  ClipboardCheck,
-  Hourglass,
   Crosshair,
 } from "lucide-react";
+import { IoDocumentText } from "react-icons/io5";
+import { BiSolidDollarCircle } from "react-icons/bi";
 import { useTranslation } from "react-i18next";
 import StatsCard from "./StatsCard";
 import type { DashboardMark1Item } from "@/types/DashboardTypes/HomeTypes";
+import { FaHourglassEnd } from "react-icons/fa";
 
 /** Icon mapping for each stats card key — matches the provided design */
 const STATS_ICON_BY_KEY: Record<string, ReactNode> = {
-  total_revenue: <CircleDollarSign className="w-5 h-5" />,
-  total_bookings: <ClipboardCheck className="w-5 h-5" />,
-  upcoming_sessions: <Hourglass className="w-5 h-5" />,
+  total_revenue: <BiSolidDollarCircle className="w-5 h-5" />,
+  total_bookings: <IoDocumentText className="w-5 h-5" />,
+  upcoming_sessions: <FaHourglassEnd className="w-5 h-5" />,
   matches_hosted: <Crosshair className="w-5 h-5" />,
 };
 
