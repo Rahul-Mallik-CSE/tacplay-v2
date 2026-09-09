@@ -67,7 +67,7 @@ const RevenueChart = ({
       {/* Header with title, value, and range dropdown */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <p className="text-sm text-secondary mb-1">{translatedTitle}</p>
+          <p className="text-sm text-[#8381A3] mb-1">{translatedTitle}</p>
           <h2 className="text-xl md:text-2xl font-bold text-primary flex items-center gap-1">
             <Euro className="w-4 h-4" /> {valueDisplay}
           </h2>
