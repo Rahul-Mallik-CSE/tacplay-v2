@@ -10,8 +10,8 @@ import DataSection from "./DataSection";
 import type { RecentBookingCardProps } from "@/types/DashboardTypes/HomeTypes";
 
 const STATUS_STYLES: Record<string, string> = {
-  confirmed: "bg-emerald-500/15 text-emerald-400",
-  pending: "bg-amber-500/15 text-amber-400",
+  confirmed: "bg-[#E4FAE0] text-[#07B129]",
+  pending: "bg-[#FDEFE2] text-[#EB7101]",
   cancelled: "bg-red-500/15 text-red-400",
 };
 
@@ -50,18 +50,18 @@ const RecentBookingCard = ({
             <p className="text-sm font-medium text-white truncate">
               {item.playerName}
             </p>
-            <p className="text-xs text-[#71717a] truncate">
+            <p className="text-xs text-[#ADADAD] truncate">
               {item.sessionName}
             </p>
           </div>
 
           {/* Price + Status */}
           <div className="flex flex-col items-end gap-1 flex-shrink-0">
-            <span className="text-sm font-semibold text-white">
+            <span className="text-sm md:text-base font-semibold text-[#ADADAD]">
               {item.price}
             </span>
             <span
-              className={`text-[10px] font-medium px-2 py-0.5 rounded-md capitalize ${
+              className={`text-[10px] font-medium px-2 py-0.5 rounded-sm capitalize ${
                 STATUS_STYLES[item.status] ?? STATUS_STYLES.pending
               }`}
             >
