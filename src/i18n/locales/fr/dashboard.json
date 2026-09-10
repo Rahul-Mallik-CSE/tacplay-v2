@@ -497,7 +497,17 @@
       "packageCreated": "Forfait créé avec succès.",
       "packageUpdated": "Forfait mis à jour avec succès.",
       "packageDeleted": "Forfait supprimé avec succès.",
-      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce forfait ?"
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce forfait ?",
+      "title": "Gestion des forfaits du terrain",
+      "subtitle": "Créez un forfait de base et d'autres offres groupées de mise à jour paintball, qui peuvent également inclure des articles non paintball, par ex. BBQ, Événements, forfaits STAG, etc.",
+      "typeHeader": "Type de forfait {{index}}",
+      "packageFeePlaceholder": "prix",
+      "includeItems": "Articles inclus",
+      "selectPackageItems": "Sélectionner les articles du forfait",
+      "packageImage": "Image du forfait",
+      "uploadImage": "Télécharger une image",
+      "savePackage": "Enregistrer le forfait",
+      "saveFailed": "Échec de l'enregistrement du forfait."
     },
     "openingHoursTab": {
       "title": "Horaires hebdomadaires standard",

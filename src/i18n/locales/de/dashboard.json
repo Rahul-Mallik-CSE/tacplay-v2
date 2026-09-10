@@ -497,7 +497,17 @@
       "packageCreated": "Paket erfolgreich erstellt.",
       "packageUpdated": "Paket erfolgreich aktualisiert.",
       "packageDeleted": "Paket erfolgreich gelöscht.",
-      "confirmDelete": "Sind Sie sicher, dass Sie dieses Paket löschen möchten?"
+      "confirmDelete": "Sind Sie sicher, dass Sie dieses Paket löschen möchten?",
+      "title": "Spielfeld-Paketverwaltung",
+      "subtitle": "Erstellen Sie ein Basispaket und andere gebündelte Paintball-Upgrade-Angebote, die auch Nicht-Paintball-Artikel umfassen können, z.B. BBQ, Events, STAG-Pakete usw.",
+      "typeHeader": "Pakettyp {{index}}",
+      "packageFeePlaceholder": "Preis",
+      "includeItems": "Enthaltene Artikel",
+      "selectPackageItems": "Paketartikel auswählen",
+      "packageImage": "Paketbild",
+      "uploadImage": "Bild hochladen",
+      "savePackage": "Paket speichern",
+      "saveFailed": "Paket konnte nicht gespeichert werden."
     },
     "openingHoursTab": {
       "title": "Standard-Wochenstunden",

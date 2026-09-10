@@ -528,7 +528,17 @@
       "packageCreated": "Package created successfully.",
       "packageUpdated": "Package updated successfully.",
       "packageDeleted": "Package deleted successfully.",
-      "confirmDelete": "Are you sure you want to delete this package?"
+      "confirmDelete": "Are you sure you want to delete this package?",
+      "title": "Field Packages Management",
+      "subtitle": "Create a base package and other bundled paintball upgrade deals, which can also include non paintball items, e.g BBQ, Events, STAG packages, etc.",
+      "typeHeader": "Package Type {{index}}",
+      "packageFeePlaceholder": "price",
+      "includeItems": "Include Items",
+      "selectPackageItems": "Select package items",
+      "packageImage": "Package Image",
+      "uploadImage": "Upload Image",
+      "savePackage": "Save Package",
+      "saveFailed": "Failed to save package."
     },
     "openingHoursTab": {
       "title": "Standard Weekly Hours",

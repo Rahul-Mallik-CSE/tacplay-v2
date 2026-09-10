@@ -3,23 +3,15 @@
 /**
  * CreateEditPackagePage.tsx
  * Page for creating or editing a package.
- * Reuses the same form layout as the design.
+ * Matches the design with package image upload, name, description, fee, and include items.
  */
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useRouter, useParams } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Camera } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { mockPackageManagement } from "../../../../mock-data/DashboardMockData/arena-management-mock-data"
@@ -31,6 +23,7 @@ export default function CreateEditPackagePage() {
   const params = useParams()
   const packageId = params?.id as string | undefined
   const isEdit = Boolean(packageId)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [form, setForm] = useState<PackageForm>({
     package_name: "",
@@ -45,6 +38,8 @@ export default function CreateEditPackagePage() {
     booking_change: 0,
   })
   const [isSaving, setIsSaving] = useState(false)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [includeItemsInput, setIncludeItemsInput] = useState("")
 
   useEffect(() => {
     if (isEdit && packageId) {
@@ -73,6 +68,36 @@ export default function CreateEditPackagePage() {
     setForm((prev) => ({ ...prev, [key]: value }))
   }
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleAddItem = () => {
+    if (!includeItemsInput.trim()) return
+    if (!form.include_items.includes(includeItemsInput.trim())) {
+      updateField("include_items", [...form.include_items, includeItemsInput.trim()])
+    }
+    setIncludeItemsInput("")
+  }
+
+  const handleRemoveItem = (item: string) => {
+    updateField("include_items", form.include_items.filter((i) => i !== item))
+  }
+
+  const handleItemKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault()
+      handleAddItem()
+    }
+  }
+
   const handleSave = async () => {
     setIsSaving(true)
     try {
@@ -80,7 +105,7 @@ export default function CreateEditPackagePage() {
       toast.success(isEdit ? t("arena.packagesTab.packageUpdated") : t("arena.packagesTab.packageCreated"))
       router.push("/dashboard/field-profile/package-management")
     } catch {
-      toast.error("Failed to save package.")
+      toast.error(t("arena.packagesTab.saveFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -100,112 +125,130 @@ export default function CreateEditPackagePage() {
 
       <div>
         <h2 className="text-xl sm:text-2xl font-bold text-primary">
-          {isEdit ? t("arena.packagesTab.editTitle") : t("arena.packagesTab.createTitle")}
+          {t("arena.packagesTab.title")}
         </h2>
-        <p className="text-sm text-muted-foreground mt-1">
-          {isEdit ? t("arena.packagesTab.editSubtitle") : t("arena.packagesTab.createSubtitle")}
+        <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
+          {t("arena.packagesTab.subtitle")}
         </p>
       </div>
 
-      <div className="space-y-5">
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-primary">
-            {t("arena.packagesTab.packageName")}
-          </label>
-          <Input
-            value={form.package_name}
-            onChange={(e) => updateField("package_name", e.target.value)}
-            placeholder={t("arena.packagesTab.packageNamePlaceholder")}
-            className="bg-input/30 border-white/10 text-primary h-11"
-          />
-        </div>
+      <div className="h-px bg-white/10" />
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-primary">
-            {t("arena.packagesTab.packageDescription")}
-          </label>
-          <Textarea
-            value={form.description}
-            onChange={(e) => updateField("description", e.target.value)}
-            placeholder={t("arena.packagesTab.packageDescriptionPlaceholder")}
-            className="bg-input/30 border-white/10 text-primary min-h-25"
-          />
-        </div>
+      <div className="space-y-6">
+        <h3 className="text-lg font-bold text-primary">
+          {t("arena.packagesTab.typeHeader", { index: 1 })}
+        </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-primary">
+              {t("arena.packagesTab.packageName")}
+            </label>
+            <Input
+              value={form.package_name}
+              onChange={(e) => updateField("package_name", e.target.value)}
+              placeholder={t("arena.packagesTab.packageNamePlaceholder")}
+              className="bg-input/30 border-white/10 text-primary h-11"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-primary">
+              {t("arena.packagesTab.packageDescription")}
+            </label>
+            <Textarea
+              value={form.description}
+              onChange={(e) => updateField("description", e.target.value)}
+              placeholder={t("arena.packagesTab.packageDescriptionPlaceholder")}
+              className="bg-input/30 border-white/10 text-primary min-h-25"
+            />
+          </div>
+
           <div className="space-y-2">
             <label className="text-sm font-medium text-primary">
               {t("arena.packagesTab.packageFee")}
             </label>
             <Input
-              type="number"
-              inputMode="decimal"
-              step="0.01"
+              type="text"
               value={form.package_fee}
               onChange={(e) => updateField("package_fee", e.target.value)}
-              placeholder="€0.00"
+              placeholder={t("arena.packagesTab.packageFeePlaceholder")}
               className="bg-input/30 border-white/10 text-primary h-11"
             />
           </div>
+
           <div className="space-y-2">
             <label className="text-sm font-medium text-primary">
-              {t("arena.packagesTab.packageType")}
+              {t("arena.packagesTab.includeItems")}
             </label>
-            <Select
-              value={form.type}
-              onValueChange={(val) => updateField("type", val as "Public" | "Private" | "Ranked")}
+            <div className="flex gap-2">
+              <Input
+                value={includeItemsInput}
+                onChange={(e) => setIncludeItemsInput(e.target.value)}
+                onKeyDown={handleItemKeyDown}
+                placeholder={t("arena.packagesTab.selectPackageItems")}
+                className="bg-input/30 border-white/10 text-primary h-11"
+              />
+              <Button
+                type="button"
+                variant="default"
+                size="sm"
+                className="h-11 px-4"
+                onClick={handleAddItem}
+              >
+                {t("arena.add")}
+              </Button>
+            </div>
+            {form.include_items.length > 0 && (
+              <div className="flex flex-wrap gap-2 pt-2">
+                {form.include_items.map((item) => (
+                  <span
+                    key={item}
+                    className="inline-flex items-center gap-1.5 bg-primary/15 border border-primary/30 text-primary text-xs font-medium px-2.5 py-1 rounded-full"
+                  >
+                    {item}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveItem(item)}
+                      className="flex items-center justify-center hover:text-destructive transition-colors cursor-pointer"
+                      aria-label={`Remove ${item}`}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-primary">
+              {t("arena.packagesTab.packageImage")}
+            </label>
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center justify-center w-full h-32 border-2 border-dashed border-white/10 rounded-lg bg-input/20 hover:bg-input/30 transition-colors cursor-pointer"
             >
-              <SelectTrigger className="bg-input/30 border-white/10 text-primary h-11">
-                <SelectValue placeholder={t("arena.packagesTab.selectType")} />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-white/10">
-                <SelectItem value="Public">{t("arena.packagesTab.public")}</SelectItem>
-                <SelectItem value="Private">{t("arena.packagesTab.private")}</SelectItem>
-                <SelectItem value="Ranked">{t("arena.packagesTab.ranked")}</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              {t("arena.packagesTab.paintballsIncluded")}
-            </label>
-            <Input
-              value={form.paint_count}
-              onChange={(e) => updateField("paint_count", e.target.value)}
-              placeholder={t("arena.packagesTab.paintballsPlaceholder")}
-              className="bg-input/30 border-white/10 text-primary h-11"
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Package preview"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <Camera className="w-8 h-8" />
+                  <span className="text-sm">{t("arena.packagesTab.uploadImage")}</span>
+                </div>
+              )}
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
             />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              {t("arena.packagesTab.bookingCount")}
-            </label>
-            <Input
-              type="number"
-              value={form.booking_count}
-              onChange={(e) => updateField("booking_count", Number(e.target.value))}
-              placeholder={t("arena.packagesTab.bookingCountPlaceholder")}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between py-3 border-t border-white/5">
-          <label className="text-sm font-medium text-primary">
-            {t("arena.packagesTab.active")}
-          </label>
-          <div className="flex items-center gap-3">
-            <Switch
-              checked={form.is_active}
-              onCheckedChange={(checked) => updateField("is_active", checked)}
-              className="data-[state=checked]:bg-custom-yellow"
-            />
-            <span className="text-sm text-muted-foreground">
-              {form.is_active ? t("arena.on") : t("arena.off")}
-            </span>
           </div>
         </div>
       </div>
@@ -221,7 +264,7 @@ export default function CreateEditPackagePage() {
           {isSaving ? (
             <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
           ) : null}
-          {t("arena.save")}
+          {t("arena.packagesTab.savePackage")}
         </Button>
       </div>
     </div>

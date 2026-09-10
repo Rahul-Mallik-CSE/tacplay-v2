@@ -497,7 +497,17 @@
       "packageCreated": "Paquete creado correctamente.",
       "packageUpdated": "Paquete actualizado correctamente.",
       "packageDeleted": "Paquete eliminado correctamente.",
-      "confirmDelete": "¿Estás seguro de que quieres eliminar este paquete?"
+      "confirmDelete": "¿Estás seguro de que quieres eliminar este paquete?",
+      "title": "Gestión de paquetes del campo",
+      "subtitle": "Crea un paquete base y otras ofertas combinadas de mejora de paintball, que también pueden incluir artículos que no sean de paintball, por ejemplo BBQ, Eventos, paquetes STAG, etc.",
+      "typeHeader": "Tipo de paquete {{index}}",
+      "packageFeePlaceholder": "precio",
+      "includeItems": "Artículos incluidos",
+      "selectPackageItems": "Seleccionar artículos del paquete",
+      "packageImage": "Imagen del paquete",
+      "uploadImage": "Subir imagen",
+      "savePackage": "Guardar paquete",
+      "saveFailed": "Error al guardar el paquete."
     },
     "openingHoursTab": {
       "title": "Horario semanal estándar",
