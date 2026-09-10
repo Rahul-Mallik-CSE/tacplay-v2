@@ -682,6 +682,7 @@
       "unitMinute": "Minute",
       "unitHour": "Hour",
       "basePrice": "Base Price Per Player",
+      "allowOwnGear": "Allow Own Gear",
       "allowSocial": "Allow Social Matches",
       "allowRanked": "Allow Ranked Matches",
       "on": "On",

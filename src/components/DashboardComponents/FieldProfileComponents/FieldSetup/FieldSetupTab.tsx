@@ -38,7 +38,7 @@ const FieldSetupTab = ({ fieldSetup = mockFieldSetup }: FieldSetupTabProps) => {
       maximum_players_per_session: fieldSetup.maximum_players_per_session ?? 0,
       default_session_duration: fieldSetup.default_session_duration ?? 0,
       duration_unit: fieldSetup.duration_unit ?? "minute",
-      base_price_per_player: fieldSetup.base_price_per_player ?? "",
+      allow_own_gear: fieldSetup.allow_own_gear ?? false,
       allow_social_matches: fieldSetup.allow_social_matches ?? false,
       allow_ranked_matches: fieldSetup.allow_ranked_matches ?? false,
     }),
@@ -158,22 +158,12 @@ const FieldSetupTab = ({ fieldSetup = mockFieldSetup }: FieldSetupTabProps) => {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-primary">
-            {t("arena.fieldSetupTab.basePrice")}
-          </label>
-          <Input
-            type="text"
-            value={form.base_price_per_player ? `$${form.base_price_per_player}` : ""}
-            onChange={(e) => {
-              const raw = e.target.value.replace(/^\$/, "").trim()
-              updateField("base_price_per_player", raw)
-            }}
-            readOnly={!isEditing}
-            placeholder="$0.00"
-            className="bg-input/30 border-white/10 text-primary h-11"
-          />
-        </div>
+        <ToggleField
+          label={t("onboardingFields.business.allowOwnGear")}
+          checked={form.allow_own_gear}
+          disabled={!isEditing}
+          onCheckedChange={(c) => updateField("allow_own_gear", c)}
+        />
 
         <ToggleField
           label={t("onboardingFields.business.allowSocial")}

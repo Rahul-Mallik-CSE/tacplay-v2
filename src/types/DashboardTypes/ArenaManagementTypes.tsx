@@ -46,7 +46,7 @@ export interface FieldSetupData {
   maximum_players_per_session: number
   default_session_duration: number
   duration_unit: string
-  base_price_per_player: string
+  allow_own_gear: boolean
   allow_social_matches: boolean
   allow_ranked_matches: boolean
 }
@@ -138,7 +138,7 @@ export type FieldSetupForm = {
   maximum_players_per_session: number
   default_session_duration: number
   duration_unit: string
-  base_price_per_player: string
+  allow_own_gear: boolean
   allow_social_matches: boolean
   allow_ranked_matches: boolean
 }

@@ -651,6 +651,7 @@
       "unitMinute": "Minute",
       "unitHour": "Heure",
       "basePrice": "Prix de base par joueur",
+      "allowOwnGear": "Autoriser le propre équipement",
       "allowSocial": "Autoriser les matchs amicaux",
       "allowRanked": "Autoriser les matchs classés",
       "on": "Actif",

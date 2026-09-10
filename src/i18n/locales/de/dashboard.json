@@ -651,6 +651,7 @@
       "unitMinute": "Minute",
       "unitHour": "Stunde",
       "basePrice": "Basispreis pro Spieler",
+      "allowOwnGear": "Eigenes Gerät erlauben",
       "allowSocial": "Soziale Spiele erlauben",
       "allowRanked": "Gewertete Spiele erlauben",
       "on": "An",
