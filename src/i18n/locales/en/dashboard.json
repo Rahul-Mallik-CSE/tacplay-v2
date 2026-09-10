@@ -594,7 +594,8 @@
       "statusPaid": "Paid",
       "statusPending": "Pending",
       "statusFailed": "Failed",
-      "statusRefunded": "Refunded"
+      "statusRefunded": "Refunded",
+      "filter": "Filter"
     }
   },
   "auth": {

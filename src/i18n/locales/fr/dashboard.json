@@ -563,7 +563,8 @@
       "statusPaid": "Payé",
       "statusPending": "En attente",
       "statusFailed": "Échoué",
-      "statusRefunded": "Remboursé"
+      "statusRefunded": "Remboursé",
+      "filter": "Filtrer"
     }
   },
   "auth": {

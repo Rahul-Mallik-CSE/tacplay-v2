@@ -563,7 +563,8 @@
       "statusPaid": "Bezahlt",
       "statusPending": "Ausstehend",
       "statusFailed": "Fehlgeschlagen",
-      "statusRefunded": "Rückerstattet"
+      "statusRefunded": "Rückerstattet",
+      "filter": "Filter"
     }
   },
   "auth": {

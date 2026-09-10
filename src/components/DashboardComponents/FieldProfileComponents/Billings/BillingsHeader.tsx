@@ -2,11 +2,11 @@
 
 /**
  * BillingsHeader.tsx
- * Header row with title and search input for filtering billing records.
+ * Header row with title, search input, and filter button for billing records.
  * Used as part of the BillingsTab component.
  */
 
-import { Search } from "lucide-react"
+import { Search, Funnel } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import type { BillingsHeaderProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 
@@ -32,6 +32,10 @@ export default function BillingsHeader({
             className="w-full sm:w-56 pl-9 pr-4 py-2 rounded-lg bg-input/30 border border-white/10 text-sm text-primary placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
           />
         </div>
+        <button className="flex items-center gap-2 px-4 py-2 bg-input/30 text-primary rounded-lg text-sm font-medium hover:bg-secondary/50 transition-colors cursor-pointer border border-white/10">
+          <Funnel className="w-4 h-4" />
+          {t("arena.billingsTab.filter")}
+        </button>
       </div>
     </div>
   )
