@@ -3,15 +3,26 @@
 /**
  * PackageListTable.tsx
  * Package management table using CustomTable component.
- * Shows packages with date/time, type, price, paint, booking, status, and action columns.
+ * Shows packages with image, package name, type, price, paint, booking, status, and action columns.
  */
 
 import { useTranslation } from "react-i18next"
 import { useRouter } from "next/navigation"
+import { Search, Funnel, SlidersHorizontal } from "lucide-react"
 import type { PackageItem, PackageListTableProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import PackageActionDropdown from "./PackageActionDropdown"
+import Image from "next/image"
 
 type PackageRow = PackageItem & Record<string, unknown>
+
+const PACKAGE_IMAGES = [
+  "https://images.unsplash.com/photo-1544298621-a21e4e4cb0a3?w=120&h=120&fit=crop",
+  "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=120&h=120&fit=crop",
+  "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=120&h=120&fit=crop",
+  "https://images.unsplash.com/photo-1529926706528-db9e5010cd3e?w=120&h=120&fit=crop",
+  "https://images.unsplash.com/photo-1461896836934-bd45ba8fcb3b?w=120&h=120&fit=crop",
+  "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=120&h=120&fit=crop",
+]
 
 export default function PackageListTable({
   packages,
@@ -39,16 +50,22 @@ export default function PackageListTable({
 
   const getStatusBadge = (isActive: boolean) => {
     return isActive
-      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-      : "bg-custom-red/20 text-red-400 border border-custom-red/30"
+      ? "bg-[#181F44] text-[#4868EE] border border-none"
+      : "bg-[#3A121F] text-[#DF1C41] border border-none"
   }
 
   const columns = [
     {
-      header: t("arena.packagesTab.dateTime"),
-      accessor: (row: PackageRow) => (
+      header: t("arena.packagesTab.packageName"),
+      accessor: (row: PackageRow, index: number) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-muted/50 rounded-md shrink-0" />
+          <Image
+            src={PACKAGE_IMAGES[index % PACKAGE_IMAGES.length]}
+            height={40}
+            width={40}
+            alt={row.package_name as string}
+            className="w-10 h-10 rounded-md object-cover shrink-0"
+          />
           <div>
             <p className="text-sm font-medium text-primary">{row.package_name as string}</p>
             <p className="text-xs text-muted-foreground">{row.description as string}</p>
@@ -112,19 +129,22 @@ export default function PackageListTable({
         </h2>
         <div className="flex items-center gap-3">
           <div className="relative flex-1 sm:flex-none">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               placeholder={t("arena.packagesTab.searchPlaceholder")}
-              className="w-full sm:w-56 pl-4 pr-4 py-2 rounded-lg bg-input/30 border border-white/10 text-sm text-primary placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
+              className="w-full sm:w-56 pl-9 pr-4 py-2 rounded-lg bg-input/30 border border-white/10 text-sm text-primary placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
             />
           </div>
+          <button className="flex items-center gap-2 px-4 py-2 text-primary rounded-lg text-sm font-medium hover:bg-secondary/50 transition-colors cursor-pointer border border-white/10">
+            <Funnel className="w-4 h-4" />
+            {t("arena.packagesTab.filter")}
+          </button>
           <button
             onClick={onCreatePackage}
             className="flex items-center gap-2 px-4 py-2 bg-custom-red text-white rounded-lg text-sm font-medium hover:bg-custom-red/90 transition-colors cursor-pointer"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
+            <SlidersHorizontal className="w-4 h-4" />
             {t("arena.packagesTab.createPackage")}
           </button>
         </div>
@@ -145,7 +165,7 @@ export default function PackageListTable({
             </tr>
           </thead>
           <tbody>
-            {packages.map((pkg) => (
+            {packages.map((pkg, index) => (
               <tr
                 key={pkg.id}
                 className="border-b border-white/5 hover:bg-muted/30 transition-colors cursor-pointer"
@@ -153,7 +173,7 @@ export default function PackageListTable({
               >
                 {columns.map((col, colIdx) => (
                   <td key={colIdx} className="p-3 text-primary/80 text-xs sm:text-sm whitespace-nowrap">
-                    {col.accessor(pkg as PackageRow)}
+                    {col.accessor(pkg as PackageRow, index)}
                   </td>
                 ))}
                 <td className="p-3 text-right">
