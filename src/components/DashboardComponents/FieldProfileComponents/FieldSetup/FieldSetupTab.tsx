@@ -20,7 +20,8 @@ import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import type { FieldSetupData, FieldSetupForm, FieldSetupTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import { mockFieldSetup } from "../../../../mock-data/DashboardMockData/arena-management-mock-data"
-import EditSaveHeader from "../EditSaveHeader"
+import SectionHeader from "../SectionHeader"
+import EditSaveButton from "../EditSaveButton"
 import ToggleField from "../ToggleField"
 
 const FieldSetupTab = ({ fieldSetup = mockFieldSetup }: FieldSetupTabProps) => {
@@ -73,13 +74,9 @@ const FieldSetupTab = ({ fieldSetup = mockFieldSetup }: FieldSetupTabProps) => {
 
   return (
     <div className="space-y-6">
-      <EditSaveHeader
+      <SectionHeader
         title={t("onboardingFields.business.title")}
         subtitle={t("onboardingFields.business.subtitle")}
-        isEditing={isEditing}
-        isSaving={isSaving}
-        onToggleEdit={handleToggleEdit}
-        onSave={handleSave}
       />
 
       <div className="space-y-5">
@@ -190,6 +187,15 @@ const FieldSetupTab = ({ fieldSetup = mockFieldSetup }: FieldSetupTabProps) => {
           checked={form.allow_ranked_matches}
           disabled={!isEditing}
           onCheckedChange={(c) => updateField("allow_ranked_matches", c)}
+        />
+      </div>
+
+      <div className="flex justify-end">
+        <EditSaveButton
+          isEditing={isEditing}
+          isSaving={isSaving}
+          onToggleEdit={handleToggleEdit}
+          onSave={handleSave}
         />
       </div>
     </div>

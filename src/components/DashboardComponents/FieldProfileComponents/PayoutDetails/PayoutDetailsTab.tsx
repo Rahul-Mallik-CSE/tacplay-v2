@@ -20,7 +20,8 @@ import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import type { PayoutDetailsData, PayoutForm, PayoutDetailsTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import { mockPayoutDetails } from "../../../../mock-data/DashboardMockData/arena-management-mock-data"
-import EditSaveHeader from "../EditSaveHeader"
+import SectionHeader from "../SectionHeader"
+import EditSaveButton from "../EditSaveButton"
 import PayoutLockedView from "./PayoutLockedView"
 
 const PayoutDetailsTab = ({
@@ -77,13 +78,9 @@ const PayoutDetailsTab = ({
 
   return (
     <div className="space-y-8">
-      <EditSaveHeader
+      <SectionHeader
         title={t("onboardingFields.payout.title")}
         subtitle={t("onboardingFields.payout.subtitle")}
-        isEditing={isEditing}
-        isSaving={isSaving}
-        onToggleEdit={handleToggleEdit}
-        onSave={handleSave}
       />
 
       <div className="space-y-5">
@@ -202,6 +199,15 @@ const PayoutDetailsTab = ({
             />
           </div>
         </div>
+      </div>
+
+      <div className="flex justify-end">
+        <EditSaveButton
+          isEditing={isEditing}
+          isSaving={isSaving}
+          onToggleEdit={handleToggleEdit}
+          onSave={handleSave}
+        />
       </div>
     </div>
   )

@@ -13,7 +13,8 @@ import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import type { PackageManagementData, PackageForm, PackageManagementTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import { mockPackageManagement } from "../../../../mock-data/DashboardMockData/arena-management-mock-data"
-import EditSaveHeader from "../EditSaveHeader"
+import SectionHeader from "../SectionHeader"
+import EditSaveButton from "../EditSaveButton"
 import PackageCard from "./PackageCard"
 
 
@@ -105,28 +106,16 @@ const PackageManagementTab = ({
   return (
     <div className="space-y-6 mb-8 md:mb-12">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-primary">
-            {t("onboardingFields.packages.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            {t("onboardingFields.packages.subtitle")}
-          </p>
-        </div>
+        <SectionHeader
+          title={t("onboardingFields.packages.title")}
+          subtitle={t("onboardingFields.packages.subtitle")}
+        />
         <div className="flex gap-3 flex-wrap">
-          <Button variant="default" size="sm" className="flex items-center gap-2" onClick={handleToggleEdit}>
-            {isEditing ? t("arena.cancelEdit") : t("arena.editInfo")}
-          </Button>
           {isEditing && (
-            <>
-              <Button variant="default" size="sm" className="flex items-center gap-2" onClick={handleSave} disabled={isSaving}>
-                {t("arena.save")}
-              </Button>
-              <Button variant="default" size="sm" className="flex items-center gap-2" onClick={addPackage}>
-                <Plus className="w-4 h-4" />
-                {t("arena.packagesTab.addNew")}
-              </Button>
-            </>
+            <Button variant="default" size="sm" className="flex items-center gap-2" onClick={addPackage}>
+              <Plus className="w-4 h-4" />
+              {t("arena.packagesTab.addNew")}
+            </Button>
           )}
         </div>
       </div>
@@ -144,6 +133,15 @@ const PackageManagementTab = ({
             onRemoveItem={removeItem}
           />
         ))}
+      </div>
+
+      <div className="flex justify-end">
+        <EditSaveButton
+          isEditing={isEditing}
+          isSaving={isSaving}
+          onToggleEdit={handleToggleEdit}
+          onSave={handleSave}
+        />
       </div>
     </div>
   )
