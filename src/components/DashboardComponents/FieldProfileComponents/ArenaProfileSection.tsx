@@ -7,7 +7,7 @@
  */
 
 import React from "react"
-import { Crown } from "lucide-react"
+
 import { useTranslation } from "react-i18next"
 import Image from "next/image"
 import type { ArenaProfileSectionProps } from "@/types/DashboardTypes/ArenaManagementTypes"
@@ -64,7 +64,7 @@ export default function ArenaProfileSection({
         {showProBadge && (
           <div className="pb-1">
             <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-custom-red text-white text-xs sm:text-sm font-semibold shadow-md shadow-custom-red/25 cursor-pointer">
-              <Crown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#cdba20]" />
+              <Image src="/bronze.png" alt="Bronze" width={16} height={16} className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               {t("arena.pro")}
             </button>
           </div>
