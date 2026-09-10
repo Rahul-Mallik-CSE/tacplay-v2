@@ -520,7 +520,7 @@
     },
     "aiPricingTab": {
       "title": "Tarification IA",
-      "subtitle": "Fournissez les détails de l'entreprise et les informations de paiement pour recevoir les paiements de réservation et gérer les abonnements en toute sécurité.",
+      "subtitle": "Optimisez automatiquement vos tarifs de session grâce à l'IA. Définissez une date de base, un pourcentage de frais supplémentaires et sélectionnez les sessions auxquelles appliquer une tarification intelligente.",
       "selectDate": "Sélectionner la date",
       "selectDateTime": "Sélectionner la date et l'heure",
       "aiSuggest": "Suggestion IA",
@@ -528,7 +528,7 @@
       "extrasChargePlaceholder": "20%",
       "selectSession": "Sélectionner la session",
       "selectSessions": "Sélectionner les sessions",
-      "registeredCompany": "Entreprise enregistrée",
+      "selectSessionPlaceholder": "Sélectionner une session",
       "sessionName": "Nom de la session",
       "dateTimeLabel": "Date & Heure",
       "assignStaff": "Attribuer le personnel",
@@ -542,7 +542,13 @@
       "loading": "Chargement des détails de paiement...",
       "loadFailed": "Votre forfait Essential Starter for Fields actuel n'inclut pas l'accès aux gains ni aux détails de paiement. Veuillez passer au forfait Essential for Field Growth ou Or pour accéder à cette fonctionnalité.",
       "updated": "Détails de paiement mis à jour avec succès.",
-      "updateFailed": "Échec de la mise à jour des détails de paiement."
+      "updateFailed": "Échec de la mise à jour des détails de paiement.",
+      "stripeConnectTitle": "Se connecter avec Stripe",
+      "stripeConnectDesc": "Liez votre compte Stripe pour recevoir vos paiements en toute sécurité. Toutes les transactions sont traitées via la plateforme sécurisée de Stripe.",
+      "connectStripe": "Se connecter avec Stripe",
+      "stripeSecureNote": "Connexion sécurisée par Stripe",
+      "stripeConnectSuccess": "Connexion avec Stripe réussie !",
+      "stripeConnectFailed": "Échec de la connexion avec Stripe. Veuillez réessayer."
     },
     "billingsTab": {
       "title": "Historique de facturation",

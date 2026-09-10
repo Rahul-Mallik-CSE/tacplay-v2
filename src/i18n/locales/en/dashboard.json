@@ -551,7 +551,7 @@
     },
     "aiPricingTab": {
       "title": "AI Pricing",
-      "subtitle": "Provide business details and payout information to receive booking payments and manage subscriptions securely.",
+      "subtitle": "Automatically optimize your session pricing using AI. Set a base date, extras charge percentage, and select which sessions to apply intelligent pricing to.",
       "selectDate": "Select Date",
       "selectDateTime": "Select Date Time",
       "aiSuggest": "AI Suggest",
@@ -559,7 +559,7 @@
       "extrasChargePlaceholder": "20%",
       "selectSession": "Select Session",
       "selectSessions": "Select Sessions",
-      "registeredCompany": "Registered Company",
+      "selectSessionPlaceholder": "Select session",
       "sessionName": "Session Name",
       "dateTimeLabel": "Date & Time",
       "assignStaff": "Assign Staff",
@@ -573,7 +573,13 @@
       "loading": "Loading payout details...",
       "loadFailed": "Your current Essential Starter for Fields plan does not include access to earnings or payout details. Please upgrade to Essential for Field Growth or Gold to access this feature.",
       "updated": "Payout details updated successfully.",
-      "updateFailed": "Failed to update payout details."
+      "updateFailed": "Failed to update payout details.",
+      "stripeConnectTitle": "Connect with Stripe",
+      "stripeConnectDesc": "Link your Stripe account to receive payments securely. All transactions are processed through Stripe's secure platform.",
+      "connectStripe": "Connect with Stripe",
+      "stripeSecureNote": "Secure connection powered by Stripe",
+      "stripeConnectSuccess": "Successfully connected with Stripe!",
+      "stripeConnectFailed": "Failed to connect with Stripe. Please try again."
     },
     "billingsTab": {
       "title": "Billing History",

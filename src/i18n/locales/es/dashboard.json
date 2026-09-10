@@ -520,7 +520,7 @@
     },
     "aiPricingTab": {
       "title": "Precios con IA",
-      "subtitle": "Proporciona detalles comerciales e información de pago para recibir los pagos de reservas y administrar las suscripciones de forma segura.",
+      "subtitle": "Optimiza automáticamente los precios de tus sesiones con IA. Establece una fecha base, un porcentaje de cargo adicional y selecciona las sesiones a las que aplicar precios inteligentes.",
       "selectDate": "Seleccionar fecha",
       "selectDateTime": "Seleccionar fecha y hora",
       "aiSuggest": "Sugerencia IA",
@@ -528,7 +528,7 @@
       "extrasChargePlaceholder": "20%",
       "selectSession": "Seleccionar sesión",
       "selectSessions": "Seleccionar sesiones",
-      "registeredCompany": "Empresa registrada",
+      "selectSessionPlaceholder": "Seleccionar sesión",
       "sessionName": "Nombre de la sesión",
       "dateTimeLabel": "Fecha & Hora",
       "assignStaff": "Asignar personal",
@@ -542,7 +542,13 @@
       "loading": "Cargando detalles de pago...",
       "loadFailed": "Tu plan Essential Starter for Fields actual no incluye el acceso a las ganancias ni a los detalles de pago. Por favor, mejora a Essential for Field Growth o Oro para acceder a esta función.",
       "updated": "Detalles de pago actualizados correctamente.",
-      "updateFailed": "Error al actualizar los detalles de pago."
+      "updateFailed": "Error al actualizar los detalles de pago.",
+      "stripeConnectTitle": "Conectar con Stripe",
+      "stripeConnectDesc": "Vincula tu cuenta de Stripe para recibir pagos de forma segura. Todas las transacciones se procesan a través de la plataforma segura de Stripe.",
+      "connectStripe": "Conectar con Stripe",
+      "stripeSecureNote": "Conexión segura con Stripe",
+      "stripeConnectSuccess": "¡Conexión con Stripe exitosa!",
+      "stripeConnectFailed": "Error al conectar con Stripe. Por favor, inténtalo de nuevo."
     },
     "billingsTab": {
       "title": "Historial de facturación",

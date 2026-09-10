@@ -520,7 +520,7 @@
     },
     "aiPricingTab": {
       "title": "KI-Preisgestaltung",
-      "subtitle": "Geben Sie Geschäftsdetails und Auszahlungsinformationen an, um Buchungszahlungen zu erhalten und Abonnements sicher zu verwalten.",
+      "subtitle": "Optimieren Sie Ihre Sitzungspreise automatisch mit KI. Legen Sie ein Basisdatum, einen Prozentsatz für Zusatzgebühren fest und wählen Sie die Sitzungen aus, auf die intelligente Preise angewendet werden sollen.",
       "selectDate": "Datum auswählen",
       "selectDateTime": "Datum und Uhrzeit auswählen",
       "aiSuggest": "KI-Vorschlag",
@@ -528,7 +528,7 @@
       "extrasChargePlaceholder": "20%",
       "selectSession": "Sitzung auswählen",
       "selectSessions": "Sitzungen auswählen",
-      "registeredCompany": "Eingetragenes Unternehmen",
+      "selectSessionPlaceholder": "Sitzung auswählen",
       "sessionName": "Sitzungsname",
       "dateTimeLabel": "Datum & Uhrzeit",
       "assignStaff": "Mitarbeiter zuweisen",
@@ -542,7 +542,13 @@
       "loading": "Auszahlungsdetails werden geladen...",
       "loadFailed": "Ihr aktueller Essential Starter for Fields-Plan beinhaltet keinen Zugriff auf Einnahmen oder Auszahlungsdetails. Bitte führen Sie ein Upgrade auf Essential for Field Growth oder Gold durch, um auf diese Funktion zuzugreifen.",
       "updated": "Auszahlungsdetails erfolgreich aktualisiert.",
-      "updateFailed": "Auszahlungsdetails konnten nicht aktualisiert werden."
+      "updateFailed": "Auszahlungsdetails konnten nicht aktualisiert werden.",
+      "stripeConnectTitle": "Mit Stripe verbinden",
+      "stripeConnectDesc": "Verknüpfen Sie Ihr Stripe-Konto, um Zahlungen sicher zu empfangen. Alle Transaktionen werden über die sichere Plattform von Stripe abgewickelt.",
+      "connectStripe": "Mit Stripe verbinden",
+      "stripeSecureNote": "Sichere Verbindung durch Stripe",
+      "stripeConnectSuccess": "Erfolgreich mit Stripe verbunden!",
+      "stripeConnectFailed": "Verbindung mit Stripe fehlgeschlagen. Bitte versuchen Sie es erneut."
     },
     "billingsTab": {
       "title": "Rechnungsverlauf",
