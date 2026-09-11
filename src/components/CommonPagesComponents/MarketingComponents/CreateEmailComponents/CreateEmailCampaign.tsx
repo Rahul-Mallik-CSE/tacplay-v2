@@ -42,7 +42,7 @@ export default function CreateEmailCampaign() {
       </div>
 
       {/* Email Preview */}
-      <div className="bg-card border border-white/5 rounded-xl p-4 md:p-5">
+      <div className="bg-[#2B2A2C] border border-white/5 rounded-xl p-4 md:p-5">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-base font-semibold text-primary">
             {t("marketing.createEmailCampaign")}
@@ -93,7 +93,7 @@ export default function CreateEmailCampaign() {
             />
             <button className="flex items-center gap-1 text-xs text-secondary hover:text-primary transition-colors cursor-pointer">
               <Sparkles className="w-3 h-3" />
-              {t("marketing.form.aiOptimization")}
+              {t("marketing.aiOptimization")}
             </button>
           </div>
 
@@ -111,7 +111,7 @@ export default function CreateEmailCampaign() {
             />
             <button className="flex items-center gap-1 text-xs text-secondary hover:text-primary transition-colors cursor-pointer">
               <Sparkles className="w-3 h-3" />
-              {t("marketing.form.aiOptimization")}
+              {t("marketing.aiOptimization")}
             </button>
           </div>
 
@@ -129,7 +129,7 @@ export default function CreateEmailCampaign() {
             />
             <button className="flex items-center gap-1 text-xs text-secondary hover:text-primary transition-colors cursor-pointer">
               <Sparkles className="w-3 h-3" />
-              {t("marketing.form.aiOptimization")}
+              {t("marketing.aiOptimization")}
             </button>
           </div>
 
@@ -147,7 +147,7 @@ export default function CreateEmailCampaign() {
             />
             <button className="flex items-center gap-1 text-xs text-secondary hover:text-primary transition-colors cursor-pointer">
               <Sparkles className="w-3 h-3" />
-              {t("marketing.form.aiOptimization")}
+              {t("marketing.aiOptimization")}
             </button>
           </div>
 
