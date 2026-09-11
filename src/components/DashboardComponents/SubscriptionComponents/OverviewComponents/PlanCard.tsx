@@ -24,9 +24,9 @@ export default function PlanCard({
   return (
     <div
       className={cn(
-        "relative rounded-2xl p-5 transition-all duration-200 flex flex-col bg-[#1a1a24]",
+        "relative rounded-2xl p-5 transition-all duration-200 flex flex-col bg-[#0B0B0F]",
         isSelected && !isCurrentPlan
-          ? "border-2 border-transparent bg-[linear-gradient(#1a1a24,#1a1a24)_padding-box,linear-gradient(135deg,#C00069,#ff4d6d)_border-box] shadow-[0_0_24px_rgba(192,0,105,0.3)]"
+          ? "border-2 border-transparent bg-[linear-gradient(#0B0B0F,#0B0B0F)_padding-box,linear-gradient(135deg,#C00069,#ff4d6d)_border-box] shadow-[0_0_24px_rgba(192,0,105,0.3)]"
           : "border border-white/10",
         isCurrentPlan && "border border-white/10"
       )}
@@ -40,7 +40,7 @@ export default function PlanCard({
       )}
 
       <div className="flex items-center gap-3 mb-3">
-        <div className="relative w-8 h-8">
+        <div className="relative w-12 h-12">
           <Image
             src={plan.logo}
             alt={plan.name}
@@ -66,7 +66,21 @@ export default function PlanCard({
         {plan.description}
       </p>
 
-      {isCurrentPlan ? (
+      {plan.code.includes("bronze") ? (
+        <button
+          className="w-full py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-white hover:border-white transition-colors cursor-pointer mb-5"
+          onClick={() => onSelect(plan.code)}
+        >
+          {t("subscription.overview.activeBronze")}
+        </button>
+      ) : plan.code.includes("gold") ? (
+        <button
+          onClick={() => onSelect(plan.code)}
+          className="w-full py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-white hover:border-white transition-colors cursor-pointer mb-5"
+        >
+          {t("subscription.overview.goGold")}
+        </button>
+      ) : isCurrentPlan ? (
         <button
           className="w-full py-2.5 rounded-xl text-sm font-semibold border border-emerald-500/30 text-emerald-400 cursor-default mb-5"
           disabled
