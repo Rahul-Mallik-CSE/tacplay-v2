@@ -25,15 +25,24 @@ export default function PlanCard({
     <div
       className={cn(
         "relative rounded-2xl p-5 transition-all duration-200 flex flex-col bg-[#0B0B0F]",
-        isSelected && !isCurrentPlan
-          ? "border-2 border-transparent bg-[linear-gradient(#0B0B0F,#0B0B0F)_padding-box,linear-gradient(135deg,#C00069,#ff4d6d)_border-box] shadow-[0_0_24px_rgba(192,0,105,0.3)]"
-          : "border border-white/10",
-        isCurrentPlan && "border border-white/10"
+        plan.code.includes("silver")
+          ? "border-4 border-[#F93825] "
+          : isSelected && !isCurrentPlan
+            ? "border-2 border-transparent bg-[linear-gradient(#0B0B0F,#0B0B0F)_padding-box,linear-gradient(135deg,#C00069,#ff4d6d)_border-box] shadow-[0_0_24px_rgba(192,0,105,0.3)]"
+            : "border border-white/10",
+        !plan.code.includes("silver") && isCurrentPlan && "border border-white/10"
       )}
     >
       {plan.is_popular && (
-        <div className="absolute top-4 right-4">
-          <span className="bg-emerald-500/20 text-emerald-400 text-xs font-semibold px-3 py-1 border border-emerald-500/30 rounded-md">
+        <div className="absolute top-[-0.1px] right-0">
+          <span
+            className={cn(
+              "text-xs font-semibold px-4 py-1.5 rounded-tr-xl rounded-bl-lg",
+              plan.code.includes("silver")
+                ? "bg-[#DDB215] text-primary"
+                : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+            )}
+          >
             {t("subscription.overview.popular")}
           </span>
         </div>
