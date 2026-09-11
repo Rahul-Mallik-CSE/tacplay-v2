@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Search } from "lucide-react"
+import { Search, Filter } from "lucide-react"
 import CustomTable from "@/components/SharedComponents/CustomTable"
 import CampaignActionMenu from "../CommonComponents/CampaignActionMenu"
 import CampaignTypeBadge from "../CommonComponents/CampaignTypeBadge"
@@ -79,15 +79,21 @@ export default function CampaignsTable() {
         <h1 className="text-2xl md:text-3xl font-bold text-primary">
           {t("marketing.allCampaigns")}
         </h1>
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary" />
-          <input
-            type="text"
-            placeholder={t("common.search")}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-primary placeholder:text-secondary focus:outline-none focus:border-white/20"
-          />
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="relative flex-1 sm:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary" />
+            <input
+              type="text"
+              placeholder={t("common.search")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-primary placeholder:text-secondary focus:outline-none focus:border-white/20"
+            />
+          </div>
+          <button className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-primary hover:bg-white/10 transition-colors cursor-pointer">
+            <Filter className="w-4 h-4" />
+            {t("marketing.form.filter")}
+          </button>
         </div>
       </div>
       <CustomTable
