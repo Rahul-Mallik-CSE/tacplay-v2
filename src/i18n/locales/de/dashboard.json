@@ -1011,7 +1011,7 @@
       "liveChat": "Live-Chat",
       "liveChatValue": "Im Portal verfügbar",
       "phone": "Telefon-Support",
-      "phoneValue": "+34 900 123 234"
+      "phoneValue": "+49 800 123 4567"
     },
     "info": {
       "responseTime": "Antwortzeit",
@@ -1369,7 +1369,7 @@
       "description": "Beschreibung (Optional)",
       "descriptionPlaceholder": "20% Rabatt auf Wochenendbuchungen. Zeitlich begrenztes Angebot!",
       "activeNow": "Jetzt aktiv",
-      "scheduleForSomeDays": "Für einige Tage planen",
+      "scheduleForLaterDays": "Für spätere Tage planen",
       "selectStartAndEndDate": "Start- und Enddatum auswählen"
     },
     "aiOptimization": "KI-Optimierung"

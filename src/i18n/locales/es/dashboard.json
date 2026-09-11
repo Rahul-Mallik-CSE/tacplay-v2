@@ -1369,7 +1369,7 @@
       "description": "Descripcion (Opcional)",
       "descriptionPlaceholder": "20% de descuento en reservas de fin de semana. Oferta por tiempo limitado!",
       "activeNow": "Activo ahora",
-      "scheduleForSomeDays": "Programar por algunos dias",
+      "scheduleForLaterDays": "Programar para dias posteriores",
       "selectStartAndEndDate": "Seleccionar fecha de inicio y fin"
     },
     "aiOptimization": "Optimizacion con IA"

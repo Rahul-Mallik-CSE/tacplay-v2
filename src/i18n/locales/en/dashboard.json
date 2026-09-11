@@ -1042,7 +1042,7 @@
       "liveChat": "Live Chat",
       "liveChatValue": "Available in Portal",
       "phone": "Phone Support",
-      "phoneValue": "+34 900 123 234"
+      "phoneValue": "+1 800 555 0199"
     },
     "info": {
       "responseTime": "Response Time",
@@ -1400,7 +1400,7 @@
       "description": "Descripton (Optional)",
       "descriptionPlaceholder": "20% off on weekend bookings. Limited time offer!",
       "activeNow": "Active Now",
-      "scheduleForSomeDays": "Schedule for Some Days",
+      "scheduleForLaterDays": "Schedule for Later Days",
       "selectStartAndEndDate": "Select start and end Date"
     },
     "aiOptimization": "AI optimization"

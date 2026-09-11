@@ -1011,7 +1011,7 @@
       "liveChat": "Chat en direct",
       "liveChatValue": "Disponible dans le portail",
       "phone": "Support telephonique",
-      "phoneValue": "+34 900 123 234"
+      "phoneValue": "+33 1 23 45 67 89"
     },
     "info": {
       "responseTime": "Temps de reponse",
@@ -1369,7 +1369,7 @@
       "description": "Description (Optionnel)",
       "descriptionPlaceholder": "20% de reduction sur les reservations du week-end. Offre limitee!",
       "activeNow": "Actif maintenant",
-      "scheduleForSomeDays": "Planifier pour quelques jours",
+      "scheduleForLaterDays": "Planifier pour des jours plus tard",
       "selectStartAndEndDate": "Selectionner la date de debut et de fin"
     },
     "aiOptimization": "Optimisation IA"

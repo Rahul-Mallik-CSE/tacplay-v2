@@ -156,7 +156,7 @@ export default function CreateVoucher() {
                   <div className="w-2 h-2 rounded-full bg-custom-yellow" />
                 )}
               </div>
-              <span className="text-sm text-primary">{t("marketing.form.scheduleForSomeDays")}</span>
+              <span className="text-sm text-primary">{t("marketing.form.scheduleForLaterDays")}</span>
             </label>
           </div>
           {formData.schedule === "scheduled" && (
