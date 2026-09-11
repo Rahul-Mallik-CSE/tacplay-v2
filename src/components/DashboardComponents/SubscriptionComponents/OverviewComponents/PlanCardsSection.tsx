@@ -17,7 +17,7 @@ export default function PlanCardsSection({
   const { t } = useTranslation("dashboard")
 
   return (
-    <div className="rounded-xl border border-white/10 bg-[#1a1a24] p-4 sm:p-6">
+    <div className="rounded-xl border border-white/10 bg-[#141315] p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-primary">

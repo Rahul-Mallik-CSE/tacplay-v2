@@ -26,9 +26,9 @@ export default function CurrentPlanCard({
   }
 
   return (
-    <div className="rounded-xl border border-white/10 bg-[#1a1a24] p-4 sm:p-6">
+    <div className="rounded-xl border border-white/10 bg-[#141315] p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0">
+        <div className="relative w-16 h-16 sm:w-26 sm:h-26 shrink-0">
           <Image
             src={getPlanLogo(subscription.plan_code)}
             alt={subscription.plan_name}
