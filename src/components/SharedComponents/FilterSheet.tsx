@@ -1,6 +1,7 @@
 "use client"
 
 import { useTranslation } from "react-i18next"
+import { X } from "lucide-react"
 import {
   Sheet,
   SheetContent,
@@ -107,7 +108,15 @@ export default function FilterSheet({
       <SheetContent side="right" showCloseButton={false} className="bg-gray-950 border-none w-full sm:max-w-sm p-0 flex flex-col">
         <SheetHeader className="border-b border-white/5 px-5 py-4">
           <SheetTitle className="text-lg font-bold text-primary flex items-center justify-between w-full">
-            <span>{title}</span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => onOpenChange(false)}
+                className="p-1 rounded-md hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5 text-secondary" />
+              </button>
+              <span>{title}</span>
+            </div>
             {activeCount > 0 && (
               <span className="bg-primary/20 text-primary text-xs font-medium px-2 py-0.5 rounded-full">
                 {activeCount} active
