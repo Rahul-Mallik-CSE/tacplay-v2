@@ -32,7 +32,7 @@ export default function NotificationFilterTabs({
           onClick={() => onTabChange(tab.value)}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors cursor-pointer ${
             activeTab === tab.value
-              ? "bg-primary text-white"
+              ? "bg-red-700 text-white"
               : "bg-white/5 text-secondary hover:bg-white/10 hover:text-primary"
           }`}
         >

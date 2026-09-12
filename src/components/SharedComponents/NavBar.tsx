@@ -92,9 +92,9 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
         {/* Right side */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
           {/* Search Button */}
-          <button className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors cursor-pointer">
+          {/* <button className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors cursor-pointer">
             <Search className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
-          </button>
+          </button> */}
 
           {/* Notification Button */}
           <button
