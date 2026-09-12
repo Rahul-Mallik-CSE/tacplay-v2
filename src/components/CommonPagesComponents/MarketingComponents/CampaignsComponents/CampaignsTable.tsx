@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Search, Filter } from "lucide-react"
 import CustomTable from "@/components/SharedComponents/CustomTable"
+import FilterSheet from "@/components/SharedComponents/FilterSheet"
 import CampaignActionMenu from "../CommonComponents/CampaignActionMenu"
 import CampaignTypeBadge from "../CommonComponents/CampaignTypeBadge"
 import CampaignStatusBadge from "../CommonComponents/CampaignStatusBadge"
@@ -13,12 +14,18 @@ import type { Campaign } from "@/types/DashboardTypes/MarketingTypes"
 export default function CampaignsTable() {
   const { t } = useTranslation("dashboard")
   const [search, setSearch] = useState("")
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const [campaignFilters, setCampaignFilters] = useState<Record<string, string[]>>({})
 
-  const filteredCampaigns = mockCampaigns.filter(
-    (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
+  const filteredCampaigns = mockCampaigns.filter((c) => {
+    const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.type.toLowerCase().includes(search.toLowerCase())
-  )
+    const typeFilters = campaignFilters[t("filterSheet.type", "Type")] || []
+    const statusFilters = campaignFilters[t("filterSheet.status", "Status")] || []
+    const matchesType = typeFilters.length === 0 || typeFilters.includes(c.type)
+    const matchesStatus = statusFilters.length === 0 || statusFilters.includes(c.status)
+    return matchesSearch && matchesType && matchesStatus
+  })
 
   const columns = [
     {
@@ -90,7 +97,10 @@ export default function CampaignsTable() {
               className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-primary placeholder:text-secondary focus:outline-none focus:border-white/20"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-primary hover:bg-white/10 transition-colors cursor-pointer">
+          <button
+            onClick={() => setFilterSheetOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-primary hover:bg-white/10 transition-colors cursor-pointer"
+          >
             <Filter className="w-4 h-4" />
             {t("marketing.form.filter")}
           </button>
@@ -107,6 +117,33 @@ export default function CampaignsTable() {
             onDuplicate={handleDuplicate}
           />
         )}
+      />
+
+      <FilterSheet
+        open={filterSheetOpen}
+        onOpenChange={setFilterSheetOpen}
+        title={t("common.filter")}
+        filterGroups={[
+          {
+            title: t("filterSheet.type", "Type"),
+            options: [
+              { label: "Email", value: "Email" },
+              { label: "Push", value: "Push" },
+              { label: "SMS", value: "SMS" },
+            ],
+          },
+          {
+            title: t("filterSheet.status", "Status"),
+            options: [
+              { label: "Active", value: "Active" },
+              { label: "Complete", value: "Complete" },
+              { label: "Schedule", value: "Schedule" },
+              { label: "Draft", value: "Draft" },
+            ],
+          },
+        ]}
+        selectedFilters={campaignFilters}
+        onFilterChange={setCampaignFilters}
       />
     </div>
   )

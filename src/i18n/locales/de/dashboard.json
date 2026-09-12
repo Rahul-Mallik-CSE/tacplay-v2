@@ -1374,6 +1374,18 @@
     },
     "aiOptimization": "KI-Optimierung"
   },
+  "filterSheet": {
+    "reset": "Zurücksetzen",
+    "apply": "Filter anwenden",
+    "title": "Filter",
+    "status": "Status",
+    "matchType": "Spielart",
+    "type": "Typ",
+    "plan": "Plan",
+    "membership": "Mitgliedschaft",
+    "country": "Land",
+    "role": "Rolle"
+  },
   "notifications": {
     "title": "Benachrichtigungen",
     "subtitle": "Bleiben Sie über Ihre neuesten Aktivitäten und Warnungen auf dem Laufenden.",

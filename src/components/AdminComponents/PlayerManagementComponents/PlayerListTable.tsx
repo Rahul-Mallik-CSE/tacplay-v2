@@ -2,7 +2,9 @@
 
 import React, { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { Filter } from "lucide-react"
 import CustomTable from "@/components/SharedComponents/CustomTable"
+import FilterSheet from "@/components/SharedComponents/FilterSheet"
 import PlayerSearchBar from "./PlayerSearchBar"
 import PlayerMembershipBadge from "./PlayerMembershipBadge"
 import PlayerStatusBadge from "./PlayerStatusBadge"
@@ -23,16 +25,29 @@ function PlayerListTable() {
   const [isDetailsSheetOpen, setIsDetailsSheetOpen] = useState(false)
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
   const [upgradePlayer, setUpgradePlayer] = useState<Player | null>(null)
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const [playerFilters, setPlayerFilters] = useState<Record<string, string[]>>({})
 
   const filteredData = useMemo(() => {
-    if (!search.trim()) return mockPlayerData
-    const normalizedSearch = search.trim().toLowerCase()
-    return mockPlayerData.filter((item) =>
-      [item.name, item.email, item.userId, item.username]
-        .filter(Boolean)
-        .some((value) => value.toLowerCase().includes(normalizedSearch)),
-    )
-  }, [search])
+    let result = mockPlayerData
+    if (search.trim()) {
+      const normalizedSearch = search.trim().toLowerCase()
+      result = result.filter((item) =>
+        [item.name, item.email, item.userId, item.username]
+          .filter(Boolean)
+          .some((value) => value.toLowerCase().includes(normalizedSearch)),
+      )
+    }
+    const membershipFilters = playerFilters[t("filterSheet.membership", "Membership")] || []
+    const statusFilters = playerFilters[t("filterSheet.status", "Status")] || []
+    if (membershipFilters.length > 0) {
+      result = result.filter((item) => membershipFilters.includes(item.membership))
+    }
+    if (statusFilters.length > 0) {
+      result = result.filter((item) => statusFilters.includes(item.status))
+    }
+    return result
+  }, [search, playerFilters, t])
 
   const handleSearchChange = (value: string) => {
     setSearch(value)
@@ -150,38 +165,13 @@ function PlayerListTable() {
         </div>
         <div className="flex items-center gap-3">
           <PlayerSearchBar value={search} onChange={handleSearchChange} />
-          {/* <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 bg-muted text-sm text-primary hover:bg-muted/80 transition-colors cursor-pointer">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-              />
-            </svg>
+          <button
+            onClick={() => setFilterSheetOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 bg-muted text-sm text-primary hover:bg-muted/80 transition-colors cursor-pointer"
+          >
+            <Filter className="w-4 h-4" />
             {t("common.filter")}
-          </button> */}
-          {/* <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 bg-muted text-sm text-primary hover:bg-muted/80 transition-colors cursor-pointer">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-              />
-            </svg>
-            {t("playerManagement.sortBy")}
-          </button> */}
+          </button>
         </div>
       </div>
 
@@ -218,6 +208,30 @@ function PlayerListTable() {
         open={isUpgradeModalOpen}
         onOpenChange={setIsUpgradeModalOpen}
         onConfirm={handleUpgradeConfirm}
+      />
+
+      <FilterSheet
+        open={filterSheetOpen}
+        onOpenChange={setFilterSheetOpen}
+        title={t("common.filter")}
+        filterGroups={[
+          {
+            title: t("filterSheet.membership", "Membership"),
+            options: [
+              { label: t("playerManagement.membership.premium"), value: "Premium" },
+              { label: t("playerManagement.membership.free"), value: "Free" },
+            ],
+          },
+          {
+            title: t("filterSheet.status", "Status"),
+            options: [
+              { label: t("playerManagement.status.active"), value: "Active" },
+              { label: t("playerManagement.status.block"), value: "Block" },
+            ],
+          },
+        ]}
+        selectedFilters={playerFilters}
+        onFilterChange={setPlayerFilters}
       />
     </div>
   )

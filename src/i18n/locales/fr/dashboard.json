@@ -1374,6 +1374,18 @@
     },
     "aiOptimization": "Optimisation IA"
   },
+  "filterSheet": {
+    "reset": "Réinitialiser",
+    "apply": "Appliquer les filtres",
+    "title": "Filtres",
+    "status": "Statut",
+    "matchType": "Type de match",
+    "type": "Type",
+    "plan": "Plan",
+    "membership": "Adhésion",
+    "country": "Pays",
+    "role": "Rôle"
+  },
   "notifications": {
     "title": "Notifications",
     "subtitle": "Restez informé de vos dernières activités et alertes.",

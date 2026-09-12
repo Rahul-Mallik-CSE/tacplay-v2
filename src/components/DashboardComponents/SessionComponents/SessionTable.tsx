@@ -17,6 +17,7 @@ import { Switch } from "@/components/ui/switch"
 import { mockSessionsListData } from "@/mock-data/DashboardMockData/sessions-mock-data"
 import AssignStaffSheet from "./AssignStaffSheet"
 import CustomTable from "@/components/SharedComponents/CustomTable"
+import FilterSheet from "@/components/SharedComponents/FilterSheet"
 import type {
   SessionsListItem,
 } from "@/types/DashboardTypes/SessionTypes"
@@ -32,6 +33,8 @@ function SessionTable() {
   const [assignSheetOpen, setAssignSheetOpen] = useState(false)
   const [assignSheetSessionId, setAssignSheetSessionId] = useState<number | null>(null)
   const [assignSheetSessionName, setAssignSheetSessionName] = useState("")
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const [sessionFilters, setSessionFilters] = useState<Record<string, string[]>>({})
   const actionMenuRef = useRef<HTMLDivElement>(null)
 
   // Close action menu on outside click
@@ -48,15 +51,21 @@ function SessionTable() {
   // Filter mock data
   const filteredData = useMemo(() => {
     return mockSessionsListData.filter((item) => {
-      if (!search.trim()) return true
-      const query = search.toLowerCase()
-      return (
-        item.session_name.toLowerCase().includes(query) ||
-        item.session_id.toLowerCase().includes(query) ||
-        item.assign_staff.toLowerCase().includes(query)
-      )
+      const matchesSearch = !search.trim() || (() => {
+        const query = search.toLowerCase()
+        return (
+          item.session_name.toLowerCase().includes(query) ||
+          item.session_id.toLowerCase().includes(query) ||
+          item.assign_staff.toLowerCase().includes(query)
+        )
+      })()
+      const statusFilters = sessionFilters[t("filterSheet.status", "Status")] || []
+      const matchTypeFilters = sessionFilters[t("filterSheet.matchType", "Match Type")] || []
+      const matchesStatus = statusFilters.length === 0 || statusFilters.includes(item.status_display)
+      const matchesMatchType = matchTypeFilters.length === 0 || matchTypeFilters.includes(item.match_type_display)
+      return matchesSearch && matchesStatus && matchesMatchType
     })
-  }, [search])
+  }, [search, sessionFilters, t])
 
   // Handle row click to navigate to session details
   const handleRowClick = (row: SessionsListItem) => {
@@ -240,7 +249,10 @@ function SessionTable() {
           </div>
 
           {/* Filter Button */}
-          <button className="flex items-center gap-2 bg-muted border border-white/10 rounded-lg px-4 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer">
+          <button
+            onClick={() => setFilterSheetOpen(true)}
+            className="flex items-center gap-2 bg-muted border border-white/10 rounded-lg px-4 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+          >
             <Filter className="w-4 h-4" />
             <span className="hidden sm:inline">{t("common.filter")}</span>
           </button>
@@ -274,6 +286,34 @@ function SessionTable() {
         onOpenChange={setAssignSheetOpen}
         sessionId={assignSheetSessionId}
         sessionName={assignSheetSessionName}
+      />
+
+      {/* Filter Sheet */}
+      <FilterSheet
+        open={filterSheetOpen}
+        onOpenChange={setFilterSheetOpen}
+        title={t("common.filter")}
+        filterGroups={[
+          {
+            title: t("filterSheet.status", "Status"),
+            options: [
+              { label: t("sessions.filters.open"), value: "Open" },
+              { label: t("sessions.filters.ongoing"), value: "Ongoing" },
+              { label: t("sessions.filters.completed"), value: "Completed" },
+              { label: t("sessions.filters.full"), value: "Full" },
+              { label: t("sessions.filters.cancelled"), value: "Cancelled" },
+            ],
+          },
+          {
+            title: t("filterSheet.matchType", "Match Type"),
+            options: [
+              { label: t("sessions.filters.ranked"), value: "Ranked" },
+              { label: t("sessions.filters.social"), value: "Social" },
+            ],
+          },
+        ]}
+        selectedFilters={sessionFilters}
+        onFilterChange={setSessionFilters}
       />
     </div>
   )

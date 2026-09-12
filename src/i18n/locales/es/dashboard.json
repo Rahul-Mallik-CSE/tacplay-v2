@@ -1374,6 +1374,18 @@
     },
     "aiOptimization": "Optimizacion con IA"
   },
+  "filterSheet": {
+    "reset": "Restablecer",
+    "apply": "Aplicar filtros",
+    "title": "Filtros",
+    "status": "Estado",
+    "matchType": "Tipo de partido",
+    "type": "Tipo",
+    "plan": "Plan",
+    "membership": "Membresía",
+    "country": "País",
+    "role": "Rol"
+  },
   "notifications": {
     "title": "Notificaciones",
     "subtitle": "Mantente actualizado con tu última actividad y alertas.",

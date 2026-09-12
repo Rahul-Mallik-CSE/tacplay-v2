@@ -1405,6 +1405,18 @@
     },
     "aiOptimization": "AI optimization"
   },
+  "filterSheet": {
+    "reset": "Reset",
+    "apply": "Apply Filters",
+    "title": "Filters",
+    "status": "Status",
+    "matchType": "Match Type",
+    "type": "Type",
+    "plan": "Plan",
+    "membership": "Membership",
+    "country": "Country",
+    "role": "Role"
+  },
   "notifications": {
     "title": "Notifications",
     "subtitle": "Stay updated with your latest activity and alerts.",

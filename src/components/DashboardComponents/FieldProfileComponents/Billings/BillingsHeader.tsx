@@ -13,7 +13,8 @@ import type { BillingsHeaderProps } from "@/types/DashboardTypes/ArenaManagement
 export default function BillingsHeader({
   search,
   onSearchChange,
-}: BillingsHeaderProps) {
+  onFilterClick,
+}: BillingsHeaderProps & { onFilterClick?: () => void }) {
   const { t } = useTranslation("dashboard")
 
   return (
@@ -32,7 +33,10 @@ export default function BillingsHeader({
             className="w-full sm:w-56 pl-9 pr-4 py-2 rounded-lg bg-input/30 border border-white/10 text-sm text-primary placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
           />
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-input/30 text-primary rounded-lg text-sm font-medium hover:bg-secondary/50 transition-colors cursor-pointer border border-white/10">
+        <button
+          onClick={onFilterClick}
+          className="flex items-center gap-2 px-4 py-2 bg-input/30 text-primary rounded-lg text-sm font-medium hover:bg-secondary/50 transition-colors cursor-pointer border border-white/10"
+        >
           <Funnel className="w-4 h-4" />
           {t("arena.billingsTab.filter")}
         </button>
