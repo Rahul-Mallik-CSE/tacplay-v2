@@ -1374,6 +1374,31 @@
     },
     "aiOptimization": "Optimizacion con IA"
   },
+  "notifications": {
+    "title": "Notificaciones",
+    "subtitle": "Mantente actualizado con tu última actividad y alertas.",
+    "markAllRead": "Marcar todo como leído",
+    "clearAll": "Borrar todo",
+    "emptyTitle": "Sin notificaciones",
+    "emptyMessage": "¡Estás al día! Vuelve más tarde para ver las actualizaciones.",
+    "tabs": {
+      "all": "Todas",
+      "bookings": "Reservas",
+      "sessions": "Sesiones",
+      "payments": "Pagos",
+      "system": "Sistema"
+    },
+    "types": {
+      "booking": "Reserva",
+      "session": "Sesión",
+      "payment": "Pago",
+      "info": "Info",
+      "warning": "Advertencia",
+      "success": "Éxito",
+      "error": "Error",
+      "system": "Sistema"
+    }
+  },
   "error": {
     "pageNotFound": "Pagina no encontrada",
     "notFoundDesc": "La pagina que buscas no existe o ha sido movida.",

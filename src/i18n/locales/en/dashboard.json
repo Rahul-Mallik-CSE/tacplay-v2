@@ -1405,6 +1405,31 @@
     },
     "aiOptimization": "AI optimization"
   },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Stay updated with your latest activity and alerts.",
+    "markAllRead": "Mark all read",
+    "clearAll": "Clear all",
+    "emptyTitle": "No notifications",
+    "emptyMessage": "You're all caught up! Check back later for updates.",
+    "tabs": {
+      "all": "All",
+      "bookings": "Bookings",
+      "sessions": "Sessions",
+      "payments": "Payments",
+      "system": "System"
+    },
+    "types": {
+      "booking": "Booking",
+      "session": "Session",
+      "payment": "Payment",
+      "info": "Info",
+      "warning": "Warning",
+      "success": "Success",
+      "error": "Error",
+      "system": "System"
+    }
+  },
   "error": {
     "pageNotFound": "Page Not Found",
     "notFoundDesc": "The page you are looking for does not exist or has been moved.",

@@ -68,6 +68,8 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
     return t("common.dashboard");
   }, [pathname, pageTitle, t]);
 
+  const isAdmin = pathname?.startsWith("/admin") ?? false;
+
   const handleLogout = () => {
     setIsLogoutModalOpen(false);
     onLogout?.();
@@ -95,13 +97,19 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
           </button>
 
           {/* Notification Button */}
-          <button className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors relative cursor-pointer">
+          <button
+            onClick={() => router.push(isAdmin ? "/admin/notifications" : "/dashboard/notifications")}
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors relative cursor-pointer"
+          >
             <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
             <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#1a1a2e]" />
           </button>
 
           {/* Email Button */}
-          <button className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors cursor-pointer">
+          <button
+            onClick={() => router.push(isAdmin ? "/admin/marketing/email" : "/dashboard/marketing/email")}
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors cursor-pointer"
+          >
             <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
           </button>
 

@@ -1374,6 +1374,31 @@
     },
     "aiOptimization": "KI-Optimierung"
   },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "subtitle": "Bleiben Sie über Ihre neuesten Aktivitäten und Warnungen auf dem Laufenden.",
+    "markAllRead": "Alle als gelesen markieren",
+    "clearAll": "Alle löschen",
+    "emptyTitle": "Keine Benachrichtigungen",
+    "emptyMessage": "Sie sind auf dem neuesten Stand! Schauen Sie später wieder vorbei.",
+    "tabs": {
+      "all": "Alle",
+      "bookings": "Buchungen",
+      "sessions": "Sitzungen",
+      "payments": "Zahlungen",
+      "system": "System"
+    },
+    "types": {
+      "booking": "Buchung",
+      "session": "Sitzung",
+      "payment": "Zahlung",
+      "info": "Info",
+      "warning": "Warnung",
+      "success": "Erfolg",
+      "error": "Fehler",
+      "system": "System"
+    }
+  },
   "error": {
     "pageNotFound": "Seite nicht gefunden",
     "notFoundDesc": "Die Seite, nach der Sie suchen, existiert nicht oder wurde verschoben.",
