@@ -598,6 +598,7 @@
     "signingUp": "Registrierung läuft...",
     "or": "oder",
     "alreadyHaveAccount": "Haben Sie bereits ein Konto?",
+    "backTo": "Zurück zu",
     "forgotPasswordTitle": "Passwort vergessen?",
     "forgotPasswordDesc": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Bestätigungscode zum Zurücksetzen.",
     "emailAddress": "E-Mail-Adresse",

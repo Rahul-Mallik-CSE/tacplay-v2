@@ -598,6 +598,7 @@
     "signingUp": "Registrándose...",
     "or": "o",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "backTo": "Volver a",
     "forgotPasswordTitle": "¿Olvidaste tu contraseña?",
     "forgotPasswordDesc": "Introduce tu correo electrónico y te enviaremos un código de verificación para restablecerla.",
     "emailAddress": "Dirección de correo electrónico",

@@ -629,6 +629,7 @@
     "signingUp": "Signing Up...",
     "or": "or",
     "alreadyHaveAccount": "Already have an account?",
+    "backTo": "Back to",
     "forgotPasswordTitle": "Forgot your password?",
     "forgotPasswordDesc": "Enter your email and we'll send you a verification code to reset it.",
     "emailAddress": "Email Address",

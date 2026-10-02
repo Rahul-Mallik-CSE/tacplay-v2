@@ -598,6 +598,7 @@
     "signingUp": "Inscription en cours...",
     "or": "ou",
     "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "backTo": "Retour à",
     "forgotPasswordTitle": "Mot de passe oublié ?",
     "forgotPasswordDesc": "Entrez votre e-mail et nous vous enverrons un code de vérification pour le réinitialiser.",
     "emailAddress": "Adresse e-mail",
