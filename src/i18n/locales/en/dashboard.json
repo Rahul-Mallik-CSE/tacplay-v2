@@ -625,6 +625,8 @@
     "signUpDesc": "Create your Field Owner account to publish sessions, manage bookings, and grow your tactical community on TACPLAY.",
     "ownerName": "Owner Name",
     "confirmPassword": "Confirm Password",
+    "passwordMinLength": "Password must be at least 6 characters long",
+    "passwordsDoNotMatch": "Passwords do not match",
     "agreeToTerms": "I agree to field owner agreement",
     "signingUp": "Signing Up...",
     "or": "or",

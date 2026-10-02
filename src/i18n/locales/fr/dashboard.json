@@ -594,6 +594,8 @@
     "signUpDesc": "Créez votre compte propriétaire de terrain pour publier des sessions, gérer les réservations et développer votre communauté tactique sur TACPLAY.",
     "ownerName": "Nom du propriétaire",
     "confirmPassword": "Confirmer le mot de passe",
+    "passwordMinLength": "Le mot de passe doit comporter au moins 6 caractères",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
     "agreeToTerms": "J'accepte l'accord de propriétaire de terrain",
     "signingUp": "Inscription en cours...",
     "or": "ou",

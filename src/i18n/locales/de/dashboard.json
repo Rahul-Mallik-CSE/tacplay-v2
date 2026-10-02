@@ -594,6 +594,8 @@
     "signUpDesc": "Erstellen Sie Ihr Spielfeld-Eigentümerkonto, um Sitzungen zu veröffentlichen, Buchungen zu verwalten und Ihre taktische Community auf TACPLAY aufzubauen.",
     "ownerName": "Name des Eigentümers",
     "confirmPassword": "Passwort bestätigen",
+    "passwordMinLength": "Das Passwort muss mindestens 6 Zeichen lang sein",
+    "passwordsDoNotMatch": "Passwörter stimmen nicht überein",
     "agreeToTerms": "Ich stimme der Vereinbarung für Spielfeldbetreiber zu",
     "signingUp": "Registrierung läuft...",
     "or": "oder",

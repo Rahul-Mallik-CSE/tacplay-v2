@@ -594,6 +594,8 @@
     "signUpDesc": "Crea tu cuenta de propietario de campo para publicar sesiones, gestionar reservas y hacer crecer tu comunidad táctica en TACPLAY.",
     "ownerName": "Nombre del propietario",
     "confirmPassword": "Confirmar contraseña",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
     "agreeToTerms": "Acepto el acuerdo de propietario de campo",
     "signingUp": "Registrándose...",
     "or": "o",
