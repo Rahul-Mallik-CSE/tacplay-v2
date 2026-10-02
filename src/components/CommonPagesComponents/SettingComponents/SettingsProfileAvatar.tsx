@@ -12,7 +12,7 @@ import { toAbsoluteMediaUrl } from "@/lib/utils"
 import type { SettingsProfileAvatarProps } from "@/types/DashboardTypes/SettingsTypes"
 
 /** Generate initials from full name */
-function getInitials(fullName: string): string {
+export function getInitials(fullName: string): string {
   if (!fullName) return "U"
 
   const parts = fullName.trim().split(/\s+/).filter(Boolean)

@@ -58,7 +58,7 @@ function ChangePasswordDialog({
     Boolean(newPassword) &&
     Boolean(currentPassword) &&
     newPassword === currentPassword
-  const isNewTooShort = Boolean(newPassword) && newPassword.length < 6
+  const isNewTooShort = Boolean(newPassword) && newPassword.length < 8
   const isConfirmMismatch =
     Boolean(confirmPassword) && newPassword !== confirmPassword
 
@@ -72,7 +72,7 @@ function ChangePasswordDialog({
       return
     }
 
-    if (newPassword.length < 6) {
+    if (newPassword.length < 8) {
       return
     }
 
@@ -115,7 +115,6 @@ function ChangePasswordDialog({
       }}
     >
       <DialogContent
-        showCloseButton={false}
         className="bg-card border border-white/10 max-w-sm"
       >
         <DialogHeader className="items-center">
@@ -196,7 +195,7 @@ function ChangePasswordDialog({
             </div>
             {isNewTooShort && (
               <p className="text-xs text-red-500 font-medium">
-                Password must be at least 6 characters long
+                {t("changePassword.minLength", "Password must be at least 8 characters long")}
               </p>
             )}
             {isNewSameAsCurrent && (

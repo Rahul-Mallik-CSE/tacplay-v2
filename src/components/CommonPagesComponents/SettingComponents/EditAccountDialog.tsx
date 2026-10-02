@@ -8,6 +8,7 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from "react"
+import Image from "next/image"
 import { Camera } from "lucide-react"
 import {
   Dialog,
@@ -19,11 +20,12 @@ import {
 import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import SettingsProfileAvatar from "./SettingsProfileAvatar"
+import { getInitials } from "./SettingsProfileAvatar"
 import type { EditAccountDialogProps } from "@/types/DashboardTypes/SettingsTypes"
 
 import { useUpdateProfileMutation } from "@/redux/features/shared/setting/settingAPI"
 import { getErrorMessage } from "@/lib/auth"
+import { toAbsoluteMediaUrl } from "@/lib/utils"
 
 function EditAccountDialog({
   open,
@@ -36,6 +38,7 @@ function EditAccountDialog({
     () => profile?.contact_number || "",
   )
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
+  const [imageError, setImageError] = useState(false)
   const [updateProfile, { isLoading: isSaving }] = useUpdateProfileMutation()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -64,7 +67,11 @@ function EditAccountDialog({
     }
   }, [profile])
 
-  const displayImage = previewImageUrl || profile?.profile_image
+  const displayUrl = previewImageUrl || toAbsoluteMediaUrl(profile?.profile_image)
+
+  useEffect(() => {
+    setImageError(false)
+  }, [displayUrl])
 
   /** Handle form submission */
   const handleSave = async () => {
@@ -98,7 +105,6 @@ function EditAccountDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        showCloseButton={false}
         className="bg-card border border-white/10 max-w-sm"
       >
         <DialogHeader className="items-center">
@@ -113,20 +119,20 @@ function EditAccountDialog({
         <div className="flex flex-col items-center gap-5 mt-2">
           {/* Avatar Upload */}
           <div className="relative">
-            <div className="w-24 h-24 rounded-full bg-muted border-2 border-dashed border-white/20 flex items-center justify-center overflow-hidden">
-              {displayImage ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={displayImage}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
+            <div className="w-24 h-24 rounded-full bg-muted border-2 border-dashed border-white/20 flex items-center justify-center overflow-hidden relative">
+              {displayUrl && !imageError ? (
+                <Image
+                  src={displayUrl}
+                  alt={fullName || profile?.full_name || "Profile"}
+                  fill
+                  unoptimized
+                  onError={() => setImageError(true)}
+                  className="object-cover rounded-full"
                 />
               ) : (
-                <SettingsProfileAvatar
-                  imageUrl={null}
-                  fullName={fullName || profile?.full_name || "U"}
-                  size="lg"
-                />
+                <span className="text-2xl font-bold text-primary">
+                  {getInitials(fullName || profile?.full_name || "U")}
+                </span>
               )}
             </div>
             <button
@@ -141,9 +147,11 @@ function EditAccountDialog({
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={(event) =>
-                setSelectedImage(event.target.files?.[0] ?? null)
-              }
+              onChange={(event) => {
+                const file = event.target.files?.[0] ?? null
+                setSelectedImage(file)
+                setImageError(false)
+              }}
             />
           </div>
 
