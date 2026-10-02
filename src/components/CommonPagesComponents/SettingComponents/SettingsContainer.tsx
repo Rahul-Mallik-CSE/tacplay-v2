@@ -15,7 +15,8 @@ import SettingsActionButtons from "./SettingsActionButtons"
 import SettingsLoading from "./SettingsLoading"
 import EditAccountDialog from "./EditAccountDialog"
 import ChangePasswordDialog from "./ChangePasswordDialog"
-import { mockFieldOwnerProfile } from "../../../mock-data/DashboardMockData/settings-mock-data"
+import { useGetProfileQuery } from "@/redux/features/shared/setting/settingAPI"
+import { Button } from "@/components/ui/button"
 
 function SettingsContainer() {
   const { t } = useTranslation("dashboard")
@@ -25,10 +26,47 @@ function SettingsContainer() {
   const [passwordOpen, setPasswordOpen] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  // Use mock data for demonstration (no API integration)
-  const profile = mockFieldOwnerProfile
-  const isLoading = false
-  const isError = false
+  // Fetch real profile data from backend API
+  const { data, isLoading, isError, refetch } = useGetProfileQuery()
+  const profile = data?.data
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4 md:space-y-6">
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary">
+            {t("settingsPage.title", "Settings")}
+          </h1>
+          <p className="text-sm text-secondary mt-1">
+            {t("settingsPage.subtitle", "Manage your account settings and profile details.")}
+          </p>
+        </div>
+        <div className="rounded-xl border border-white/5 bg-card p-5 sm:p-6">
+          <SettingsLoading />
+        </div>
+      </div>
+    )
+  }
+
+  if (isError || !profile) {
+    return (
+      <div className="space-y-4 md:space-y-6">
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary">
+            {t("settingsPage.title", "Settings")}
+          </h1>
+        </div>
+        <div className="rounded-xl border border-white/5 bg-card p-6 text-center space-y-4">
+          <p className="text-sm text-destructive">
+            {t("settingsPage.loadFailed", "Failed to load profile. Please try again.")}
+          </p>
+          <Button onClick={() => refetch()} variant="outline" size="sm">
+            Retry
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -60,17 +98,7 @@ function SettingsContainer() {
           </div>
         </div>
 
-        {/* Loading State */}
-        {isLoading ? (
-          <SettingsLoading />
-        ) : null}
 
-        {/* Error State */}
-        {isError ? (
-          <div className="text-sm text-destructive">
-            {t("settingsPage.loadFailed")}
-          </div>
-        ) : null}
 
         {/* Personal Information */}
         <div>
@@ -96,7 +124,7 @@ function SettingsContainer() {
             {/* Password */}
             <SettingsProfileField
               label={t("settingsPage.password")}
-              value={profile.password}
+              value={profile.password || "••••••••"}
               type="password"
               showPasswordToggle
               showPassword={showPassword}

@@ -19,6 +19,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
+import { useChangePasswordMutation } from "@/redux/features/shared/setting/settingAPI"
+import { getErrorMessage } from "@/lib/auth"
 import type { ChangePasswordDialogProps } from "@/types/DashboardTypes/SettingsTypes"
 
 function ChangePasswordDialog({
@@ -32,83 +34,117 @@ function ChangePasswordDialog({
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
-  const [error, setError] = useState("")
-  const [isChanging, setIsChanging] = useState(false)
+  const [touched, setTouched] = useState(false)
+  const [apiError, setApiError] = useState("")
+
+  const [changePasswordMutation, { isLoading: isChanging }] =
+    useChangePasswordMutation()
 
   /** Reset form fields */
   const resetForm = () => {
     setCurrentPassword("")
     setNewPassword("")
     setConfirmPassword("")
-    setError("")
+    setTouched(false)
+    setApiError("")
     setShowCurrent(false)
     setShowNew(false)
     setShowConfirm(false)
   }
 
+  // Field validation flags
+  const isCurrentEmpty = touched && !currentPassword.trim()
+  const isNewSameAsCurrent =
+    Boolean(newPassword) &&
+    Boolean(currentPassword) &&
+    newPassword === currentPassword
+  const isNewTooShort = Boolean(newPassword) && newPassword.length < 6
+  const isConfirmMismatch =
+    Boolean(confirmPassword) && newPassword !== confirmPassword
+
   /** Handle form submission */
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setTouched(true)
+    setApiError("")
 
-    // Validation
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      setError(t("changePassword.allRequired"))
+    if (!currentPassword.trim()) {
       return
     }
-    if (newPassword.length < 8) {
-      setError(t("changePassword.minLength"))
+
+    if (newPassword.length < 6) {
       return
     }
+
+    if (newPassword === currentPassword) {
+      return
+    }
+
     if (newPassword !== confirmPassword) {
-      setError(t("changePassword.mismatch"))
       return
     }
-
-    setError("")
-    setIsChanging(true)
 
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 800))
-      toast.success(t("changePassword.changed"))
+      const res = await changePasswordMutation({
+        current_password: currentPassword,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
+      }).unwrap()
+
+      let successMsg = "Password changed successfully."
+      if (res.message && res.message !== "password_changed_successfully") {
+        successMsg = res.message
+      }
+
+      toast.success(successMsg)
       onOpenChange(false)
       resetForm()
-    } catch {
-      const message = t("changePassword.failed")
-      setError(message)
-      toast.error(message)
-    } finally {
-      setIsChanging(false)
+    } catch (err) {
+      const formattedError = getErrorMessage(err, "Failed to change password.")
+      setApiError(formattedError)
+      toast.error(formattedError)
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(val) => {
+        if (!val) resetForm()
+        onOpenChange(val)
+      }}
+    >
       <DialogContent
         showCloseButton={false}
         className="bg-card border border-white/10 max-w-sm"
       >
         <DialogHeader className="items-center">
           <DialogTitle className="text-xl font-bold text-primary">
-            {t("changePassword.title")}
+            {t("changePassword.title", "Change Password")}
           </DialogTitle>
           <DialogDescription className="text-sm text-secondary text-center">
-            {t("changePassword.subtitle")}
+            {t(
+              "changePassword.subtitle",
+              "Enter your current password and choose a new secure password.",
+            )}
           </DialogDescription>
         </DialogHeader>
 
         <form className="flex flex-col gap-4 mt-2" onSubmit={handleSubmit}>
           {/* Current Password */}
-          <div className="space-y-2">
-            <label className="text-sm text-secondary">
-              {t("changePassword.current")}
+          <div className="space-y-1.5">
+            <label className="text-sm text-secondary font-medium">
+              {t("changePassword.current", "Current Password")}
             </label>
             <div className="relative">
               <input
                 type={showCurrent ? "text" : "password"}
                 value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder={t("changePassword.placeholderCurrent")}
+                onChange={(e) => {
+                  setCurrentPassword(e.target.value)
+                  if (apiError) setApiError("")
+                }}
+                placeholder={t("changePassword.placeholderCurrent", "Enter current password")}
                 className="w-full px-4 py-2.5 pr-10 rounded-lg bg-muted border border-white/10 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
               />
               <button
@@ -123,19 +159,27 @@ function ChangePasswordDialog({
                 )}
               </button>
             </div>
+            {isCurrentEmpty && (
+              <p className="text-xs text-red-500 font-medium">
+                Current password is required
+              </p>
+            )}
           </div>
 
           {/* New Password */}
-          <div className="space-y-2">
-            <label className="text-sm text-secondary">
-              {t("changePassword.new")}
+          <div className="space-y-1.5">
+            <label className="text-sm text-secondary font-medium">
+              {t("changePassword.new", "New Password")}
             </label>
             <div className="relative">
               <input
                 type={showNew ? "text" : "password"}
                 value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder={t("changePassword.placeholderNew")}
+                onChange={(e) => {
+                  setNewPassword(e.target.value)
+                  if (apiError) setApiError("")
+                }}
+                placeholder={t("changePassword.placeholderNew", "Enter new password")}
                 className="w-full px-4 py-2.5 pr-10 rounded-lg bg-muted border border-white/10 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
               />
               <button
@@ -150,20 +194,32 @@ function ChangePasswordDialog({
                 )}
               </button>
             </div>
-            <p className="text-xs text-secondary">{t("changePassword.hint")}</p>
+            {isNewTooShort && (
+              <p className="text-xs text-red-500 font-medium">
+                Password must be at least 6 characters long
+              </p>
+            )}
+            {isNewSameAsCurrent && (
+              <p className="text-xs text-red-500 font-medium">
+                New password cannot be the same as current password
+              </p>
+            )}
           </div>
 
           {/* Confirm Password */}
-          <div className="space-y-2">
-            <label className="text-sm text-secondary">
-              {t("changePassword.confirm")}
+          <div className="space-y-1.5">
+            <label className="text-sm text-secondary font-medium">
+              {t("changePassword.confirm", "Confirm Password")}
             </label>
             <div className="relative">
               <input
                 type={showConfirm ? "text" : "password"}
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder={t("changePassword.placeholderConfirm")}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value)
+                  if (apiError) setApiError("")
+                }}
+                placeholder={t("changePassword.placeholderConfirm", "Confirm new password")}
                 className="w-full px-4 py-2.5 pr-10 rounded-lg bg-muted border border-white/10 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
               />
               <button
@@ -178,13 +234,18 @@ function ChangePasswordDialog({
                 )}
               </button>
             </div>
+            {isConfirmMismatch && (
+              <p className="text-xs text-red-500 font-medium">
+                Confirm password does not match new password
+              </p>
+            )}
           </div>
 
-          {/* Error Message */}
-          {error && (
+          {/* API Error Message */}
+          {apiError && (
             <div className="flex items-center gap-2 p-3 rounded-lg bg-custom-red/10 border border-custom-red/20">
               <AlertCircle className="w-4 h-4 text-custom-red shrink-0" />
-              <p className="text-xs text-red-400">{error}</p>
+              <p className="text-xs text-red-400">{apiError}</p>
             </div>
           )}
 
@@ -195,8 +256,8 @@ function ChangePasswordDialog({
             className="cursor-pointer w-full py-2.5 rounded-lg bg-custom-red text-white text-sm font-medium hover:bg-custom-red/80 transition-colors mt-1"
           >
             {isChanging
-              ? t("changePassword.changing")
-              : t("changePassword.change")}
+              ? t("changePassword.changing", "Changing...")
+              : t("changePassword.change", "Change Password")}
           </Button>
         </form>
       </DialogContent>

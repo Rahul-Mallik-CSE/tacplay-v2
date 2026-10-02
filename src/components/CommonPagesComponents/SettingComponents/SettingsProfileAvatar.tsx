@@ -7,6 +7,8 @@
  */
 
 import React from "react"
+import Image from "next/image"
+import { toAbsoluteMediaUrl } from "@/lib/utils"
 import type { SettingsProfileAvatarProps } from "@/types/DashboardTypes/SettingsTypes"
 
 /** Generate initials from full name */
@@ -37,17 +39,19 @@ function SettingsProfileAvatar({
 }: SettingsProfileAvatarProps) {
   const initials = getInitials(fullName)
   const sizeClass = SIZE_CLASSES[size]
+  const avatarUrl = toAbsoluteMediaUrl(imageUrl)
 
   return (
     <div
-      className={`${sizeClass} rounded-full bg-linear-to-br from-custom-red/30 to-custom-yellow/30 flex items-center justify-center shrink-0`}
+      className={`${sizeClass} rounded-full bg-linear-to-br from-custom-red/30 to-custom-yellow/30 flex items-center justify-center shrink-0 overflow-hidden relative`}
     >
-      {imageUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={imageUrl}
-          alt="Profile"
-          className="w-full h-full object-cover rounded-full"
+      {avatarUrl ? (
+        <Image
+          src={avatarUrl}
+          alt={fullName || "Profile"}
+          fill
+          unoptimized
+          className="object-cover rounded-full"
         />
       ) : (
         <span className="font-bold text-primary">{initials}</span>

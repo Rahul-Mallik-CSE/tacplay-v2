@@ -12,7 +12,7 @@ import type { SettingsProfileFieldProps } from "@/types/DashboardTypes/SettingsT
 
 function SettingsProfileField({
   label,
-  value,
+  value = "",
   type = "text",
   showPasswordToggle = false,
   showPassword = false,

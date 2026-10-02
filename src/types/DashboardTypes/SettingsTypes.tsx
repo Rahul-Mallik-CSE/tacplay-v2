@@ -10,8 +10,8 @@ export type FieldOwnerProfile = {
   full_name: string
   email_address: string
   contact_number: string
-  password: string
-  profile_image: string | null
+  password?: string
+  profile_image?: string | null
 }
 
 /** API response structure for profile data */
@@ -44,7 +44,7 @@ export type ChangeFieldOwnerPasswordResponse = {
 
 /** Props for SettingsProfileAvatar component */
 export interface SettingsProfileAvatarProps {
-  imageUrl: string | null
+  imageUrl?: string | null
   fullName: string
   size?: "sm" | "md" | "lg"
 }
@@ -52,7 +52,7 @@ export interface SettingsProfileAvatarProps {
 /** Props for SettingsProfileField component */
 export interface SettingsProfileFieldProps {
   label: string
-  value: string
+  value?: string
   type?: "text" | "email" | "number" | "password"
   showPasswordToggle?: boolean
   showPassword?: boolean

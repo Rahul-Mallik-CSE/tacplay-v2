@@ -22,6 +22,9 @@ import { useTranslation } from "react-i18next"
 import SettingsProfileAvatar from "./SettingsProfileAvatar"
 import type { EditAccountDialogProps } from "@/types/DashboardTypes/SettingsTypes"
 
+import { useUpdateProfileMutation } from "@/redux/features/shared/setting/settingAPI"
+import { getErrorMessage } from "@/lib/auth"
+
 function EditAccountDialog({
   open,
   onOpenChange,
@@ -33,7 +36,7 @@ function EditAccountDialog({
     () => profile?.contact_number || "",
   )
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
-  const [isSaving, setIsSaving] = useState(false)
+  const [updateProfile, { isLoading: isSaving }] = useUpdateProfileMutation()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -56,8 +59,8 @@ function EditAccountDialog({
   // Reset form when profile changes
   useEffect(() => {
     if (profile) {
-      setFullName(profile.full_name)
-      setContactNumber(profile.contact_number)
+      setFullName(profile.full_name || "")
+      setContactNumber(profile.contact_number || "")
     }
   }, [profile])
 
@@ -66,26 +69,29 @@ function EditAccountDialog({
   /** Handle form submission */
   const handleSave = async () => {
     if (!fullName.trim()) {
-      toast.error(t("editAccount.fullNameRequired"))
+      toast.error(t("editAccount.fullNameRequired", "Full name is required"))
       return
     }
 
     if (!contactNumber.trim()) {
-      toast.error(t("editAccount.contactRequired"))
+      toast.error(t("editAccount.contactRequired", "Contact number is required"))
       return
     }
 
-    setIsSaving(true)
-
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 800))
-      toast.success(t("editAccount.updated"))
+      const formData = new FormData()
+      formData.append("full_name", fullName.trim())
+      formData.append("contact_number", contactNumber.trim())
+      if (selectedImage) {
+        formData.append("profile_image", selectedImage)
+      }
+
+      const res = await updateProfile(formData).unwrap()
+      toast.success(res.message || t("editAccount.updated", "Profile updated successfully"))
       onOpenChange(false)
-    } catch {
-      toast.error(t("editAccount.updateFailed"))
-    } finally {
-      setIsSaving(false)
+      setSelectedImage(null)
+    } catch (error) {
+      toast.error(getErrorMessage(error, t("editAccount.updateFailed", "Failed to update profile")))
     }
   }
 
