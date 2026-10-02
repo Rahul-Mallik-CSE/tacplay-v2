@@ -96,8 +96,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <ReduxProvider>
             {children}
             <ToastProvider />
-            </ReduxProvider>
-          </I18nProvider>
+          </ReduxProvider>
+        </I18nProvider>
       </body>
     </html>
   );

@@ -3,17 +3,15 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import AuthBanner from "@/components/AuthComponents/AuthBanner";
 import { PasswordInput } from "@/components/AuthComponents/shared";
 
 interface SignInFormProps {
-  onSubmit: (data: { email: string; password: string; role: "user" | "admin" }) => void;
+  onSubmit: (data: { email: string; password: string }) => void;
   isLoading?: boolean;
   defaultEmail?: string;
   defaultPassword?: string;
-  defaultRole?: "user" | "admin";
 }
 
 export default function SignInForm({
@@ -21,29 +19,26 @@ export default function SignInForm({
   isLoading = false,
   defaultEmail = "",
   defaultPassword = "",
-  defaultRole = "user",
 }: SignInFormProps) {
   const { t } = useTranslation("dashboard");
-  const router = useRouter();
   const [email, setEmail] = useState(defaultEmail);
   const [password, setPassword] = useState(defaultPassword);
-  const [role, setRole] = useState<"user" | "admin">(defaultRole);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ email: email.trim(), password, role });
+    onSubmit({ email: email.trim(), password });
   };
 
   return (
     <AuthBanner>
       <div className="flex flex-col items-center">
-        <div className="h-12 mb-4">
+        <div className="h-16 mb-4">
           <Image
             src="/Tacplay-logo-2.png"
             alt="TacPlay"
-            width={200}
-            height={200}
-            className="object-contain h-12"
+            width={400}
+            height={400}
+            className="object-contain h-16"
             priority
           />
         </div>
@@ -90,36 +85,6 @@ export default function SignInForm({
               name="password"
               autoComplete="current-password"
             />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              {t("auth.loginAs")}
-            </label>
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={() => setRole("user")}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-medium border-2 transition-colors cursor-pointer ${
-                  role === "user"
-                    ? "bg-custom-red text-white border-border"
-                    : "bg-transparent text-primary border-white/10 hover:border-white/20"
-                }`}
-              >
-                {t("auth.user")}
-              </button>
-              <button
-                type="button"
-                onClick={() => setRole("admin")}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-medium border-2 transition-colors cursor-pointer ${
-                  role === "admin"
-                    ? "bg-custom-red text-white border-border"
-                    : "bg-transparent text-primary border-white/10 hover:border-white/20"
-                }`}
-              >
-                {t("auth.admin")}
-              </button>
-            </div>
           </div>
 
           <button

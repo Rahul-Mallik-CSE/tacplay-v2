@@ -20,7 +20,6 @@ function SignInPageInner() {
   const handleSubmit = async (data: {
     email: string;
     password: string;
-    role: "user" | "admin";
   }) => {
     try {
       const res = await login({
@@ -72,7 +71,6 @@ function SignInPageInner() {
       isLoading={isLoading}
       defaultEmail=""
       defaultPassword=""
-      defaultRole="user"
     />
   );
 }

@@ -17,8 +17,8 @@ export default function AuthBanner({ children }: AuthBannerProps) {
           <Image
             src="/Tacplay-logo-2.png"
             alt="TacPlay Logo"
-            width={120}
-            height={40}
+            width={200}
+            height={300}
             className="object-contain"
           />
         </div>

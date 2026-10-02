@@ -35,13 +35,13 @@ export default function SignUpForm({ onSubmit, isLoading = false }: SignUpFormPr
   return (
     <AuthBanner>
       <div className="flex flex-col items-center">
-        <div className="h-12 mb-4">
+        <div className="h-16 mb-4">
           <Image
             src="/Tacplay-logo-2.png"
             alt="TacPlay"
-            width={200}
-            height={200}
-            className="object-contain h-12"
+            width={400}
+            height={400}
+            className="object-contain h-16"
             priority
           />
         </div>
