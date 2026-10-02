@@ -24,7 +24,7 @@ export function resolveAccountType(
 const persistedUser = getAuthUser();
 
 const initialState: AuthState = {
-  isAuthenticated: hasAccessToken(),
+  isAuthenticated: Boolean(hasAccessToken() && persistedUser),
   user: persistedUser
     ? {
         id: persistedUser.id,

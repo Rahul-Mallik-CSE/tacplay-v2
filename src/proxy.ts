@@ -83,16 +83,26 @@ export function proxy(request: NextRequest) {
 
   // ── 2. Public auth paths ────────────────────────────────────────────
   if (isPublicPath(pathname)) {
-    // If the user already has a valid session, redirect them away from
-    // auth pages to their dashboard.
-    if (hasValidToken(request)) {
-      const user = getUserFromCookie(request);
-      const accountType = user?.account_type || user?.role;
+    // Flow paths (OTP verification, password reset, etc.) must remain accessible
+    // during multi-step auth processes even when temporary tokens are set in cookies.
+    const isFlowPath =
+      pathname.startsWith("/verify-otp") ||
+      pathname.startsWith("/reset-pass") ||
+      pathname.startsWith("/verify-email") ||
+      pathname.startsWith("/create-new-pass");
 
-      if (accountType === "admin") {
-        return NextResponse.redirect(new URL("/admin", request.url));
+    if (!isFlowPath) {
+      // For entry auth pages (sign-in, sign-up, forgot-pass), only redirect if
+      // the user has BOTH a valid token AND an authenticated user profile cookie.
+      const user = getUserFromCookie(request);
+      if (hasValidToken(request) && user) {
+        const accountType = user.account_type || user.role;
+
+        if (accountType === "admin") {
+          return NextResponse.redirect(new URL("/admin", request.url));
+        }
+        return NextResponse.redirect(new URL("/dashboard", request.url));
       }
-      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
     // Otherwise, let them through.

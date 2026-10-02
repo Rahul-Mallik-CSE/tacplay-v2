@@ -1,0 +1,21 @@
+{
+  "name": "TACPlay Field Owner Dashboard",
+  "short_name": "TACPlay",
+  "description": "Manage your arena, sessions, bookings, earnings, and player engagement from one powerful platform.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0c",
+  "theme_color": "#0a0a0c",
+  "icons": [
+    {
+      "src": "/Tacplay-logo-2.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/Tacplay-logo-2.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
