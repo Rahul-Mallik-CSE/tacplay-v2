@@ -22,8 +22,8 @@ const StatsCard = ({
     <div className="bg-card border border-white/5 rounded-xl p-5 flex flex-col min-w-0 flex-1">
       {/* Row 1: Title left, icon right */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-secondary">{title}</h3>
-        <span className="text-secondary opacity-70">{icon}</span>
+        <h3 className="text-sm font-medium text-[#D9D9D9]">{title}</h3>
+        <span className="text-primary opacity-70">{icon}</span>
       </div>
 
       {/* Row 2: Value left, change badge right */}
@@ -36,7 +36,7 @@ const StatsCard = ({
           className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md ${
             isPositive
               ? "bg-emerald-500/15 text-emerald-400"
-              : "bg-red-500/15 text-red-400"
+              : "bg-red-500/15 text-[#980303]"
           }`}
         >
           {isPositive ? (

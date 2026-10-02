@@ -56,18 +56,18 @@ export default function AppSidebar({
   return (
     <>
       <Sidebar
-        className={`shadow-none py-4 bg-root-bg border-r border-none ${isCollapsed ? "px-1" : "px-4"}`}
+        className={`shadow-none py-4 bg-background border-r border-none ${isCollapsed ? "px-1" : "px-2"}`}
         collapsible="icon"
       >
         <SidebarContent
-          className={`bg-background border-t-2 border-l-2 border-r-2 border-[#2C2740] shadow-neutral-600 rounded-t-4xl
-                      ${isCollapsed ? "px-0.5" : "px-2"}`}
+          className={`bg-background 
+                      ${isCollapsed ? "px-0.5" : "px-1"}`}
         >
           {/* Logo */}
           <div
-            className={`mb-6 flex items-center justify-center rounded-md ${
+            className={`mb-1 flex items-center justify-center rounded-md ${
               isCollapsed
-                ? "flex items-center w-full justify-center mx-auto p-1"
+                ? "flex items-center w-full justify-center mx-auto "
                 : "gap-2"
             }`}
           >
@@ -75,15 +75,17 @@ export default function AppSidebar({
               {logo ? (
                 logo
               ) : isCollapsed ? (
-                <Image src="/logo.png" alt="Logo" width={40} height={40} />
+                <Image src="/logo.png" alt="Logo" width={40} height={40} 
+                    className="pb-4 pt-1"
+                    />
               ) : (
-                <div className="mt-2 flex items-center gap-2 h-10">
+                <div className="w-full h-16 flex items-center gap-2 pb-2 border-b-2 border-white/10 ">
                   <Image
                     src="/Tacplay-logo-2.png"
                     alt="Logo"
-                    width={120}
-                    height={120}
-                    className="w-40 h-10"
+                    width={520}
+                    height={520}
+                    className="w-52 h-14"
                     priority
                   />
                 </div>
@@ -100,7 +102,7 @@ export default function AppSidebar({
             {navItems.map((item) => (
               <React.Fragment key={item.href}>
                 {item.separator && (
-                  <div className="my-2 mx-2 border-t border-white/10" />
+                  <div className="my-2 mx-2  border-t border-white/10" />
                 )}
                 <NavItem
                   href={item.href}
@@ -124,7 +126,7 @@ export default function AppSidebar({
         </SidebarContent>
 
         {/* Footer */}
-        <SidebarFooter className="pb-2 bg-background rounded-b-4xl border-r-2 border-b-2 border-l-2 border-[#2C2740] shadow-neutral-600">
+        <SidebarFooter className="pb-2 bg-background ">
           {showUpgradeBanner && (
             isCollapsed ? (
               <div className="flex justify-center mb-2">
@@ -137,34 +139,32 @@ export default function AppSidebar({
                 </Button>
               </div>
             ) : (
-              <div className="mx-2 mb-3 rounded-2xl border border-[#C00069] bg-[#100F17] p-3 shadow-[0_0_12px_rgba(192,0,105,0.25)]">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="relative shrink-0">
-                    <div
-                      className="w-12 h-12 bg-[#980009] flex items-center justify-center"
-                      style={{
-                        clipPath:
-                          "polygon(50% 0%,61% 15%,79% 9%,75% 28%,93% 35%,82% 50%,93% 65%,75% 72%,79% 91%,61% 85%,50% 100%,39% 85%,21% 91%,25% 72%,7% 65%,18% 50%,7% 35%,25% 28%,21% 9%,39% 15%)",
-                      }}
-                    >
-                      <Crown size={20} className="text-[#cdba20]" />
+              <div className="mx-2 mb-3 rounded-lg overflow-hidden shadow-lg">
+                <div className="bg-linear-to-b from-[#DC2727] via-[#b80000] to-[#8b0000] p-3 relative">
+                  <div className="mb-2">
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center p-0.5">
+                      <Image
+                        src="/bronze.png"
+                        alt="Bronze Badge"
+                        width={64}
+                        height={64}
+                        className="w-full h-full object-contain rounded-xl"
+                      />
                     </div>
                   </div>
-                  <div>
-                    <p className="text-primary text-sm font-semibold leading-snug mb-0.5">
-                      {t("sidebar.upgradeToSilver")}
-                    </p>
-                    <p className="text-secondary text-xs mb-2">
-                      {t("sidebar.unlockMessage")}
-                    </p>
-                    <Button
-                      onClick={() => setIsUpgradeModalOpen(true)}
-                      className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-[#980009] via-[#C00069] to-[#980009] text-white font-bold py-2.5 rounded-xl text-sm hover:opacity-90 transition-opacity shadow-[0_0_10px_rgba(192,0,105,0.4)]"
-                    >
-                      <Crown size={15} className="text-[#cdba20]" />
-                      {t("sidebar.upgrade")}
-                    </Button>
-                  </div>
+                  <h3 className="text-white text-lg font-semibold ">
+                    Upgrade to Silver!
+                  </h3>
+                  <p className="text-white/80 text-sm mb-2 leading-relaxed">
+                    Upgrade your account and unlock all of the benefits.
+                  </p>
+                  <Button
+                    onClick={() => setIsUpgradeModalOpen(true)}
+                    className="w-full flex items-center justify-center gap-2 bg-white text-gray-900 font-bold py-3 rounded-2xl text-sm hover:bg-gray-100 transition-colors"
+                  >
+                    <Crown size={16} className="text-[#d4a843]" />
+                    Upgrade Now!
+                  </Button>
                 </div>
               </div>
             )

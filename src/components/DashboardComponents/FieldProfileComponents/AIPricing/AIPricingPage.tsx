@@ -75,7 +75,7 @@ export default function AIPricingPage() {
         </div>
       </div>
 
-      <div className="h-px bg-gradient-to-r from-emerald-500 via-emerald-500 to-emerald-500" />
+      <div className="h-px bg-white/10" />
 
       <div className="space-y-5">
         <div className="space-y-2">
@@ -124,7 +124,7 @@ export default function AIPricingPage() {
             className="w-full flex items-center justify-between p-3 bg-input/30 border border-white/10 rounded-lg text-left hover:bg-input/50 transition-colors cursor-pointer"
           >
             <span className={`text-sm ${settings.selectedSession ? "text-primary" : "text-muted-foreground"}`}>
-              {settings.selectedSession || t("arena.aiPricingTab.registeredCompany")}
+              {settings.selectedSession || t("arena.aiPricingTab.selectSessionPlaceholder")}
             </span>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
           </button>

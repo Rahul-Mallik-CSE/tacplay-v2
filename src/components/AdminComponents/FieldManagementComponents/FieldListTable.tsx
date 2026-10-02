@@ -4,7 +4,9 @@ import React, { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
+import { Filter } from "lucide-react"
 import CustomTable from "@/components/SharedComponents/CustomTable"
+import FilterSheet from "@/components/SharedComponents/FilterSheet"
 import FieldSearchBar from "./FieldSearchBar"
 import FieldPlanBadge from "./FieldPlanBadge"
 import FieldCountryFlag from "./FieldCountryFlag"
@@ -24,16 +26,25 @@ function FieldListTable() {
   const [isDetailsSheetOpen, setIsDetailsSheetOpen] = useState(false)
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
   const [upgradeField, setUpgradeField] = useState<Field | null>(null)
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const [fieldFilters, setFieldFilters] = useState<Record<string, string[]>>({})
 
   const filteredData = useMemo(() => {
-    if (!search.trim()) return mockFieldData
-    const normalizedSearch = search.trim().toLowerCase()
-    return mockFieldData.filter((item) =>
-      [item.fieldName, item.fieldId, item.ownerName, item.ownerEmail]
-        .filter(Boolean)
-        .some((value) => value.toLowerCase().includes(normalizedSearch)),
-    )
-  }, [search])
+    let result = mockFieldData
+    if (search.trim()) {
+      const normalizedSearch = search.trim().toLowerCase()
+      result = result.filter((item) =>
+        [item.fieldName, item.fieldId, item.ownerName, item.ownerEmail]
+          .filter(Boolean)
+          .some((value) => value.toLowerCase().includes(normalizedSearch)),
+      )
+    }
+    const planFilters = fieldFilters[t("filterSheet.plan", "Plan")] || []
+    if (planFilters.length > 0) {
+      result = result.filter((item) => planFilters.includes(item.plan))
+    }
+    return result
+  }, [search, fieldFilters, t])
 
   const handleSearchChange = (value: string) => {
     setSearch(value)
@@ -159,38 +170,13 @@ function FieldListTable() {
         </div>
         <div className="flex items-center gap-3">
           <FieldSearchBar value={search} onChange={handleSearchChange} />
-          {/* <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 bg-muted text-sm text-primary hover:bg-muted/80 transition-colors cursor-pointer">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-              />
-            </svg>
+          <button
+            onClick={() => setFilterSheetOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 bg-muted text-sm text-primary hover:bg-muted/80 transition-colors cursor-pointer"
+          >
+            <Filter className="w-4 h-4" />
             {t("common.filter")}
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 bg-muted text-sm text-primary hover:bg-muted/80 transition-colors cursor-pointer">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-              />
-            </svg>
-            {t("fieldManagement.sortBy")}
-          </button> */}
         </div>
       </div>
 
@@ -228,6 +214,24 @@ function FieldListTable() {
         open={isUpgradeModalOpen}
         onOpenChange={setIsUpgradeModalOpen}
         onConfirm={handleUpgradeConfirm}
+      />
+
+      <FilterSheet
+        open={filterSheetOpen}
+        onOpenChange={setFilterSheetOpen}
+        title={t("common.filter")}
+        filterGroups={[
+          {
+            title: t("filterSheet.plan", "Plan"),
+            options: [
+              { label: "Gold", value: "Gold" },
+              { label: "Silver", value: "Sliver" },
+              { label: "Bronze", value: "Bronze" },
+            ],
+          },
+        ]}
+        selectedFilters={fieldFilters}
+        onFilterChange={setFieldFilters}
       />
     </div>
   )

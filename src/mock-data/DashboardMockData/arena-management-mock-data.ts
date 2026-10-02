@@ -31,7 +31,7 @@ export const mockFieldSetup: FieldSetupData = {
   maximum_players_per_session: 22,
   default_session_duration: 60,
   duration_unit: "minute",
-  base_price_per_player: "15.00",
+  allow_own_gear: true,
   allow_social_matches: true,
   allow_ranked_matches: false,
 }

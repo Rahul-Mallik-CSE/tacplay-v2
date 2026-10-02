@@ -497,7 +497,17 @@
       "packageCreated": "Forfait créé avec succès.",
       "packageUpdated": "Forfait mis à jour avec succès.",
       "packageDeleted": "Forfait supprimé avec succès.",
-      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce forfait ?"
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce forfait ?",
+      "title": "Gestion des forfaits du terrain",
+      "subtitle": "Créez un forfait de base et d'autres offres groupées de mise à jour paintball, qui peuvent également inclure des articles non paintball, par ex. BBQ, Événements, forfaits STAG, etc.",
+      "typeHeader": "Type de forfait {{index}}",
+      "packageFeePlaceholder": "prix",
+      "includeItems": "Articles inclus",
+      "selectPackageItems": "Sélectionner les articles du forfait",
+      "packageImage": "Image du forfait",
+      "uploadImage": "Télécharger une image",
+      "savePackage": "Enregistrer le forfait",
+      "saveFailed": "Échec de l'enregistrement du forfait."
     },
     "openingHoursTab": {
       "title": "Horaires hebdomadaires standard",
@@ -510,7 +520,7 @@
     },
     "aiPricingTab": {
       "title": "Tarification IA",
-      "subtitle": "Fournissez les détails de l'entreprise et les informations de paiement pour recevoir les paiements de réservation et gérer les abonnements en toute sécurité.",
+      "subtitle": "Optimisez automatiquement vos tarifs de session grâce à l'IA. Définissez une date de base, un pourcentage de frais supplémentaires et sélectionnez les sessions auxquelles appliquer une tarification intelligente.",
       "selectDate": "Sélectionner la date",
       "selectDateTime": "Sélectionner la date et l'heure",
       "aiSuggest": "Suggestion IA",
@@ -518,7 +528,7 @@
       "extrasChargePlaceholder": "20%",
       "selectSession": "Sélectionner la session",
       "selectSessions": "Sélectionner les sessions",
-      "registeredCompany": "Entreprise enregistrée",
+      "selectSessionPlaceholder": "Sélectionner une session",
       "sessionName": "Nom de la session",
       "dateTimeLabel": "Date & Heure",
       "assignStaff": "Attribuer le personnel",
@@ -532,7 +542,13 @@
       "loading": "Chargement des détails de paiement...",
       "loadFailed": "Votre forfait Essential Starter for Fields actuel n'inclut pas l'accès aux gains ni aux détails de paiement. Veuillez passer au forfait Essential for Field Growth ou Or pour accéder à cette fonctionnalité.",
       "updated": "Détails de paiement mis à jour avec succès.",
-      "updateFailed": "Échec de la mise à jour des détails de paiement."
+      "updateFailed": "Échec de la mise à jour des détails de paiement.",
+      "stripeConnectTitle": "Se connecter avec Stripe",
+      "stripeConnectDesc": "Liez votre compte Stripe pour recevoir vos paiements en toute sécurité. Toutes les transactions sont traitées via la plateforme sécurisée de Stripe.",
+      "connectStripe": "Se connecter avec Stripe",
+      "stripeSecureNote": "Connexion sécurisée par Stripe",
+      "stripeConnectSuccess": "Connexion avec Stripe réussie !",
+      "stripeConnectFailed": "Échec de la connexion avec Stripe. Veuillez réessayer."
     },
     "billingsTab": {
       "title": "Historique de facturation",
@@ -547,7 +563,8 @@
       "statusPaid": "Payé",
       "statusPending": "En attente",
       "statusFailed": "Échoué",
-      "statusRefunded": "Remboursé"
+      "statusRefunded": "Remboursé",
+      "filter": "Filtrer"
     }
   },
   "auth": {
@@ -651,6 +668,7 @@
       "unitMinute": "Minute",
       "unitHour": "Heure",
       "basePrice": "Prix de base par joueur",
+      "allowOwnGear": "Autoriser le propre équipement",
       "allowSocial": "Autoriser les matchs amicaux",
       "allowRanked": "Autoriser les matchs classés",
       "on": "Actif",
@@ -993,7 +1011,7 @@
       "liveChat": "Chat en direct",
       "liveChatValue": "Disponible dans le portail",
       "phone": "Support telephonique",
-      "phoneValue": "+34 900 123 234"
+      "phoneValue": "+33 1 23 45 67 89"
     },
     "info": {
       "responseTime": "Temps de reponse",
@@ -1090,7 +1108,7 @@
       "perMonth": "/par mois",
       "includedFeatures": "Fonctionnalites incluses :",
       "seeAll": "Voir tout",
-      "activeBronze": "Bronze actif",
+      "activeBronze": "Active Bronze",
       "upgradeToSilver": "Passer a Silver",
       "goGold": "Choisir Gold",
       "popular": "Populaire",
@@ -1340,7 +1358,7 @@
       "next": "Suivant",
       "apply": "Appliquer",
       "filter": "Filtrer",
-      "allPlayer": "Tous les joueurs",
+      "allPlayers": "Tous les joueurs",
       "activePlayers": "Joueurs actifs",
       "sendNowLabel": "Envoyer maintenant",
       "voucherCode": "Code du voucher",
@@ -1351,10 +1369,47 @@
       "description": "Description (Optionnel)",
       "descriptionPlaceholder": "20% de reduction sur les reservations du week-end. Offre limitee!",
       "activeNow": "Actif maintenant",
-      "scheduleForSomeDays": "Planifier pour quelques jours",
+      "scheduleForLaterDays": "Planifier pour des jours plus tard",
       "selectStartAndEndDate": "Selectionner la date de debut et de fin"
     },
     "aiOptimization": "Optimisation IA"
+  },
+  "filterSheet": {
+    "reset": "Réinitialiser",
+    "apply": "Appliquer les filtres",
+    "title": "Filtres",
+    "status": "Statut",
+    "matchType": "Type de match",
+    "type": "Type",
+    "plan": "Plan",
+    "membership": "Adhésion",
+    "country": "Pays",
+    "role": "Rôle"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Restez informé de vos dernières activités et alertes.",
+    "markAllRead": "Tout marquer comme lu",
+    "clearAll": "Tout effacer",
+    "emptyTitle": "Aucune notification",
+    "emptyMessage": "Vous êtes à jour ! Revenez plus tard pour les mises à jour.",
+    "tabs": {
+      "all": "Toutes",
+      "bookings": "Réservations",
+      "sessions": "Sessions",
+      "payments": "Paiements",
+      "system": "Système"
+    },
+    "types": {
+      "booking": "Réservation",
+      "session": "Session",
+      "payment": "Paiement",
+      "info": "Info",
+      "warning": "Avertissement",
+      "success": "Succès",
+      "error": "Erreur",
+      "system": "Système"
+    }
   },
   "error": {
     "pageNotFound": "Page non trouvée",

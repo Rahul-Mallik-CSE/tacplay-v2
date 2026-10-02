@@ -8,9 +8,10 @@
 
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
 import DayScheduleRow, { type DayScheduleItem } from "./DayScheduleRow"
+import SectionHeader from "../SectionHeader"
+import EditSaveButton from "../EditSaveButton"
 
 const DEFAULT_SCHEDULE: DayScheduleItem[] = [
   { day: "Monday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "21:00" }] },
@@ -94,35 +95,10 @@ export default function OpeningHoursPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-primary">
-            {t("arena.openingHoursTab.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            {t("arena.openingHoursTab.subtitle")}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          {isEditing ? (
-            <>
-              <Button variant="ghost" size="sm" onClick={handleToggleEdit}>
-                {t("arena.cancelEdit")}
-              </Button>
-              <Button variant="default" size="sm" onClick={handleSave} disabled={isSaving}>
-                {isSaving ? (
-                  <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                ) : null}
-                {t("arena.openingHoursTab.saveChanges")}
-              </Button>
-            </>
-          ) : (
-            <Button variant="default" size="sm" onClick={handleToggleEdit}>
-              {t("arena.editInfo")}
-            </Button>
-          )}
-        </div>
-      </div>
+      <SectionHeader
+        title={t("arena.openingHoursTab.title")}
+        subtitle={t("arena.openingHoursTab.subtitle")}
+      />
 
       <div className="space-y-4">
         {currentSchedule.map((day, index) => (
@@ -139,9 +115,12 @@ export default function OpeningHoursPage() {
 
       {isEditing && (
         <div className="flex justify-end">
-          <Button variant="destructive" size="sm" onClick={handleSave} disabled={isSaving}>
-            {t("arena.openingHoursTab.saveChanges")}
-          </Button>
+          <EditSaveButton
+            isEditing={isEditing}
+            isSaving={isSaving}
+            onToggleEdit={handleToggleEdit}
+            onSave={handleSave}
+          />
         </div>
       )}
     </div>

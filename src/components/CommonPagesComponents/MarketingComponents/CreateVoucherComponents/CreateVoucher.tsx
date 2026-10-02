@@ -156,15 +156,15 @@ export default function CreateVoucher() {
                   <div className="w-2 h-2 rounded-full bg-custom-yellow" />
                 )}
               </div>
-              <span className="text-sm text-primary">{t("marketing.form.scheduleForSomeDays")}</span>
+              <span className="text-sm text-primary">{t("marketing.form.scheduleForLaterDays")}</span>
             </label>
           </div>
           {formData.schedule === "scheduled" && (
-            <div className="relative">
+            <div className="relative w-full md:w-64">
               <input
                 type="text"
                 placeholder={t("marketing.form.selectStartAndEndDate")}
-                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-primary placeholder:text-secondary focus:outline-none focus:border-white/20"
+                className="w-full md:w-64 px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-primary placeholder:text-secondary focus:outline-none focus:border-white/20"
               />
               <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary" />
             </div>

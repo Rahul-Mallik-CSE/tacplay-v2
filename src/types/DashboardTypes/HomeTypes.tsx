@@ -101,7 +101,7 @@ export type DashboardMark3Item = {
 };
 
 /** Color palette for pie chart segments (red for check-in, yellow for late, white for no-show) */
-export const PIE_CHART_COLORS = ["#980009", "#b4971e", "#d1d5db"] as const;
+export const PIE_CHART_COLORS = ["#980009", "#FEDD00", "#d1d5db"] as const;
 
 /** Props for the SessionPieChart component */
 export type SessionPieChartProps = {

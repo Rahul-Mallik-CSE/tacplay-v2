@@ -2,12 +2,12 @@
 
 "use client";
 
-import { LayoutGrid, Settings, BarChart3, CircleHelp, Package, Users, Megaphone, MessageCircle } from "lucide-react";
-import { CiTrophy } from "react-icons/ci";
-import { IoDocumentTextOutline } from "react-icons/io5";
+import { LayoutGrid,CalendarCheck,CalendarClock, Settings, BarChart3, CircleHelp, Package, Users, Megaphone, MessageCircle } from "lucide-react";
+import { FaHouseUser } from "react-icons/fa";
 import { GrUserManager } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
 import type { NavItemConfig } from "@/components/SharedComponents/NavItem";
+
 
 export function useDashboardNavItems(): NavItemConfig[] {
   const { t } = useTranslation("dashboard");
@@ -21,17 +21,17 @@ export function useDashboardNavItems(): NavItemConfig[] {
     },
     {
       href: "/dashboard/bookings",
-      icon: IoDocumentTextOutline,
+      icon: CalendarCheck,
       label: t("sidebar.bookings"),
     },
     {
       href: "/dashboard/sessions",
-      icon: CiTrophy,
+      icon: CalendarClock,
       label: t("sidebar.sessions"),
     },
     {
       href: "/dashboard/field-profile",
-      icon: GrUserManager,
+      icon: FaHouseUser,
       label: t("sidebar.fieldProfile"),
       subItems: [
         {

@@ -23,7 +23,8 @@ import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import type { ArenaInfo, ArenaInfoForm, ArenaInfoTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import { mockArenaInfo } from "../../../../mock-data/DashboardMockData/arena-management-mock-data"
-import EditSaveHeader from "../EditSaveHeader"
+import SectionHeader from "../SectionHeader"
+import EditSaveButton from "../EditSaveButton"
 
 const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
   const { t } = useTranslation("dashboard")
@@ -150,13 +151,9 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
 
   return (
     <div className="space-y-6">
-      <EditSaveHeader
+      <SectionHeader
         title={t("onboardingFields.arena.title")}
         subtitle={t("onboardingFields.arena.subtitle")}
-        isEditing={isEditing}
-        isSaving={isSaving}
-        onToggleEdit={handleToggleEdit}
-        onSave={handleSave}
       />
 
       <div className="space-y-5">
@@ -270,6 +267,15 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
             className="bg-input/30 border-white/10 text-primary h-11"
           />
         </div>
+      </div>
+
+      <div className="flex justify-end">
+        <EditSaveButton
+          isEditing={isEditing}
+          isSaving={isSaving}
+          onToggleEdit={handleToggleEdit}
+          onSave={handleSave}
+        />
       </div>
     </div>
   )

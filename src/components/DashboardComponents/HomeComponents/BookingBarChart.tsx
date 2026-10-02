@@ -63,23 +63,23 @@ const BookingBarChart = ({
       {/* Header with title, value, and legends */}
       <div className="flex items-start justify-between mb-1">
         <div>
-          <h3 className="text-sm text-secondary">
+          <h3 className="text-sm text-[#8381A3]">
             {translatedTitle}
           </h3>
           {!isLocked && (
-            <h2 className="text-xl md:text-3xl font-bold text-primary mt-1">
+            <h2 className="text-xl md:text-2xl font-bold text-primary mt-1">
               {valueDisplay}
             </h2>
           )}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col items-end gap-4">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm bg-custom-red" />
             <span className="text-xs text-primary">{legendA}</span>
+            <span className="w-3 h-3 rounded-xs bg-custom-red" />
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm bg-custom-yellow" />
             <span className="text-xs text-primary">{legendB}</span>
+            <span className="w-3 h-3 rounded-xs bg-custom-yellow" />
           </div>
         </div>
       </div>
@@ -122,16 +122,16 @@ const BookingBarChart = ({
               <Bar
                 dataKey="premium"
                 name={legendA}
-                fill="#980009"
-                radius={[3, 3, 0, 0]}
-                barSize={12}
+                fill="#FF6757"
+                radius={[6, 6, 6, 6]}
+                barSize={16}
               />
               <Bar
                 dataKey="free"
                 name={legendB}
-                fill="#b4971e"
-                radius={[3, 3, 0, 0]}
-                barSize={12}
+                fill="#F0AC3C"
+                radius={[6, 6, 6, 6]}
+                barSize={16}
               />
             </BarChart>
           </ResponsiveContainer>

@@ -528,7 +528,17 @@
       "packageCreated": "Package created successfully.",
       "packageUpdated": "Package updated successfully.",
       "packageDeleted": "Package deleted successfully.",
-      "confirmDelete": "Are you sure you want to delete this package?"
+      "confirmDelete": "Are you sure you want to delete this package?",
+      "title": "Field Packages Management",
+      "subtitle": "Create a base package and other bundled paintball upgrade deals, which can also include non paintball items, e.g BBQ, Events, STAG packages, etc.",
+      "typeHeader": "Package Type {{index}}",
+      "packageFeePlaceholder": "price",
+      "includeItems": "Include Items",
+      "selectPackageItems": "Select package items",
+      "packageImage": "Package Image",
+      "uploadImage": "Upload Image",
+      "savePackage": "Save Package",
+      "saveFailed": "Failed to save package."
     },
     "openingHoursTab": {
       "title": "Standard Weekly Hours",
@@ -541,7 +551,7 @@
     },
     "aiPricingTab": {
       "title": "AI Pricing",
-      "subtitle": "Provide business details and payout information to receive booking payments and manage subscriptions securely.",
+      "subtitle": "Automatically optimize your session pricing using AI. Set a base date, extras charge percentage, and select which sessions to apply intelligent pricing to.",
       "selectDate": "Select Date",
       "selectDateTime": "Select Date Time",
       "aiSuggest": "AI Suggest",
@@ -549,7 +559,7 @@
       "extrasChargePlaceholder": "20%",
       "selectSession": "Select Session",
       "selectSessions": "Select Sessions",
-      "registeredCompany": "Registered Company",
+      "selectSessionPlaceholder": "Select session",
       "sessionName": "Session Name",
       "dateTimeLabel": "Date & Time",
       "assignStaff": "Assign Staff",
@@ -563,7 +573,13 @@
       "loading": "Loading payout details...",
       "loadFailed": "Your current Essential Starter for Fields plan does not include access to earnings or payout details. Please upgrade to Essential for Field Growth or Gold to access this feature.",
       "updated": "Payout details updated successfully.",
-      "updateFailed": "Failed to update payout details."
+      "updateFailed": "Failed to update payout details.",
+      "stripeConnectTitle": "Connect with Stripe",
+      "stripeConnectDesc": "Link your Stripe account to receive payments securely. All transactions are processed through Stripe's secure platform.",
+      "connectStripe": "Connect with Stripe",
+      "stripeSecureNote": "Secure connection powered by Stripe",
+      "stripeConnectSuccess": "Successfully connected with Stripe!",
+      "stripeConnectFailed": "Failed to connect with Stripe. Please try again."
     },
     "billingsTab": {
       "title": "Billing History",
@@ -578,7 +594,8 @@
       "statusPaid": "Paid",
       "statusPending": "Pending",
       "statusFailed": "Failed",
-      "statusRefunded": "Refunded"
+      "statusRefunded": "Refunded",
+      "filter": "Filter"
     }
   },
   "auth": {
@@ -682,6 +699,7 @@
       "unitMinute": "Minute",
       "unitHour": "Hour",
       "basePrice": "Base Price Per Player",
+      "allowOwnGear": "Allow Own Gear",
       "allowSocial": "Allow Social Matches",
       "allowRanked": "Allow Ranked Matches",
       "on": "On",
@@ -1024,7 +1042,7 @@
       "liveChat": "Live Chat",
       "liveChatValue": "Available in Portal",
       "phone": "Phone Support",
-      "phoneValue": "+34 900 123 234"
+      "phoneValue": "+1 800 555 0199"
     },
     "info": {
       "responseTime": "Response Time",
@@ -1293,7 +1311,7 @@
     "vouchers": "Vouchers & Discounts",
     "allCampaigns": "All Campaigns",
     "viewAll": "View All",
-    "viewAllCampaigns": "View All Campinge",
+    "viewAllCampaigns": "View All Campaigns",
     "totalCampaigns": "Total Campaigns",
     "emailsSent": "Emails Sent",
     "smsSent": "SMS Sent",
@@ -1367,11 +1385,11 @@
       "deepLink": "Deep Link (Optional)",
       "deepLinkPlaceholder": "propainball://events/123",
       "uploadImageOptional": "Upload image (Optional)",
-      "saveDraft": "Save an Draft",
+      "saveDraft": "Save Draft",
       "next": "Next",
       "apply": "Apply",
       "filter": "Filter",
-      "allPlayer": "All Player",
+      "allPlayers": "All Players",
       "activePlayers": "Active Players",
       "sendNowLabel": "Send Now",
       "voucherCode": "Voucher Code",
@@ -1382,10 +1400,47 @@
       "description": "Descripton (Optional)",
       "descriptionPlaceholder": "20% off on weekend bookings. Limited time offer!",
       "activeNow": "Active Now",
-      "scheduleForSomeDays": "Schedule for Some Days",
+      "scheduleForLaterDays": "Schedule for Later Days",
       "selectStartAndEndDate": "Select start and end Date"
     },
     "aiOptimization": "AI optimization"
+  },
+  "filterSheet": {
+    "reset": "Reset",
+    "apply": "Apply Filters",
+    "title": "Filters",
+    "status": "Status",
+    "matchType": "Match Type",
+    "type": "Type",
+    "plan": "Plan",
+    "membership": "Membership",
+    "country": "Country",
+    "role": "Role"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Stay updated with your latest activity and alerts.",
+    "markAllRead": "Mark all read",
+    "clearAll": "Clear all",
+    "emptyTitle": "No notifications",
+    "emptyMessage": "You're all caught up! Check back later for updates.",
+    "tabs": {
+      "all": "All",
+      "bookings": "Bookings",
+      "sessions": "Sessions",
+      "payments": "Payments",
+      "system": "System"
+    },
+    "types": {
+      "booking": "Booking",
+      "session": "Session",
+      "payment": "Payment",
+      "info": "Info",
+      "warning": "Warning",
+      "success": "Success",
+      "error": "Error",
+      "system": "System"
+    }
   },
   "error": {
     "pageNotFound": "Page Not Found",

@@ -17,10 +17,10 @@ export default function BillingToggle({
         <button
           onClick={() => onToggle("monthly")}
           className={cn(
-            "px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer",
+            "px-6 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer",
             billingCycle === "monthly"
-              ? "bg-transparent text-primary"
-              : "text-secondary hover:text-primary"
+              ? "bg-[#980009] text-primary"
+              : "text-[#FEDD00] hover:text-[#FEDD00]/80"
           )}
         >
           {t("subscription.overview.monthly")}
@@ -28,10 +28,10 @@ export default function BillingToggle({
         <button
           onClick={() => onToggle("annual")}
           className={cn(
-            "px-4 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer",
+            "px-6 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer",
             billingCycle === "annual"
-              ? "bg-gradient-to-r from-[#980009] via-[#C00069] to-[#980009] text-white"
-              : "text-secondary hover:text-primary"
+              ? "bg-[#980009] text-primary"
+              : "text-[#FEDD00] hover:text-[#FEDD00]/80"
           )}
         >
           {t("subscription.overview.annual")}

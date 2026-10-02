@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { mockBookingListData } from "../../../mock-data/DashboardMockData/booking-list-mock-data"
 import type { BookingListItem } from "@/types/DashboardTypes/BookingsTypes"
+import { Filter } from "lucide-react"
+import FilterSheet from "@/components/SharedComponents/FilterSheet"
 
 function BookingListTable() {
   const { t } = useTranslation("dashboard")
@@ -36,24 +38,37 @@ function BookingListTable() {
   const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null)
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false)
   const [cancelBookingId, setCancelBookingId] = useState<number | null>(null)
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const [bookingFilters, setBookingFilters] = useState<Record<string, string[]>>({})
 
   const filteredData = useMemo(() => {
-    if (!search.trim()) return mockBookingListData
-    const normalizedSearch = search.trim().toLowerCase()
-    return mockBookingListData.filter((item) =>
-      [
-        item.display_booking_id,
-        item.player_name,
-        item.match_date,
-        item.match_type,
-        item.package_name,
-        item.amount_display,
-        item.status,
-      ]
-        .filter(Boolean)
-        .some((value) => value.toLowerCase().includes(normalizedSearch)),
-    )
-  }, [search])
+    let result = mockBookingListData
+    if (search.trim()) {
+      const normalizedSearch = search.trim().toLowerCase()
+      result = result.filter((item) =>
+        [
+          item.display_booking_id,
+          item.player_name,
+          item.match_date,
+          item.match_type,
+          item.package_name,
+          item.amount_display,
+          item.status,
+        ]
+          .filter(Boolean)
+          .some((value) => value.toLowerCase().includes(normalizedSearch)),
+      )
+    }
+    const statusFilters = bookingFilters[t("filterSheet.status", "Status")] || []
+    const matchTypeFilters = bookingFilters[t("filterSheet.matchType", "Match Type")] || []
+    if (statusFilters.length > 0) {
+      result = result.filter((item) => statusFilters.includes(item.status))
+    }
+    if (matchTypeFilters.length > 0) {
+      result = result.filter((item) => matchTypeFilters.includes(item.match_type))
+    }
+    return result
+  }, [search, bookingFilters, t])
 
   const handleSearchChange = (value: string) => {
     setSearch(value)
@@ -179,9 +194,21 @@ function BookingListTable() {
           </h1>
           <p className="text-sm text-secondary mt-1">{t("bookings.subtitle")}</p>
         </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <BookingSearchBar value={search} onChange={handleSearchChange} />
+        <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <BookingSearchBar value={search} onChange={handleSearchChange} />
+            </div>
+
+            {/* Filter Button */}
+            <button
+              onClick={() => setFilterSheetOpen(true)}
+              className="flex items-center gap-2 bg-muted border border-white/10 rounded-lg px-4 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+            >
+                  <Filter className="w-4 h-4" />
+                  <span className="hidden sm:inline">{t("common.filter")}</span>
+            </button>
         </div>
+        
       </div>
 
       <CustomTable
@@ -209,6 +236,32 @@ function BookingListTable() {
         open={cancelDialogOpen}
         onOpenChange={setCancelDialogOpen}
         onConfirm={handleCancelConfirm}
+      />
+
+      <FilterSheet
+        open={filterSheetOpen}
+        onOpenChange={setFilterSheetOpen}
+        title={t("common.filter")}
+        filterGroups={[
+          {
+            title: t("filterSheet.status", "Status"),
+            options: [
+              { label: "Pending", value: "Pending" },
+              { label: "Confirmed", value: "Confirmed" },
+              { label: "Cancelled", value: "Cancelled" },
+              { label: "Completed", value: "Completed" },
+            ],
+          },
+          {
+            title: t("filterSheet.matchType", "Match Type"),
+            options: [
+              { label: "Ranked", value: "Ranked" },
+              { label: "Social", value: "Social" },
+            ],
+          },
+        ]}
+        selectedFilters={bookingFilters}
+        onFilterChange={setBookingFilters}
       />
     </div>
   )

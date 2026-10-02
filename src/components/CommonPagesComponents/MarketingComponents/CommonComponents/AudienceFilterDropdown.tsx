@@ -52,7 +52,7 @@ export default function AudienceFilterDropdown({ value, onChange }: AudienceFilt
               )}
             </div>
             <div>
-              <p className="text-sm font-medium text-primary">{t("marketing.form.allPlayer")}</p>
+              <p className="text-sm font-medium text-primary">{t("marketing.form.allPlayers")}</p>
               <p className="text-xs text-secondary">{t("marketing.form.sendNowLabel")}</p>
             </div>
           </button>

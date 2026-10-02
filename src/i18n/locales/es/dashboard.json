@@ -497,7 +497,17 @@
       "packageCreated": "Paquete creado correctamente.",
       "packageUpdated": "Paquete actualizado correctamente.",
       "packageDeleted": "Paquete eliminado correctamente.",
-      "confirmDelete": "¿Estás seguro de que quieres eliminar este paquete?"
+      "confirmDelete": "¿Estás seguro de que quieres eliminar este paquete?",
+      "title": "Gestión de paquetes del campo",
+      "subtitle": "Crea un paquete base y otras ofertas combinadas de mejora de paintball, que también pueden incluir artículos que no sean de paintball, por ejemplo BBQ, Eventos, paquetes STAG, etc.",
+      "typeHeader": "Tipo de paquete {{index}}",
+      "packageFeePlaceholder": "precio",
+      "includeItems": "Artículos incluidos",
+      "selectPackageItems": "Seleccionar artículos del paquete",
+      "packageImage": "Imagen del paquete",
+      "uploadImage": "Subir imagen",
+      "savePackage": "Guardar paquete",
+      "saveFailed": "Error al guardar el paquete."
     },
     "openingHoursTab": {
       "title": "Horario semanal estándar",
@@ -510,7 +520,7 @@
     },
     "aiPricingTab": {
       "title": "Precios con IA",
-      "subtitle": "Proporciona detalles comerciales e información de pago para recibir los pagos de reservas y administrar las suscripciones de forma segura.",
+      "subtitle": "Optimiza automáticamente los precios de tus sesiones con IA. Establece una fecha base, un porcentaje de cargo adicional y selecciona las sesiones a las que aplicar precios inteligentes.",
       "selectDate": "Seleccionar fecha",
       "selectDateTime": "Seleccionar fecha y hora",
       "aiSuggest": "Sugerencia IA",
@@ -518,7 +528,7 @@
       "extrasChargePlaceholder": "20%",
       "selectSession": "Seleccionar sesión",
       "selectSessions": "Seleccionar sesiones",
-      "registeredCompany": "Empresa registrada",
+      "selectSessionPlaceholder": "Seleccionar sesión",
       "sessionName": "Nombre de la sesión",
       "dateTimeLabel": "Fecha & Hora",
       "assignStaff": "Asignar personal",
@@ -532,7 +542,13 @@
       "loading": "Cargando detalles de pago...",
       "loadFailed": "Tu plan Essential Starter for Fields actual no incluye el acceso a las ganancias ni a los detalles de pago. Por favor, mejora a Essential for Field Growth o Oro para acceder a esta función.",
       "updated": "Detalles de pago actualizados correctamente.",
-      "updateFailed": "Error al actualizar los detalles de pago."
+      "updateFailed": "Error al actualizar los detalles de pago.",
+      "stripeConnectTitle": "Conectar con Stripe",
+      "stripeConnectDesc": "Vincula tu cuenta de Stripe para recibir pagos de forma segura. Todas las transacciones se procesan a través de la plataforma segura de Stripe.",
+      "connectStripe": "Conectar con Stripe",
+      "stripeSecureNote": "Conexión segura con Stripe",
+      "stripeConnectSuccess": "¡Conexión con Stripe exitosa!",
+      "stripeConnectFailed": "Error al conectar con Stripe. Por favor, inténtalo de nuevo."
     },
     "billingsTab": {
       "title": "Historial de facturación",
@@ -547,7 +563,8 @@
       "statusPaid": "Pagado",
       "statusPending": "Pendiente",
       "statusFailed": "Fallido",
-      "statusRefunded": "Reembolsado"
+      "statusRefunded": "Reembolsado",
+      "filter": "Filtrar"
     }
   },
   "auth": {
@@ -651,6 +668,7 @@
       "unitMinute": "Minuto",
       "unitHour": "Hora",
       "basePrice": "Precio base por jugador",
+      "allowOwnGear": "Permitir equipo propio",
       "allowSocial": "Permitir partidos amistosos",
       "allowRanked": "Permitir partidos clasificados",
       "on": "Encendido",
@@ -1090,7 +1108,7 @@
       "perMonth": "/por mes",
       "includedFeatures": "Funciones incluidas:",
       "seeAll": "Ver todo",
-      "activeBronze": "Bronce activo",
+      "activeBronze": "Active Bronze",
       "upgradeToSilver": "Mejorar a Silver",
       "goGold": "Elegir Gold",
       "popular": "Popular",
@@ -1340,7 +1358,7 @@
       "next": "Siguiente",
       "apply": "Aplicar",
       "filter": "Filtrar",
-      "allPlayer": "Todos los jugadores",
+      "allPlayers": "Todos los jugadores",
       "activePlayers": "Jugadores activos",
       "sendNowLabel": "Enviar ahora",
       "voucherCode": "Codigo del voucher",
@@ -1351,10 +1369,47 @@
       "description": "Descripcion (Opcional)",
       "descriptionPlaceholder": "20% de descuento en reservas de fin de semana. Oferta por tiempo limitado!",
       "activeNow": "Activo ahora",
-      "scheduleForSomeDays": "Programar por algunos dias",
+      "scheduleForLaterDays": "Programar para dias posteriores",
       "selectStartAndEndDate": "Seleccionar fecha de inicio y fin"
     },
     "aiOptimization": "Optimizacion con IA"
+  },
+  "filterSheet": {
+    "reset": "Restablecer",
+    "apply": "Aplicar filtros",
+    "title": "Filtros",
+    "status": "Estado",
+    "matchType": "Tipo de partido",
+    "type": "Tipo",
+    "plan": "Plan",
+    "membership": "Membresía",
+    "country": "País",
+    "role": "Rol"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "subtitle": "Mantente actualizado con tu última actividad y alertas.",
+    "markAllRead": "Marcar todo como leído",
+    "clearAll": "Borrar todo",
+    "emptyTitle": "Sin notificaciones",
+    "emptyMessage": "¡Estás al día! Vuelve más tarde para ver las actualizaciones.",
+    "tabs": {
+      "all": "Todas",
+      "bookings": "Reservas",
+      "sessions": "Sesiones",
+      "payments": "Pagos",
+      "system": "Sistema"
+    },
+    "types": {
+      "booking": "Reserva",
+      "session": "Sesión",
+      "payment": "Pago",
+      "info": "Info",
+      "warning": "Advertencia",
+      "success": "Éxito",
+      "error": "Error",
+      "system": "Sistema"
+    }
   },
   "error": {
     "pageNotFound": "Pagina no encontrada",

@@ -2,7 +2,10 @@
 
 import { useTranslation } from "react-i18next"
 import { useRouter } from "next/navigation"
+import { Filter } from "lucide-react"
+import { useState } from "react"
 import CustomTable from "@/components/SharedComponents/CustomTable"
+import FilterSheet from "@/components/SharedComponents/FilterSheet"
 import CampaignActionMenu from "../CommonComponents/CampaignActionMenu"
 import CampaignTypeBadge from "../CommonComponents/CampaignTypeBadge"
 import CampaignStatusBadge from "../CommonComponents/CampaignStatusBadge"
@@ -12,8 +15,18 @@ import type { Campaign } from "@/types/DashboardTypes/MarketingTypes"
 export default function RecentCampaigns() {
   const { t } = useTranslation("dashboard")
   const router = useRouter()
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const [campaignFilters, setCampaignFilters] = useState<Record<string, string[]>>({})
 
-  const recentCampaigns = mockCampaigns.slice(0, 5)
+  const filteredCampaigns = mockCampaigns.filter((c) => {
+    const typeFilters = campaignFilters[t("filterSheet.type", "Type")] || []
+    const statusFilters = campaignFilters[t("filterSheet.status", "Status")] || []
+    const matchesType = typeFilters.length === 0 || typeFilters.includes(c.type)
+    const matchesStatus = statusFilters.length === 0 || statusFilters.includes(c.status)
+    return matchesType && matchesStatus
+  })
+
+  const recentCampaigns = filteredCampaigns.slice(0, 5)
 
   const columns = [
     {
@@ -82,12 +95,23 @@ export default function RecentCampaigns() {
         <h2 className="text-xl md:text-2xl font-bold text-primary">
           {t("marketing.recentCampaigns")}
         </h2>
-        <button
-          onClick={() => router.push("/dashboard/marketing/campaigns")}
-          className="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer"
-        >
-          {t("marketing.viewAllCampaigns")}
-        </button>
+        <div className="flex items-center gap-2">
+          
+          <button
+            onClick={() => router.push("/dashboard/marketing/campaigns")}
+            className="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+          >
+            {t("marketing.viewAllCampaigns")}
+          </button>
+
+          <button
+            onClick={() => setFilterSheetOpen(true)}
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-secondary hover:text-primary bg-white/5 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+          >
+            <Filter className="w-4 h-4" />
+            <span className="hidden sm:inline">{t("common.filter")}</span>
+          </button>
+        </div>
       </div>
       <CustomTable
         data={recentCampaigns as unknown as Record<string, unknown>[]}
@@ -100,6 +124,33 @@ export default function RecentCampaigns() {
             onDuplicate={handleDuplicate}
           />
         )}
+      />
+
+      <FilterSheet
+        open={filterSheetOpen}
+        onOpenChange={setFilterSheetOpen}
+        title={t("common.filter")}
+        filterGroups={[
+          {
+            title: t("filterSheet.type", "Type"),
+            options: [
+              { label: "Email", value: "Email" },
+              { label: "Push", value: "Push" },
+              { label: "SMS", value: "SMS" },
+            ],
+          },
+          {
+            title: t("filterSheet.status", "Status"),
+            options: [
+              { label: "Active", value: "Active" },
+              { label: "Complete", value: "Complete" },
+              { label: "Schedule", value: "Schedule" },
+              { label: "Draft", value: "Draft" },
+            ],
+          },
+        ]}
+        selectedFilters={campaignFilters}
+        onFilterChange={setCampaignFilters}
       />
     </div>
   )

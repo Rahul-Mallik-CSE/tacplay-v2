@@ -7,7 +7,7 @@
  */
 
 import { useState } from "react";
-import { CalendarDays, ChevronDown, Download } from "lucide-react";
+import { CalendarDays, ChevronDown, Download, FileDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
@@ -70,8 +70,8 @@ const HomeHeader = ({
         </div>
 
         {/* Export Report button */}
-        <button className="flex items-center gap-2 bg-custom-red hover:bg-custom-red/90 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors cursor-pointer">
-          <Download className="w-4 h-4" />
+        <button className="flex items-center gap-2 bg-[#F60014] hover:bg-[#F60014]/90 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors cursor-pointer">
+          <FileDown className="w-4 h-4" />
           {t("home.exportReport", "Export Report")}
         </button>
       </div>

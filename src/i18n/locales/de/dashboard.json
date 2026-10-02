@@ -497,7 +497,17 @@
       "packageCreated": "Paket erfolgreich erstellt.",
       "packageUpdated": "Paket erfolgreich aktualisiert.",
       "packageDeleted": "Paket erfolgreich gelöscht.",
-      "confirmDelete": "Sind Sie sicher, dass Sie dieses Paket löschen möchten?"
+      "confirmDelete": "Sind Sie sicher, dass Sie dieses Paket löschen möchten?",
+      "title": "Spielfeld-Paketverwaltung",
+      "subtitle": "Erstellen Sie ein Basispaket und andere gebündelte Paintball-Upgrade-Angebote, die auch Nicht-Paintball-Artikel umfassen können, z.B. BBQ, Events, STAG-Pakete usw.",
+      "typeHeader": "Pakettyp {{index}}",
+      "packageFeePlaceholder": "Preis",
+      "includeItems": "Enthaltene Artikel",
+      "selectPackageItems": "Paketartikel auswählen",
+      "packageImage": "Paketbild",
+      "uploadImage": "Bild hochladen",
+      "savePackage": "Paket speichern",
+      "saveFailed": "Paket konnte nicht gespeichert werden."
     },
     "openingHoursTab": {
       "title": "Standard-Wochenstunden",
@@ -510,7 +520,7 @@
     },
     "aiPricingTab": {
       "title": "KI-Preisgestaltung",
-      "subtitle": "Geben Sie Geschäftsdetails und Auszahlungsinformationen an, um Buchungszahlungen zu erhalten und Abonnements sicher zu verwalten.",
+      "subtitle": "Optimieren Sie Ihre Sitzungspreise automatisch mit KI. Legen Sie ein Basisdatum, einen Prozentsatz für Zusatzgebühren fest und wählen Sie die Sitzungen aus, auf die intelligente Preise angewendet werden sollen.",
       "selectDate": "Datum auswählen",
       "selectDateTime": "Datum und Uhrzeit auswählen",
       "aiSuggest": "KI-Vorschlag",
@@ -518,7 +528,7 @@
       "extrasChargePlaceholder": "20%",
       "selectSession": "Sitzung auswählen",
       "selectSessions": "Sitzungen auswählen",
-      "registeredCompany": "Eingetragenes Unternehmen",
+      "selectSessionPlaceholder": "Sitzung auswählen",
       "sessionName": "Sitzungsname",
       "dateTimeLabel": "Datum & Uhrzeit",
       "assignStaff": "Mitarbeiter zuweisen",
@@ -532,7 +542,13 @@
       "loading": "Auszahlungsdetails werden geladen...",
       "loadFailed": "Ihr aktueller Essential Starter for Fields-Plan beinhaltet keinen Zugriff auf Einnahmen oder Auszahlungsdetails. Bitte führen Sie ein Upgrade auf Essential for Field Growth oder Gold durch, um auf diese Funktion zuzugreifen.",
       "updated": "Auszahlungsdetails erfolgreich aktualisiert.",
-      "updateFailed": "Auszahlungsdetails konnten nicht aktualisiert werden."
+      "updateFailed": "Auszahlungsdetails konnten nicht aktualisiert werden.",
+      "stripeConnectTitle": "Mit Stripe verbinden",
+      "stripeConnectDesc": "Verknüpfen Sie Ihr Stripe-Konto, um Zahlungen sicher zu empfangen. Alle Transaktionen werden über die sichere Plattform von Stripe abgewickelt.",
+      "connectStripe": "Mit Stripe verbinden",
+      "stripeSecureNote": "Sichere Verbindung durch Stripe",
+      "stripeConnectSuccess": "Erfolgreich mit Stripe verbunden!",
+      "stripeConnectFailed": "Verbindung mit Stripe fehlgeschlagen. Bitte versuchen Sie es erneut."
     },
     "billingsTab": {
       "title": "Rechnungsverlauf",
@@ -547,7 +563,8 @@
       "statusPaid": "Bezahlt",
       "statusPending": "Ausstehend",
       "statusFailed": "Fehlgeschlagen",
-      "statusRefunded": "Rückerstattet"
+      "statusRefunded": "Rückerstattet",
+      "filter": "Filter"
     }
   },
   "auth": {
@@ -651,6 +668,7 @@
       "unitMinute": "Minute",
       "unitHour": "Stunde",
       "basePrice": "Basispreis pro Spieler",
+      "allowOwnGear": "Eigenes Gerät erlauben",
       "allowSocial": "Soziale Spiele erlauben",
       "allowRanked": "Gewertete Spiele erlauben",
       "on": "An",
@@ -993,7 +1011,7 @@
       "liveChat": "Live-Chat",
       "liveChatValue": "Im Portal verfügbar",
       "phone": "Telefon-Support",
-      "phoneValue": "+34 900 123 234"
+      "phoneValue": "+49 800 123 4567"
     },
     "info": {
       "responseTime": "Antwortzeit",
@@ -1090,7 +1108,7 @@
       "perMonth": "/pro Monat",
       "includedFeatures": "Enthaltene Funktionen:",
       "seeAll": "Alle anzeigen",
-      "activeBronze": "Aktives Bronze",
+      "activeBronze": "Active Bronze",
       "upgradeToSilver": "Auf Silver upgraden",
       "goGold": "Gold wählen",
       "popular": "Beliebt",
@@ -1340,7 +1358,7 @@
       "next": "Weiter",
       "apply": "Anwenden",
       "filter": "Filter",
-      "allPlayer": "Alle Spieler",
+      "allPlayers": "Alle Spieler",
       "activePlayers": "Aktive Spieler",
       "sendNowLabel": "Jetzt senden",
       "voucherCode": "Gutscheincode",
@@ -1351,10 +1369,47 @@
       "description": "Beschreibung (Optional)",
       "descriptionPlaceholder": "20% Rabatt auf Wochenendbuchungen. Zeitlich begrenztes Angebot!",
       "activeNow": "Jetzt aktiv",
-      "scheduleForSomeDays": "Für einige Tage planen",
+      "scheduleForLaterDays": "Für spätere Tage planen",
       "selectStartAndEndDate": "Start- und Enddatum auswählen"
     },
     "aiOptimization": "KI-Optimierung"
+  },
+  "filterSheet": {
+    "reset": "Zurücksetzen",
+    "apply": "Filter anwenden",
+    "title": "Filter",
+    "status": "Status",
+    "matchType": "Spielart",
+    "type": "Typ",
+    "plan": "Plan",
+    "membership": "Mitgliedschaft",
+    "country": "Land",
+    "role": "Rolle"
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "subtitle": "Bleiben Sie über Ihre neuesten Aktivitäten und Warnungen auf dem Laufenden.",
+    "markAllRead": "Alle als gelesen markieren",
+    "clearAll": "Alle löschen",
+    "emptyTitle": "Keine Benachrichtigungen",
+    "emptyMessage": "Sie sind auf dem neuesten Stand! Schauen Sie später wieder vorbei.",
+    "tabs": {
+      "all": "Alle",
+      "bookings": "Buchungen",
+      "sessions": "Sitzungen",
+      "payments": "Zahlungen",
+      "system": "System"
+    },
+    "types": {
+      "booking": "Buchung",
+      "session": "Sitzung",
+      "payment": "Zahlung",
+      "info": "Info",
+      "warning": "Warnung",
+      "success": "Erfolg",
+      "error": "Fehler",
+      "system": "System"
+    }
   },
   "error": {
     "pageNotFound": "Seite nicht gefunden",

@@ -45,14 +45,14 @@ const TodaySessionCard = ({
             <p className="text-sm font-medium text-white truncate">
               {item.playerName}
             </p>
-            <div className="flex items-center gap-1 text-xs text-[#71717a]">
-              <Clock className="w-3 h-3 flex-shrink-0" />
+            <div className="flex items-center gap-1 text-xs text-[#ADADAD]">
+              <Clock className="w-3 h-3 shrink-0" />
               <span className="truncate">{item.timeRange}</span>
             </div>
           </div>
 
           {/* Player count badge */}
-          <span className="text-xs font-medium px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-400 flex-shrink-0">
+          <span className="text-xs font-medium px-2.5 py-1 rounded-sm bg-[#E4FAE0] text-[#07B129] shrink-0">
             {item.playersCount}
           </span>
         </div>

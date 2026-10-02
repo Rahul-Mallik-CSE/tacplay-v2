@@ -11,11 +11,11 @@ export default function AnnualBillingBanner({
   const { t } = useTranslation("dashboard")
 
   return (
-    <div className="rounded-xl border border-white/10 bg-[#1a1a24] p-4 sm:p-6">
+    <div className="rounded-xl border border-white/10 bg-[#0B0B0F] p-2 sm:p-4">
       <div className="flex flex-col sm:flex-row items-center gap-4">
-        <div className="relative w-16 h-16 shrink-0">
+        <div className="relative w-18 h-18 shrink-0">
           <Image
-            src="/heading-up.png"
+            src="/offer-logo.png"
             alt="Annual billing"
             fill
             className="object-contain"

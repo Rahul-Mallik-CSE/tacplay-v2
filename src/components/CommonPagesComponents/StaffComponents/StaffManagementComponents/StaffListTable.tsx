@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { useRouter } from "next/navigation"
 import { SlidersHorizontal } from "lucide-react"
 import CustomTable from "@/components/SharedComponents/CustomTable"
+import FilterSheet from "@/components/SharedComponents/FilterSheet"
 import StaffSearchBar from "./StaffSearchBar"
 import StaffStatusBadge from "./StaffStatusBadge"
 import StaffAvatar from "./StaffAvatar"
@@ -22,21 +23,29 @@ function StaffListTable() {
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedStaffId, setSelectedStaffId] = useState<number | null>(null)
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const [staffFilters, setStaffFilters] = useState<Record<string, string[]>>({})
 
   const filteredData = useMemo(() => {
-    if (!search.trim()) return mockStaffListData
-    const normalizedSearch = search.trim().toLowerCase()
-    return mockStaffListData.filter((item) =>
-      [
-        item.full_name,
-        item.email,
-        item.role,
-        item.status,
-      ]
-        .filter(Boolean)
-        .some((value) => value.toLowerCase().includes(normalizedSearch)),
-    )
-  }, [search])
+    let result = mockStaffListData
+    if (search.trim()) {
+      const normalizedSearch = search.trim().toLowerCase()
+      result = result.filter((item) =>
+        [item.full_name, item.email, item.role, item.status]
+          .filter(Boolean)
+          .some((value) => value.toLowerCase().includes(normalizedSearch)),
+      )
+    }
+    const statusFilters = staffFilters[t("filterSheet.status", "Status")] || []
+    const roleFilters = staffFilters[t("filterSheet.role", "Role")] || []
+    if (statusFilters.length > 0) {
+      result = result.filter((item) => statusFilters.includes(item.status))
+    }
+    if (roleFilters.length > 0) {
+      result = result.filter((item) => roleFilters.includes(item.role))
+    }
+    return result
+  }, [search, staffFilters, t])
 
   const handleSearchChange = (value: string) => {
     setSearch(value)
@@ -114,7 +123,10 @@ function StaffListTable() {
         </div>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
           <StaffSearchBar value={search} onChange={handleSearchChange} />
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer">
+          <button
+            onClick={() => setFilterSheetOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+          >
             <SlidersHorizontal className="w-4 h-4" />
             {t("staff.filter")}
           </button>
@@ -146,6 +158,32 @@ function StaffListTable() {
         open={sheetOpen}
         onOpenChange={setSheetOpen}
         staffId={selectedStaffId}
+      />
+
+      <FilterSheet
+        open={filterSheetOpen}
+        onOpenChange={setFilterSheetOpen}
+        title={t("common.filter")}
+        filterGroups={[
+          {
+            title: t("filterSheet.status", "Status"),
+            options: [
+              { label: "Active", value: "Active" },
+              { label: "Inactive", value: "Inactive" },
+            ],
+          },
+          {
+            title: t("filterSheet.role", "Role"),
+            options: [
+              { label: t("staff.roles.owner"), value: "Owner" },
+              { label: t("staff.roles.manager"), value: "Manager" },
+              { label: t("staff.roles.umpire"), value: "Umpire" },
+              { label: t("staff.roles.scanner"), value: "Scanner" },
+            ],
+          },
+        ]}
+        selectedFilters={staffFilters}
+        onFilterChange={setStaffFilters}
       />
     </div>
   )

@@ -2,7 +2,9 @@
 
 import React, { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { Filter } from "lucide-react"
 import CustomTable from "@/components/SharedComponents/CustomTable"
+import FilterSheet from "@/components/SharedComponents/FilterSheet"
 import SessionSearchBar from "./SessionSearchBar"
 import SessionStatusBadge from "./SessionStatusBadge"
 import SessionActionDropdown from "./SessionActionDropdown"
@@ -25,16 +27,29 @@ function SessionListTable() {
     null,
   )
   const [isDetailsSheetOpen, setIsDetailsSheetOpen] = useState(false)
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false)
+  const [sessionFilters, setSessionFilters] = useState<Record<string, string[]>>({})
 
   const filteredData = useMemo(() => {
-    if (!search.trim()) return mockSessionData
-    const normalizedSearch = search.trim().toLowerCase()
-    return mockSessionData.filter((item) =>
-      [item.sessionName, item.assignStaff, item.matchType, item.status]
-        .filter(Boolean)
-        .some((value) => value.toLowerCase().includes(normalizedSearch)),
-    )
-  }, [search])
+    let result = mockSessionData
+    if (search.trim()) {
+      const normalizedSearch = search.trim().toLowerCase()
+      result = result.filter((item) =>
+        [item.sessionName, item.assignStaff, item.matchType, item.status]
+          .filter(Boolean)
+          .some((value) => value.toLowerCase().includes(normalizedSearch)),
+      )
+    }
+    const statusFilters = sessionFilters[t("filterSheet.status", "Status")] || []
+    const matchTypeFilters = sessionFilters[t("filterSheet.matchType", "Match Type")] || []
+    if (statusFilters.length > 0) {
+      result = result.filter((item) => statusFilters.includes(item.status))
+    }
+    if (matchTypeFilters.length > 0) {
+      result = result.filter((item) => matchTypeFilters.includes(item.matchType))
+    }
+    return result
+  }, [search, sessionFilters, t])
 
   const handleSearchChange = (value: string) => {
     setSearch(value)
@@ -128,37 +143,13 @@ function SessionListTable() {
         </div>
         <div className="flex items-center gap-3">
           <SessionSearchBar value={search} onChange={handleSearchChange} />
-          {/* <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 bg-muted text-sm text-primary hover:bg-muted/80 transition-colors cursor-pointer">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-              />
-            </svg>
+          <button
+            onClick={() => setFilterSheetOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 bg-muted text-sm text-primary hover:bg-muted/80 transition-colors cursor-pointer"
+          >
+            <Filter className="w-4 h-4" />
             {t("common.filter")}
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 bg-muted text-sm text-primary hover:bg-muted/80 transition-colors cursor-pointer">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-          </button> */}
         </div>
       </div>
 
@@ -186,6 +177,33 @@ function SessionListTable() {
         session={selectedSession}
         open={isDetailsSheetOpen}
         onOpenChange={setIsDetailsSheetOpen}
+      />
+
+      <FilterSheet
+        open={filterSheetOpen}
+        onOpenChange={setFilterSheetOpen}
+        title={t("common.filter")}
+        filterGroups={[
+          {
+            title: t("filterSheet.status", "Status"),
+            options: [
+              { label: t("fieldManagement.sessionStatus.open"), value: "Open" },
+              { label: t("fieldManagement.sessionStatus.ongoing"), value: "Ongoing" },
+              { label: t("fieldManagement.sessionStatus.full"), value: "Full" },
+              { label: t("fieldManagement.sessionStatus.booking"), value: "Booking" },
+              { label: t("fieldManagement.sessionStatus.failed"), value: "Failed" },
+            ],
+          },
+          {
+            title: t("filterSheet.matchType", "Match Type"),
+            options: [
+              { label: "Ranked", value: "Ranked" },
+              { label: "Social", value: "Social" },
+            ],
+          },
+        ]}
+        selectedFilters={sessionFilters}
+        onFilterChange={setSessionFilters}
       />
     </div>
   )
