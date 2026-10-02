@@ -153,30 +153,31 @@ export const getErrorMessage = (
   const typedError = error as ApiError;
   const data = typedError?.data;
 
+  let message = fallback;
+
   if (data?.message) {
-    return data.message;
-  }
-
-  if (data?.detail) {
-    return data.detail;
-  }
-
-  if (data?.error) {
-    return data.error;
-  }
-
-  if (data?.errors) {
+    message = data.message;
+  } else if (data?.detail) {
+    message = data.detail;
+  } else if (data?.error) {
+    message = data.error;
+  } else if (data?.errors) {
     const firstKey = Object.keys(data.errors)[0];
     const firstError = data.errors[firstKey];
     if (Array.isArray(firstError) && firstError.length > 0) {
-      return firstError[0];
+      message = firstError[0];
+    } else if (typeof firstError === "string") {
+      message = firstError;
     }
-    if (typeof firstError === "string") {
-      return firstError;
-    }
+  } else if (typeof error === "string") {
+    message = error;
   }
 
-  return fallback;
+  if (message.trim().toLowerCase() === "invalid credentials") {
+    return "Invalid email or password.";
+  }
+
+  return message;
 };
 
 export const getSuccessMessage = (response: unknown, fallback = "Success") => {
