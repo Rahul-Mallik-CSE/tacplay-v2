@@ -1,21 +1,34 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import AnimatedLoading from "@/components/SharedComponents/AnimatedLoading"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/redux/hooks";
+import { resolveAccountType } from "@/redux/features/auth/authSlice";
+import AnimatedLoading from "@/components/SharedComponents/AnimatedLoading";
 
+/**
+ * Root page — redirects to the correct destination based on auth state.
+ * • Not authenticated → /sign-in
+ * • Admin → /admin
+ * • Field owner → /dashboard
+ */
 export default function Home() {
-  const router = useRouter()
-  const [ready, setReady] = useState(false)
+  const router = useRouter();
+  const { isAuthenticated, user } = useAppSelector((s) => s.auth);
+  const accountType = resolveAccountType(user);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setReady(true)
-      router.push("/sign-in")
-    }, 10000)
+    if (!isAuthenticated) {
+      router.replace("/sign-in");
+      return;
+    }
 
-    return () => clearTimeout(timer)
-  }, [router])
+    if (accountType === "admin") {
+      router.replace("/admin");
+    } else {
+      router.replace("/dashboard");
+    }
+  }, [isAuthenticated, accountType, router]);
 
-  return <AnimatedLoading />
+  return <AnimatedLoading />;
 }

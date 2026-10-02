@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import I18nProvider from "@/components/SharedComponents/I18nProvider";
 import "./globals.css";
 import ReduxProvider from "@/redux/ReduxProvider";
+import ToastProvider from "@/components/SharedComponents/ToastProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -94,6 +95,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <I18nProvider>
           <ReduxProvider>
             {children}
+            <ToastProvider />
             </ReduxProvider>
           </I18nProvider>
       </body>

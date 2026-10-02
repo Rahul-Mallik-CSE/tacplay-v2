@@ -1,82 +1,26 @@
 /** @format */
 
 import baseAPI from "@/redux/api/baseAPI";
-
-export type AuthUser = {
-  id?: number;
-  email: string;
-  full_name: string;
-  profile_image?: string | null;
-  account_type?: string;
-  role?: string;
-  arena_info_saved?: boolean;
-};
-
-export type SignupRequest = {
-  owner_name: string;
-  business_email: string;
-  password: string;
-  confirm_password: string;
-};
-
-export type SignupResponse = {
-  success: boolean;
-  message: string;
-  data: {
-    user_id: number;
-    business_email: string;
-  };
-};
-
-export type OtpRequest = {
-  email_address: string;
-  otp_code: string;
-};
-
-export type LoginRequest = {
-  business_email: string;
-  password: string;
-};
-
-export type LoginResponse = {
-  success: boolean;
-  message: string;
-  data: {
-    user: AuthUser;
-    tokens: {
-      access: string;
-      refresh: string;
-    };
-  };
-};
-
-export type ForgotPasswordRequest = {
-  email_address: string;
-};
-
-export type ResetPasswordRequest = {
-  new_password: string;
-  confirm_password: string;
-};
-
-export type ForgotVerifyResponse = {
-  success: boolean;
-  message: string;
-  accessToken: string;
-  refreshToken: string;
-  user: AuthUser;
-};
-
-export type ResetPasswordResponse = {
-  success: boolean;
-  message: string;
-  accessToken: string;
-  refreshToken: string;
-  user: AuthUser;
-};
+import type {
+  SignupRequest,
+  SignupResponse,
+  OtpRequest,
+  ResendOtpRequest,
+  VerifySignupOtpResponse,
+  ResendOtpResponse,
+  LoginRequest,
+  LoginResponse,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
+  VerifyForgotPasswordOtpResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
+  LogoutResponse,
+} from "@/types/AuthTypes";
 
 const authAPI = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
+    // ── Sign Up ────────────────────────────────────────────────────────
     signUpFieldOwner: builder.mutation<SignupResponse, SignupRequest>({
       query: (body) => ({
         url: "/api/auth/signup/field-owner/",
@@ -84,34 +28,26 @@ const authAPI = baseAPI.injectEndpoints({
         body,
       }),
     }),
-    resendSignupOtp: builder.mutation<
-      { success: boolean; message: string },
-      { email_address: string }
-    >({
-      query: (body) => ({
-        url: "/api/auth/resend-otp/",
-        method: "POST",
-        body,
-      }),
-    }),
-    verifySignupOtp: builder.mutation<
-      {
-        success: boolean;
-        message: string;
-        data: {
-          user_id: number;
-          email_address: string;
-          is_email_verified: boolean;
-        };
-      },
-      OtpRequest
-    >({
+
+    // ── Verify Signup OTP ─────────────────────────────────────────────
+    verifySignupOtp: builder.mutation<VerifySignupOtpResponse, OtpRequest>({
       query: (body) => ({
         url: "/api/auth/verify-otp/",
         method: "POST",
         body,
       }),
     }),
+
+    // ── Resend Signup OTP ─────────────────────────────────────────────
+    resendSignupOtp: builder.mutation<ResendOtpResponse, ResendOtpRequest>({
+      query: (body) => ({
+        url: "/api/auth/resend-otp/",
+        method: "POST",
+        body,
+      }),
+    }),
+
+    // ── Login ─────────────────────────────────────────────────────────
     loginFieldOwner: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({
         url: "/api/auth/field-owner-login/",
@@ -120,8 +56,10 @@ const authAPI = baseAPI.injectEndpoints({
       }),
       invalidatesTags: ["Auth"],
     }),
+
+    // ── Forgot Password ───────────────────────────────────────────────
     forgotPassword: builder.mutation<
-      { success: boolean; message: string; data: { email_address: string } },
+      ForgotPasswordResponse,
       ForgotPasswordRequest
     >({
       query: (body) => ({
@@ -130,9 +68,23 @@ const authAPI = baseAPI.injectEndpoints({
         body,
       }),
     }),
+
+    // ── Verify Forgot-Password OTP ────────────────────────────────────
+    verifyForgotPasswordOtp: builder.mutation<
+      VerifyForgotPasswordOtpResponse,
+      OtpRequest
+    >({
+      query: (body) => ({
+        url: "/api/auth/verify-forgot-password-otp/",
+        method: "POST",
+        body,
+      }),
+    }),
+
+    // ── Resend Forgot-Password OTP ────────────────────────────────────
     resendForgotPasswordOtp: builder.mutation<
-      { success: boolean; message: string },
-      { email_address: string }
+      ResendOtpResponse,
+      ResendOtpRequest
     >({
       query: (body) => ({
         url: "/api/auth/resend-forgot-password-otp/",
@@ -140,27 +92,21 @@ const authAPI = baseAPI.injectEndpoints({
         body,
       }),
     }),
-    verifyForgotPasswordOtp: builder.mutation<ForgotVerifyResponse, OtpRequest>(
+
+    // ── Reset Password ────────────────────────────────────────────────
+    resetPassword: builder.mutation<ResetPasswordResponse, ResetPasswordRequest>(
       {
         query: (body) => ({
-          url: "/api/auth/verify-forgot-password-otp/",
+          url: "/api/auth/reset-password/",
           method: "POST",
           body,
         }),
+        invalidatesTags: ["Auth"],
       },
     ),
-    resetPassword: builder.mutation<
-      ResetPasswordResponse,
-      ResetPasswordRequest
-    >({
-      query: (body) => ({
-        url: "/api/auth/reset-password/",
-        method: "POST",
-        body,
-      }),
-      invalidatesTags: ["Auth"],
-    }),
-    logout: builder.mutation<{ success: boolean; message: string }, void>({
+
+    // ── Logout ────────────────────────────────────────────────────────
+    logout: builder.mutation<LogoutResponse, void>({
       query: () => ({
         url: "/api/auth/logout/",
         method: "POST",
@@ -172,12 +118,12 @@ const authAPI = baseAPI.injectEndpoints({
 
 export const {
   useSignUpFieldOwnerMutation,
-  useResendSignupOtpMutation,
   useVerifySignupOtpMutation,
+  useResendSignupOtpMutation,
   useLoginFieldOwnerMutation,
   useForgotPasswordMutation,
-  useResendForgotPasswordOtpMutation,
   useVerifyForgotPasswordOtpMutation,
+  useResendForgotPasswordOtpMutation,
   useResetPasswordMutation,
   useLogoutMutation,
 } = authAPI;

@@ -2,7 +2,7 @@
 
 "use client";
 
-import { ChevronDown, Globe, Search, Bell, Mail, X } from "lucide-react";
+import { ChevronDown, Globe, Bell, Mail } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -13,6 +13,7 @@ import {
 import { UserCog, LogOut } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useTranslation } from "react-i18next";
 import { changeAppLanguage, default as appI18n } from "@/i18n/init";
@@ -22,6 +23,9 @@ import {
   type SupportedLanguage,
 } from "@/i18n/resources";
 import LogoutModal from "./LogOutModal";
+import { useAppSelector } from "@/redux/hooks";
+import { resolveAccountType } from "@/redux/features/auth/authSlice";
+import { toAbsoluteMediaUrl } from "@/lib/utils";
 
 interface NavBarProps {
   pageTitle?: string;
@@ -46,6 +50,16 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
   const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
+  // Read user from Redux
+  const { user } = useAppSelector((s) => s.auth);
+  const accountType = resolveAccountType(user);
+  const isAdmin = accountType === "admin";
+
+  const profileImageUrl = toAbsoluteMediaUrl(user?.profile_image);
+  const displayName = user?.full_name || "User";
+  const displayEmail = user?.email || "";
+  const initials = getInitials(displayName);
+
   const currentLanguage = (SUPPORTED_LANGUAGES.find(
     (item) => item === appI18n.language,
   ) ?? "en") as SupportedLanguage;
@@ -68,13 +82,12 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
     return t("common.dashboard");
   }, [pathname, pageTitle, t]);
 
-  const isAdmin = pathname?.startsWith("/admin") ?? false;
-
   const handleLogout = () => {
     setIsLogoutModalOpen(false);
     onLogout?.();
-    router.push("/sign-in");
   };
+
+  const settingsPath = isAdmin ? "/admin/settings" : "/dashboard/settings";
 
   return (
     <div className="w-full sticky top-0 z-9 px-3 md:px-4">
@@ -85,20 +98,22 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
             <SidebarTrigger />
           </div>
           <h1 className="text-sm sm:text-base md:text-lg lg:text-2xl 2xl:text-3xl font-bold text-primary truncate">
-            Welcome back, Rahul 👋
+            {t("navbar.welcomeBack", {
+              name: displayName.split(" ")[0],
+              defaultValue: `Welcome back, ${displayName.split(" ")[0]} 👋`,
+            })}
           </h1>
         </div>
 
         {/* Right side */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-          {/* Search Button */}
-          {/* <button className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors cursor-pointer">
-            <Search className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
-          </button> */}
-
           {/* Notification Button */}
           <button
-            onClick={() => router.push(isAdmin ? "/admin/notifications" : "/dashboard/notifications")}
+            onClick={() =>
+              router.push(
+                isAdmin ? "/admin/notifications" : "/dashboard/notifications",
+              )
+            }
             className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors relative cursor-pointer"
           >
             <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
@@ -107,7 +122,13 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
 
           {/* Email Button */}
           <button
-            onClick={() => router.push(isAdmin ? "/admin/marketing/email" : "/dashboard/marketing/email")}
+            onClick={() =>
+              router.push(
+                isAdmin
+                  ? "/admin/marketing/email"
+                  : "/dashboard/marketing/email",
+              )
+            }
             className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors cursor-pointer"
           >
             <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
@@ -150,13 +171,25 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
           <DropdownMenu>
             <DropdownMenuTrigger className="flex cursor-pointer border border-transparent hover:border-secondary items-center gap-2 sm:gap-3 rounded-lg px-1 sm:px-2 py-1 transition-colors shrink-0">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0">
-                <span className="text-sm sm:text-base font-semibold text-gray-700">
-                  SH
-                </span>
+                {profileImageUrl ? (
+                  <Image
+                    src={profileImageUrl}
+                    alt={displayName}
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-sm sm:text-base font-semibold text-gray-700">
+                    {initials}
+                  </span>
+                )}
               </div>
               <div className="text-left hidden sm:block">
-                <p className="text-sm font-semibold text-primary">Sujon Hossin</p>
-                <p className="text-xs text-gray-400">sujon.hossain456</p>
+                <p className="text-sm font-semibold text-primary">
+                  {displayName}
+                </p>
+                <p className="text-xs text-gray-400">{displayEmail}</p>
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -164,7 +197,7 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
               className="w-56 mt-2 border border-secondary bg-background rounded-lg shadow-lg"
             >
               <DropdownMenuItem
-                onClick={() => router.push("/dashboard/settings")}
+                onClick={() => router.push(settingsPath)}
                 className="flex items-center gap-3 px-4 py-3 cursor-pointer"
               >
                 <UserCog className="w-5 h-5 text-blue-500" />
@@ -180,8 +213,6 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-         
         </div>
       </div>
 

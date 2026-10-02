@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import LanguageDropdown from "@/components/AuthComponents/LanguageDropdown";
+import GuestGuard from "@/components/SharedComponents/GuestGuard";
 
 export default function AuthLayout({
   children,
@@ -15,11 +16,13 @@ export default function AuthLayout({
   }, []);
 
   return (
-    <div className="relative min-h-screen">
-      <div className="absolute top-6 right-6 z-50">
-        <LanguageDropdown />
+    <GuestGuard>
+      <div className="relative min-h-screen">
+        <div className="absolute top-6 right-6 z-50">
+          <LanguageDropdown />
+        </div>
+        {mounted ? children : null}
       </div>
-      {mounted ? children : null}
-    </div>
+    </GuestGuard>
   );
 }
