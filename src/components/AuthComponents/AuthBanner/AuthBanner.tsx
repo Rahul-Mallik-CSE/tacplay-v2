@@ -15,7 +15,7 @@ export default function AuthBanner({ children }: AuthBannerProps) {
       <div className="hidden lg:flex lg:w-1/2 relative flex-col">
         <div className="absolute top-6 left-6 z-10">
           <Image
-            src="/TACPLAY Logo.png"
+            src="/Tacplay-logo-2.png"
             alt="TacPlay Logo"
             width={120}
             height={40}
