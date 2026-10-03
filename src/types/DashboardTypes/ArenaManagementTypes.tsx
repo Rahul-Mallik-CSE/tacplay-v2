@@ -202,11 +202,12 @@ export interface BillingsTabProps {
   billingHistory?: BillingHistoryItem[]
 }
 
-/** Props for Cover Image Slider component */
+/** Props for Cover Image component */
 export interface CoverImageSliderProps {
-  imageUrls: string[]
-  onOpenLightbox: () => void
-  onOpenManageModal: () => void
+  coverImage?: string
+  imageUrls?: string[]
+  onOpenLightbox?: () => void
+  onOpenManageModal?: () => void
 }
 
 /** Props for Arena Lightbox (fullscreen image viewer) component */
