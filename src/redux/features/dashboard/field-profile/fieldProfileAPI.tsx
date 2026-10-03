@@ -4,6 +4,9 @@ import baseAPI from "@/redux/api/baseAPI";
 import type {
   GetArenaInfoResponse,
   UpdateArenaInfoResponse,
+  GetFieldSetupResponse,
+  UpdateFieldSetupPayload,
+  UpdateFieldSetupResponse,
 } from "@/types/DashboardTypes/ArenaManagementTypes";
 import { updateAuthUser } from "@/redux/features/auth/authSlice";
 import { setCurrentArena } from "./fieldProfileSlice";
@@ -56,12 +59,50 @@ const fieldProfileAPI = baseAPI.injectEndpoints({
         }
       },
     }),
+
+    getFieldSetup: builder.query<GetFieldSetupResponse, void>({
+      query: () => ({
+        url: "/api/arena/field-setup/",
+        method: "GET",
+      }),
+      providesTags: ["FieldSetup"],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data?.data?.user_info) {
+            dispatch(
+              updateAuthUser({
+                full_name: data.data.user_info.full_name,
+                email: data.data.user_info.email,
+                profile_image: data.data.user_info.profile_image,
+              }),
+            );
+          }
+        } catch {
+          // ignore error
+        }
+      },
+    }),
+
+    updateFieldSetup: builder.mutation<
+      UpdateFieldSetupResponse,
+      UpdateFieldSetupPayload
+    >({
+      query: (body) => ({
+        url: "/api/arena/field-setup/edit/",
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["FieldSetup"],
+    }),
   }),
 });
 
 export const {
   useGetArenaInfoQuery,
   useUpdateArenaInfoMutation,
+  useGetFieldSetupQuery,
+  useUpdateFieldSetupMutation,
 } = fieldProfileAPI;
 
 export default fieldProfileAPI;

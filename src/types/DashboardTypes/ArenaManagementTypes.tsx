@@ -91,10 +91,42 @@ export interface FieldSetupData {
   minimum_players_per_session: number
   maximum_players_per_session: number
   default_session_duration: number
-  duration_unit: string
-  allow_own_gear: boolean
+  duration_unit?: string
+  base_price_per_player: string
+  allow_own_gear?: boolean
   allow_social_matches: boolean
   allow_ranked_matches: boolean
+  user_info?: ArenaUserInfo
+}
+
+/** API response structure for GET /api/arena/field-setup/ */
+export interface GetFieldSetupResponse {
+  success: boolean
+  message: string
+  meta?: Record<string, unknown>
+  data: FieldSetupData
+  requestId?: string
+}
+
+/** Payload structure for PATCH /api/arena/field-setup/edit/ */
+export interface UpdateFieldSetupPayload {
+  minimum_players_per_team: number
+  maximum_players_per_team: number
+  minimum_players_per_session: number
+  maximum_players_per_session: number
+  default_session_duration: number
+  base_price_per_player: string
+  allow_social_matches: boolean
+  allow_ranked_matches: boolean
+}
+
+/** API response structure for PATCH /api/arena/field-setup/edit/ */
+export interface UpdateFieldSetupResponse {
+  success: boolean
+  message: string
+  meta?: Record<string, unknown>
+  data: FieldSetupData
+  requestId?: string
 }
 
 // ============================================================================
@@ -183,8 +215,9 @@ export type FieldSetupForm = {
   minimum_players_per_session: number
   maximum_players_per_session: number
   default_session_duration: number
-  duration_unit: string
-  allow_own_gear: boolean
+  duration_unit?: string
+  base_price_per_player: string
+  allow_own_gear?: boolean
   allow_social_matches: boolean
   allow_ranked_matches: boolean
 }
