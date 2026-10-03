@@ -25,7 +25,6 @@ export default function CoverImageSlider({
         priority
         sizes="100vw"
         className="object-cover"
-        onClick={onOpenLightbox}
       />
       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-10" />
     </div>
