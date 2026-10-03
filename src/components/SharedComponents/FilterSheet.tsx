@@ -20,6 +20,7 @@ export interface FilterOption {
 export interface FilterGroup {
   title: string
   options: FilterOption[]
+  type?: "single" | "multiple"
 }
 
 interface FilterChipGroupProps {
@@ -79,10 +80,19 @@ export default function FilterSheet({
   const { t } = useTranslation("dashboard")
 
   const handleToggle = (groupTitle: string, value: string) => {
+    const group = filterGroups.find((g) => g.title === groupTitle)
+    const isSingle = group?.type === "single"
     const current = selectedFilters[groupTitle] || []
-    const updated = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value]
+
+    let updated: string[]
+    if (isSingle) {
+      updated = current.includes(value) ? [] : [value]
+    } else {
+      updated = current.includes(value)
+        ? current.filter((v) => v !== value)
+        : [...current, value]
+    }
+
     onFilterChange({ ...selectedFilters, [groupTitle]: updated })
   }
 
