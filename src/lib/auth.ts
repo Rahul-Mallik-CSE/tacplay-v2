@@ -142,8 +142,27 @@ type ApiError = {
     message?: string;
     detail?: string;
     error?: string;
-    errors?: Record<string, string[] | string>;
+    errors?: Record<string, string[] | string | unknown>;
+    data?: unknown;
   };
+};
+
+const findFirstErrorString = (obj: unknown): string | null => {
+  if (typeof obj === "string" && obj.trim()) {
+    return obj.trim();
+  }
+  if (Array.isArray(obj)) {
+    for (const item of obj) {
+      const found = findFirstErrorString(item);
+      if (found) return found;
+    }
+  } else if (obj && typeof obj === "object") {
+    for (const val of Object.values(obj)) {
+      const found = findFirstErrorString(val);
+      if (found) return found;
+    }
+  }
+  return null;
 };
 
 export const getErrorMessage = (
@@ -155,20 +174,21 @@ export const getErrorMessage = (
 
   let message = fallback;
 
-  if (data?.message) {
+  const deepDataError = data?.data ? findFirstErrorString(data.data) : null;
+  const deepErrorsError = data?.errors ? findFirstErrorString(data.errors) : null;
+
+  if (data?.message && data.message.trim().toLowerCase() !== "validation error") {
+    message = data.message;
+  } else if (deepDataError) {
+    message = deepDataError;
+  } else if (deepErrorsError) {
+    message = deepErrorsError;
+  } else if (data?.message) {
     message = data.message;
   } else if (data?.detail) {
     message = data.detail;
   } else if (data?.error) {
     message = data.error;
-  } else if (data?.errors) {
-    const firstKey = Object.keys(data.errors)[0];
-    const firstError = data.errors[firstKey];
-    if (Array.isArray(firstError) && firstError.length > 0) {
-      message = firstError[0];
-    } else if (typeof firstError === "string") {
-      message = firstError;
-    }
   } else if (typeof error === "string") {
     message = error;
   }

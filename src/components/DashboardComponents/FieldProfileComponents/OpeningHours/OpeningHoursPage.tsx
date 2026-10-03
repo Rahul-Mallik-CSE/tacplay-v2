@@ -38,6 +38,12 @@ const DEFAULT_SCHEDULE: DayScheduleItem[] = DAYS_OF_WEEK.map((day) => ({
   timeSlots: [{ openTime: "09:00", closeTime: "21:00" }],
 }))
 
+const timeToMinutes = (timeStr: string): number => {
+  if (!timeStr) return 0
+  const [h, m] = timeStr.split(":").map(Number)
+  return (h || 0) * 60 + (m || 0)
+}
+
 export default function OpeningHoursPage() {
   const { t } = useTranslation("dashboard")
   const { data: apiData, isLoading } = useGetOpeningHoursQuery()
@@ -114,7 +120,7 @@ export default function OpeningHoursPage() {
   const handleSave = async () => {
     if (!draft) return
 
-    // Frontend validation: check that each open day has valid time slots
+    // Frontend validation: check that each open day has valid, non-overlapping time slots
     for (const item of draft) {
       if (item.isOpen) {
         if (!item.timeSlots || item.timeSlots.length === 0) {
@@ -146,6 +152,29 @@ export default function OpeningHoursPage() {
               ),
             )
             return
+          }
+        }
+
+        // Validate that slots do not overlap
+        if (item.timeSlots.length > 1) {
+          for (let i = 0; i < item.timeSlots.length; i++) {
+            const startA = timeToMinutes(item.timeSlots[i].openTime)
+            const endA = timeToMinutes(item.timeSlots[i].closeTime)
+
+            for (let j = i + 1; j < item.timeSlots.length; j++) {
+              const startB = timeToMinutes(item.timeSlots[j].openTime)
+              const endB = timeToMinutes(item.timeSlots[j].closeTime)
+
+              if (startA < endB && startB < endA) {
+                toast.error(
+                  t(
+                    "arena.openingHoursTab.slotsOverlap",
+                    `${item.day}: Opening hour slots cannot overlap.`,
+                  ),
+                )
+                return
+              }
+            }
           }
         }
       }
@@ -187,7 +216,33 @@ export default function OpeningHoursPage() {
 
       setDraft(null)
       setIsEditing(false)
-    } catch (error) {
+    } catch (error: unknown) {
+      // Specifically extract weekly_hours validation error structure if returned by backend
+      const errorObj = error as {
+        data?: {
+          data?: {
+            weekly_hours?: Array<{ slots?: string[] | string }>;
+          };
+        };
+      };
+
+      const weeklyHoursErrors = errorObj?.data?.data?.weekly_hours;
+      if (Array.isArray(weeklyHoursErrors)) {
+        for (let i = 0; i < weeklyHoursErrors.length; i++) {
+          const dayErr = weeklyHoursErrors[i];
+          if (dayErr?.slots && Array.isArray(dayErr.slots) && dayErr.slots.length > 0) {
+            const dayName = DAYS_OF_WEEK[i] || `Day ${i + 1}`;
+            toast.error(`${dayName}: ${dayErr.slots[0]}`);
+            return;
+          }
+          if (typeof dayErr?.slots === "string" && dayErr.slots.trim()) {
+            const dayName = DAYS_OF_WEEK[i] || `Day ${i + 1}`;
+            toast.error(`${dayName}: ${dayErr.slots}`);
+            return;
+          }
+        }
+      }
+
       toast.error(
         getErrorMessage(
           error,

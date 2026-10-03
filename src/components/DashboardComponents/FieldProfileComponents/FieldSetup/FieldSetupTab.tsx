@@ -172,6 +172,31 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
       return
     }
 
+    const rawPrice = String(draft.base_price_per_player ?? "").trim()
+    const priceNum = Number(rawPrice)
+    if (!rawPrice || isNaN(priceNum) || priceNum <= 0) {
+      toast.error(
+        t(
+          "arena.fieldSetupValidation.basePricePositive",
+          "Base price per player must be greater than 0",
+        ),
+      )
+      return
+    }
+
+    const decimalParts = rawPrice.split(".")
+    if (decimalParts.length > 1 && decimalParts[1].length > 2) {
+      toast.error(
+        t(
+          "arena.fieldSetupValidation.basePriceDecimals",
+          "Base price per player cannot have more than 2 decimal places",
+        ),
+      )
+      return
+    }
+
+    const formattedBasePrice = priceNum.toFixed(2)
+
     try {
       const payload: UpdateFieldSetupPayload = {
         minimum_players_per_team: minTeam,
@@ -179,7 +204,7 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
         minimum_players_per_session: minSession,
         maximum_players_per_session: maxSession,
         default_session_duration: Number(draft.default_session_duration),
-        base_price_per_player: String(draft.base_price_per_player || "0.00"),
+        base_price_per_player: formattedBasePrice,
         allow_social_matches: Boolean(draft.allow_social_matches),
         allow_ranked_matches: Boolean(draft.allow_ranked_matches),
       }
@@ -214,6 +239,23 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
     value: FieldSetupForm[K],
   ) => {
     setDraft((p) => (p ? { ...p, [key]: value } : p))
+  }
+
+  const handleBasePriceChange = (val: string) => {
+    if (val === "") {
+      updateField("base_price_per_player", "")
+      return
+    }
+    // Allow digits with up to 2 decimal places while typing
+    if (/^\d*(\.\d{0,2})?$/.test(val)) {
+      updateField("base_price_per_player", val)
+      return
+    }
+    // If pasted or extra decimals, sanitize to max 2 decimals
+    const match = val.match(/^(\d+)(\.\d{0,2})?/)
+    if (match) {
+      updateField("base_price_per_player", match[0])
+    }
   }
 
   if (isLoading && !propFieldSetup) {
@@ -425,14 +467,19 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
             </label>
             <Input
               type="text"
+              inputMode="decimal"
               placeholder="35.00"
               value={form.base_price_per_player}
-              onChange={(e) =>
-                updateField("base_price_per_player", e.target.value)
-              }
+              onChange={(e) => handleBasePriceChange(e.target.value)}
               readOnly={!isEditing}
               className="bg-input/30 border-white/10 text-primary h-11"
             />
+            <p className="text-[11px] text-muted-foreground">
+              {t(
+                "arena.fieldSetup.maxTwoDecimals",
+                "Maximum 2 decimal places allowed (e.g. 25.50)",
+              )}
+            </p>
           </div>
         </div>
 
