@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next"
 interface EditSaveButtonProps {
   isEditing: boolean
   isSaving: boolean
+  disabled?: boolean
   onToggleEdit: () => void
   onSave: () => void
 }
@@ -14,6 +15,7 @@ interface EditSaveButtonProps {
 export default function EditSaveButton({
   isEditing,
   isSaving,
+  disabled = false,
   onToggleEdit,
   onSave,
 }: EditSaveButtonProps) {
@@ -36,7 +38,7 @@ export default function EditSaveButton({
           size="sm"
           className="w-fit flex items-center gap-2"
           onClick={onSave}
-          disabled={isSaving}
+          disabled={isSaving || disabled}
         >
           {isSaving ? (
             <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />

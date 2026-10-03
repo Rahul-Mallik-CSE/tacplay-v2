@@ -4,7 +4,8 @@
  * FieldSetupTab.tsx
  * Editable form for field configuration including min/max players per team/session,
  * session duration, base price, and social/ranked match toggles.
- * Fully integrated with GET /api/arena/field-setup/ and PATCH /api/arena/field-setup/edit/.
+ * Fully integrated with GET /api/arena/field-setup/ and PATCH /api/arena/field-setup/edit/
+ * with frontend validation for min/max players per team and session limits.
  */
 
 import React, { useMemo, useState } from "react"
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/select"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
+import { cn } from "@/lib/utils"
 import { getErrorMessage } from "@/lib/auth"
 import type {
   FieldSetupForm,
@@ -61,6 +63,33 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
 
   const form = isEditing ? (draft ?? baseForm) : baseForm
 
+  // Validation rules
+  const teamError = useMemo(() => {
+    if (!isEditing || !draft) return null
+    const min = Number(draft.minimum_players_per_team)
+    const max = Number(draft.maximum_players_per_team)
+    if (min > max) {
+      return t(
+        "arena.fieldSetupValidation.teamRange",
+        "Minimum Players Per Team must be less than or equal to Maximum Players Per Team",
+      )
+    }
+    return null
+  }, [isEditing, draft, t])
+
+  const sessionError = useMemo(() => {
+    if (!isEditing || !draft) return null
+    const min = Number(draft.minimum_players_per_session)
+    const max = Number(draft.maximum_players_per_session)
+    if (min > max) {
+      return t(
+        "arena.fieldSetupValidation.sessionRange",
+        "Minimum Players Per Sessions must be less than or equal to Maximum Players Per Sessions",
+      )
+    }
+    return null
+  }, [isEditing, draft, t])
+
   const handleToggleEdit = () => {
     if (isEditing) {
       setDraft(null)
@@ -74,12 +103,69 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
   const handleSave = async () => {
     if (!draft) return
 
+    const minTeam = Number(draft.minimum_players_per_team)
+    const maxTeam = Number(draft.maximum_players_per_team)
+    const minSession = Number(draft.minimum_players_per_session)
+    const maxSession = Number(draft.maximum_players_per_session)
+
+    if (minTeam <= 0) {
+      toast.error(
+        t(
+          "arena.fieldSetupValidation.minTeamPositive",
+          "Minimum Players Per Team must be greater than 0",
+        ),
+      )
+      return
+    }
+
+    if (minTeam > maxTeam) {
+      toast.error(
+        teamError ||
+          t(
+            "arena.fieldSetupValidation.teamRange",
+            "Minimum Players Per Team must be less than or equal to Maximum Players Per Team",
+          ),
+      )
+      return
+    }
+
+    if (minSession <= 0) {
+      toast.error(
+        t(
+          "arena.fieldSetupValidation.minSessionPositive",
+          "Minimum Players Per Sessions must be greater than 0",
+        ),
+      )
+      return
+    }
+
+    if (minSession > maxSession) {
+      toast.error(
+        sessionError ||
+          t(
+            "arena.fieldSetupValidation.sessionRange",
+            "Minimum Players Per Sessions must be less than or equal to Maximum Players Per Sessions",
+          ),
+      )
+      return
+    }
+
+    if (Number(draft.default_session_duration) <= 0) {
+      toast.error(
+        t(
+          "arena.fieldSetupValidation.durationPositive",
+          "Default session duration must be greater than 0",
+        ),
+      )
+      return
+    }
+
     try {
       const payload: UpdateFieldSetupPayload = {
-        minimum_players_per_team: Number(draft.minimum_players_per_team),
-        maximum_players_per_team: Number(draft.maximum_players_per_team),
-        minimum_players_per_session: Number(draft.minimum_players_per_session),
-        maximum_players_per_session: Number(draft.maximum_players_per_session),
+        minimum_players_per_team: minTeam,
+        maximum_players_per_team: maxTeam,
+        minimum_players_per_session: minSession,
+        maximum_players_per_session: maxSession,
         default_session_duration: Number(draft.default_session_duration),
         base_price_per_player: String(draft.base_price_per_player || "0.00"),
         allow_social_matches: Boolean(draft.allow_social_matches),
@@ -88,7 +174,8 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
 
       const res = await updateFieldSetup(payload).unwrap()
       toast.success(
-        res.message || t("arena.fieldSetupTab.updated", "Field setup updated successfully"),
+        res.message ||
+          t("arena.fieldSetupTab.updated", "Field setup updated successfully"),
       )
       setDraft(null)
       setIsEditing(false)
@@ -168,72 +255,112 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
       />
 
       <div className="space-y-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              {t("onboardingFields.business.minPlayersTeam")}
-            </label>
-            <Input
-              type="number"
-              value={form.minimum_players_per_team}
-              onChange={(e) =>
-                updateField("minimum_players_per_team", Number(e.target.value))
-              }
-              readOnly={!isEditing}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-primary">
+                {t("onboardingFields.business.minPlayersTeam")}
+              </label>
+              <Input
+                type="number"
+                min={1}
+                value={form.minimum_players_per_team}
+                onChange={(e) =>
+                  updateField(
+                    "minimum_players_per_team",
+                    Number(e.target.value),
+                  )
+                }
+                readOnly={!isEditing}
+                className={cn(
+                  "bg-input/30 border-white/10 text-primary h-11",
+                  teamError &&
+                    "border-destructive focus-visible:ring-destructive",
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-primary">
+                {t("onboardingFields.business.maxPlayersTeam")}
+              </label>
+              <Input
+                type="number"
+                min={1}
+                value={form.maximum_players_per_team}
+                onChange={(e) =>
+                  updateField(
+                    "maximum_players_per_team",
+                    Number(e.target.value),
+                  )
+                }
+                readOnly={!isEditing}
+                className={cn(
+                  "bg-input/30 border-white/10 text-primary h-11",
+                  teamError &&
+                    "border-destructive focus-visible:ring-destructive",
+                )}
+              />
+            </div>
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              {t("onboardingFields.business.maxPlayersTeam")}
-            </label>
-            <Input
-              type="number"
-              value={form.maximum_players_per_team}
-              onChange={(e) =>
-                updateField("maximum_players_per_team", Number(e.target.value))
-              }
-              readOnly={!isEditing}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
-          </div>
+          {teamError && (
+            <p className="text-xs text-destructive mt-1.5 font-medium">
+              {teamError}
+            </p>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              {t("onboardingFields.business.minPlayersSession")}
-            </label>
-            <Input
-              type="number"
-              value={form.minimum_players_per_session}
-              onChange={(e) =>
-                updateField(
-                  "minimum_players_per_session",
-                  Number(e.target.value),
-                )
-              }
-              readOnly={!isEditing}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-primary">
+                {t("onboardingFields.business.minPlayersSession")}
+              </label>
+              <Input
+                type="number"
+                min={1}
+                value={form.minimum_players_per_session}
+                onChange={(e) =>
+                  updateField(
+                    "minimum_players_per_session",
+                    Number(e.target.value),
+                  )
+                }
+                readOnly={!isEditing}
+                className={cn(
+                  "bg-input/30 border-white/10 text-primary h-11",
+                  sessionError &&
+                    "border-destructive focus-visible:ring-destructive",
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-primary">
+                {t("onboardingFields.business.maxPlayersSession")}
+              </label>
+              <Input
+                type="number"
+                min={1}
+                value={form.maximum_players_per_session}
+                onChange={(e) =>
+                  updateField(
+                    "maximum_players_per_session",
+                    Number(e.target.value),
+                  )
+                }
+                readOnly={!isEditing}
+                className={cn(
+                  "bg-input/30 border-white/10 text-primary h-11",
+                  sessionError &&
+                    "border-destructive focus-visible:ring-destructive",
+                )}
+              />
+            </div>
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              {t("onboardingFields.business.maxPlayersSession")}
-            </label>
-            <Input
-              type="number"
-              value={form.maximum_players_per_session}
-              onChange={(e) =>
-                updateField(
-                  "maximum_players_per_session",
-                  Number(e.target.value),
-                )
-              }
-              readOnly={!isEditing}
-              className="bg-input/30 border-white/10 text-primary h-11"
-            />
-          </div>
+          {sessionError && (
+            <p className="text-xs text-destructive mt-1.5 font-medium">
+              {sessionError}
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -317,6 +444,7 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
         <EditSaveButton
           isEditing={isEditing}
           isSaving={isUpdating}
+          disabled={Boolean(teamError || sessionError)}
           onToggleEdit={handleToggleEdit}
           onSave={handleSave}
         />
