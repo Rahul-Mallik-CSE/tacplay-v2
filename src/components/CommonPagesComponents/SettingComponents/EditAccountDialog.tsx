@@ -162,7 +162,7 @@ function EditAccountDialog({
             </label>
             <input
               type="text"
-              value={fullName}
+              value={fullName ?? ""}
               onChange={(e) => setFullName(e.target.value)}
               className="w-full px-4 py-2.5 rounded-lg bg-muted border border-white/10 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
             />
@@ -175,7 +175,7 @@ function EditAccountDialog({
             </label>
             <input
               type="number"
-              value={contactNumber}
+              value={contactNumber ?? ""}
               onChange={(event) => setContactNumber(event.target.value)}
               className="w-full px-4 py-2.5 rounded-lg bg-muted border border-white/10 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
             />

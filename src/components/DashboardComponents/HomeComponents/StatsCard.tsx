@@ -28,16 +28,15 @@ const StatsCard = ({
 
       {/* Row 2: Value left, change badge right */}
       <div className="flex items-center gap-3 mb-2">
-        <h2 className="text-3xl md:text-4xl font-bold text-primary tracking-tight">
+        <h2 className="text-2xl lg:text-4xl font-bold text-primary tracking-tight">
           {showCurrencyIcon && <span className="text-2xl">€</span>}
           {value}
         </h2>
         <span
-          className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md ${
-            isPositive
-              ? "bg-emerald-500/15 text-emerald-400"
-              : "bg-red-500/15 text-[#980303]"
-          }`}
+          className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md ${isPositive
+            ? "bg-emerald-500/15 text-emerald-400"
+            : "bg-red-500/15 text-[#980303]"
+            }`}
         >
           {isPositive ? (
             <TrendingUp className="w-3 h-3" />

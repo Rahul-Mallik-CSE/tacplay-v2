@@ -25,7 +25,7 @@ function SettingsProfileField({
         <input
           type={showPasswordToggle ? (showPassword ? "text" : "password") : type}
           readOnly
-          value={value}
+          value={value ?? ""}
           className="w-full px-4 py-2.5 rounded-lg bg-muted border border-white/10 text-sm text-primary cursor-default focus:outline-none"
         />
         {showPasswordToggle && (

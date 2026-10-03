@@ -9,6 +9,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import DataSection from "./DataSection";
+import { toAbsoluteMediaUrl } from "@/lib/utils";
 import type {
   RecentBookingCardProps,
   RecentBookingItem,
@@ -30,31 +31,46 @@ const formatAmount = (amount: string, currency: string) => {
     usd: "$",
     gbp: "£",
   };
-  const symbol = symbols[currency.toLowerCase()] ?? currency.toUpperCase() + " ";
-  return `${symbol}${parseFloat(amount).toFixed(2)}`;
+  const symbol =
+    symbols[currency?.toLowerCase()] ?? (currency ? currency.toUpperCase() + " " : "$");
+  return `${symbol}${parseFloat(amount || "0").toFixed(2)}`;
+};
+
+/** Get player initials for fallback */
+const getPlayerInitials = (name?: string) => {
+  if (!name) return "P";
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  return (
+    parts
+      .slice(0, 2)
+      .map((p) => p[0]?.toUpperCase() ?? "")
+      .join("") || "P"
+  );
 };
 
 const BookingRow = ({ item }: { item: RecentBookingItem }) => {
-  const avatarSrc = item.player_image
-    ? item.player_image.startsWith("http")
-      ? item.player_image
-      : `${process.env.NEXT_PUBLIC_API_BASE_URL ?? ""}${item.player_image}`
-    : "/default-avatar.png";
+  const [imageError, setImageError] = useState(false);
+  const avatarUrl = toAbsoluteMediaUrl(item.player_image);
 
   return (
     <div className="flex items-center gap-3 py-3 border-b border-white/5 last:border-0">
       {/* Thumbnail */}
-      <div className="w-11 h-11 rounded-lg overflow-hidden flex-shrink-0 relative bg-white/5">
-        <Image
-          src={avatarSrc}
-          alt={item.player_name}
-          fill
-          sizes="44px"
-          className="object-cover"
-          onError={(e) => {
-            (e.currentTarget as HTMLImageElement).src = "/default-avatar.png";
-          }}
-        />
+      <div className="w-11 h-11 rounded-lg overflow-hidden flex-shrink-0 relative bg-white/5 flex items-center justify-center">
+        {avatarUrl && !imageError ? (
+          <Image
+            src={avatarUrl}
+            alt={item.player_name || "Player"}
+            fill
+            sizes="44px"
+            unoptimized
+            className="object-cover"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <span className="text-xs font-semibold text-white/70">
+            {getPlayerInitials(item.player_name)}
+          </span>
+        )}
       </div>
 
       {/* Info */}
