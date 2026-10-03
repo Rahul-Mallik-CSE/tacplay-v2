@@ -36,9 +36,10 @@ export default function VerifyOtpForm({
         <Image
           src="/Tacplay-logo-2.png"
           alt="TacPlay"
-          width={80}
-          height={50}
-          className="object-contain"
+          width={936}
+          height={256}
+          className="h-10 w-auto object-contain"
+          priority
         />
       </div>
 

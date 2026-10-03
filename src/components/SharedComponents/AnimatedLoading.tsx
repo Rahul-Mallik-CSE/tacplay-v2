@@ -11,9 +11,10 @@ export default function AnimatedLoading() {
           <Image
             src="/Tacplay-logo-2.png"
             alt="TacPlay"
-            width={48}
-            height={48}
-            className="object-contain"
+            width={936}
+            height={256}
+            className="w-12 h-auto object-contain"
+            priority
           />
         </div>
       </div>

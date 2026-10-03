@@ -83,9 +83,9 @@ export default function AppSidebar({
                   <Image
                     src="/Tacplay-logo-2.png"
                     alt="Logo"
-                    width={520}
-                    height={520}
-                    className="w-52 h-14"
+                    width={936}
+                    height={256}
+                    className="h-12 w-auto object-contain"
                     priority
                   />
                 </div>

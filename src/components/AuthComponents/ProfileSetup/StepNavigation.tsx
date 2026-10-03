@@ -32,9 +32,9 @@ export default function StepNavigation({
           <Image
             src="/Tacplay-logo-2.png"
             alt="TacPlay"
-            width={200}
-            height={200}
-            className="object-contain h-12"
+            width={936}
+            height={256}
+            className="h-12 w-auto object-contain"
             priority
           />
         </div>

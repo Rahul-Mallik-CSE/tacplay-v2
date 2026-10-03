@@ -36,9 +36,9 @@ export default function SignInForm({
           <Image
             src="/Tacplay-logo-2.png"
             alt="TacPlay"
-            width={400}
-            height={400}
-            className="object-contain h-16"
+            width={936}
+            height={256}
+            className="h-16 w-auto object-contain"
             priority
           />
         </div>

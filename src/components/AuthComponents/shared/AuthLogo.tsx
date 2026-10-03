@@ -13,9 +13,9 @@ export default function AuthLogo({ className = "h-12" }: AuthLogoProps) {
       <Image
         src="/Tacplay-logo-2.png"
         alt="TacPlay"
-        width={200}
-        height={200}
-        className={`object-contain ${className}`}
+        width={936}
+        height={256}
+        className={`w-auto object-contain ${className}`}
         priority
       />
     </div>
