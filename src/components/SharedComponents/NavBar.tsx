@@ -106,7 +106,7 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 ml-2">
           {/* Notification Button */}
           <button
             onClick={() =>
@@ -138,7 +138,7 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
           <DropdownMenu>
             <DropdownMenuTrigger className="flex cursor-pointer border border-transparent hover:border-secondary items-center gap-2 rounded-lg px-2 py-1 transition-colors shrink-0 text-primary text-xs sm:text-sm ">
               <Globe className="w-4 h-4" />
-              <span className="hidden sm:inline">{t("language.label")}</span>
+              <span className="hidden xl:inline">{t("language.label")}</span>
               <span className="font-semibold">
                 {LANGUAGE_LABELS[currentLanguage]}
               </span>
@@ -170,7 +170,7 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
           {/* Profile Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger className="flex cursor-pointer border border-transparent hover:border-secondary items-center gap-2 sm:gap-3 rounded-lg px-1 sm:px-2 py-1 transition-colors shrink-0">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden shrink-0">
                 {profileImageUrl ? (
                   <Image
                     src={profileImageUrl}
@@ -185,7 +185,7 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
                   </span>
                 )}
               </div>
-              <div className="text-left hidden sm:block">
+              <div className="text-left hidden xl:block">
                 <p className="text-sm font-semibold text-primary">
                   {displayName}
                 </p>
