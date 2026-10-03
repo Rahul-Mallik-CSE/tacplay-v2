@@ -1,7 +1,7 @@
 /**
  * HomeTypes.tsx
  * TypeScript types for the Dashboard Home page analytics overview.
- * Covers stats cards, revenue chart, session pie chart, and booking bar chart.
+ * Matches the /api/arena/overview/ response exactly.
  */
 
 import type { ReactNode } from "react";
@@ -11,7 +11,7 @@ import type { ReactNode } from "react";
 // ============================================================================
 
 /** Available time range options for the dashboard */
-export type DashboardRange = "week" | "month" | "year";
+export type DashboardRange = "day" | "week" | "month" | "year";
 
 /** Props for the shared chart tooltip component */
 export type ChartTooltipProps = {
@@ -43,7 +43,8 @@ export type DashboardMark1Item = {
   label: string;
   value: string | number;
   value_display: string;
-  subtitle: string;
+  /** Optional front-end-only subtitle; not returned by the API */
+  subtitle?: string;
   change: DashboardChange;
 };
 
@@ -59,7 +60,7 @@ export type StatsCardProps = {
 };
 
 // ============================================================================
-// Revenue Chart Types
+// Revenue Chart Types (mark_2)
 // ============================================================================
 
 /** Legend entry for charts (color-coded labels) */
@@ -90,7 +91,7 @@ export type RevenueChartProps = {
 };
 
 // ============================================================================
-// Session Pie Chart Types
+// Session Pie Chart Types (mark_3)
 // ============================================================================
 
 /** Session pie chart item (ranked vs social session counts) */
@@ -100,7 +101,7 @@ export type DashboardMark3Item = {
   value: number;
 };
 
-/** Color palette for pie chart segments (red for check-in, yellow for late, white for no-show) */
+/** Color palette for pie chart segments */
 export const PIE_CHART_COLORS = ["#980009", "#FEDD00", "#d1d5db"] as const;
 
 /** Props for the SessionPieChart component */
@@ -113,7 +114,7 @@ export type SessionPieChartProps = {
 };
 
 // ============================================================================
-// Booking Bar Chart Types
+// Booking Bar Chart Types (mark_4)
 // ============================================================================
 
 /** Booking bar chart data point (premium vs free booking counts) */
@@ -137,44 +138,48 @@ export type BookingBarChartProps = {
 };
 
 // ============================================================================
-// Data Section Types (Recent Booking, Today's Sessions, Upcoming Sessions)
+// Data Section Types — shaped from API response (mark_6, mark_7, mark_8)
 // ============================================================================
 
-/** Single recent booking item */
+/** Single recent booking item (from mark_6.items) */
 export type RecentBookingItem = {
-  id: string;
-  playerName: string;
-  sessionName: string;
-  imageUrl: string;
-  price: string;
-  status: "confirmed" | "pending" | "cancelled";
+  booking_id: number;
+  player_id: number;
+  player_name: string;
+  player_image: string | null;
+  session_id: number;
+  session_name: string;
+  amount: string;
+  currency: string;
+  status: string;
+  payment_status: string;
+  created_at: string;
 };
 
-/** Single today's session item */
-export type TodaySessionItem = {
-  id: string;
-  playerName: string;
-  sessionName: string;
-  imageUrl: string;
-  timeRange: string;
-  playersCount: string;
-};
-
-/** Single upcoming session item */
-export type UpcomingSessionItem = {
-  id: string;
-  month: string;
-  day: string;
-  sessionName: string;
-  timeRange: string;
-  playersCount: string;
+/** Single session item shared by Today's Sessions & Upcoming Sessions (mark_7 / mark_8) */
+export type SessionItem = {
+  session_id: number;
+  session_name: string;
+  match_date: string;
+  start_time: string;
+  start_time_period: string;
+  end_time: string;
+  end_time_period: string;
+  match_type: string;
+  session_visibility: string;
+  status: string;
+  booked_players: number;
+  total_capacity: number;
+  capacity_display: string;
 };
 
 /** Props for the DataSection wrapper */
 export type DataSectionProps = {
   title: string;
   viewAllLabel: string;
+  showViewAll: boolean;
   onViewAll?: () => void;
+  isExpanded?: boolean;
   children: ReactNode;
 };
 
@@ -190,7 +195,7 @@ export type RecentBookingCardProps = {
 export type TodaySessionCardProps = {
   title: string;
   viewAllLabel: string;
-  items: TodaySessionItem[];
+  items: SessionItem[];
   onViewAll?: () => void;
 };
 
@@ -198,15 +203,15 @@ export type TodaySessionCardProps = {
 export type UpcomingSessionCardProps = {
   title: string;
   viewAllLabel: string;
-  items: UpcomingSessionItem[];
+  items: SessionItem[];
   onViewAll?: () => void;
 };
 
 // ============================================================================
-// Dashboard Overview Types
+// Dashboard Overview — API response types
 // ============================================================================
 
-/** Complete dashboard overview data structure */
+/** Complete dashboard overview data structure from /api/arena/overview/ */
 export type DashboardOverviewData = {
   dashboard_title: string;
   analytics_header: {
@@ -243,6 +248,28 @@ export type DashboardOverviewData = {
     legends: DashboardLegend[];
     chart: DashboardMark4ChartItem[];
   };
+  mark_5: {
+    title: string;
+    total_players: number;
+    checked_in: number;
+    checked_in_percentage: number;
+    late: number;
+    late_percentage: number;
+    no_show: number;
+    no_show_percentage: number;
+  };
+  mark_6: {
+    title: string;
+    items: RecentBookingItem[];
+  };
+  mark_7: {
+    title: string;
+    items: SessionItem[];
+  };
+  mark_8: {
+    title: string;
+    items: SessionItem[];
+  };
   field: {
     id: number;
     field_name: string;
@@ -253,9 +280,6 @@ export type DashboardOverviewData = {
     can_view_advanced_analytics: boolean;
     show_upgrade_popup: boolean;
   };
-  recent_bookings: RecentBookingItem[];
-  today_sessions: TodaySessionItem[];
-  upcoming_sessions: UpcomingSessionItem[];
 };
 
 /** API response wrapper for dashboard overview */

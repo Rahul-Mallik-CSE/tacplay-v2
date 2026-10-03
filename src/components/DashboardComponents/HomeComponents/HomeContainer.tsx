@@ -2,13 +2,19 @@
 
 /**
  * HomeContainer.tsx
- * Container component that orchestrates the dashboard home layout:
- * header, stats grid, charts row, and data sections grid.
- * Manages state for time range selection and upgrade modal.
+ * Container component that orchestrates the dashboard home layout.
+ * Fetches data from /api/arena/overview/ via RTK Query.
  */
 
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  setSelectedRange,
+  openUpgradeModal,
+  closeUpgradeModal,
+} from "@/redux/features/dashboard/home/homeSlice";
+import { useGetArenaOverviewQuery } from "@/redux/features/dashboard/home/homeAPI";
+
 import HomeHeader from "./HomeHeader";
 import StatsGrid from "./StatsGrid";
 import RevenueChart from "./RevenueChart";
@@ -17,19 +23,35 @@ import BookingBarChart from "./BookingBarChart";
 import DataSectionsGrid from "./DataSectionsGrid";
 import DashboardLoading from "./DashboardLoading";
 import UpgradeModal from "@/components/SharedComponents/UpgradeModal";
-import { mockDashboardOverview } from "@/mock-data/DashboardMockData/home-mock-data";
 import type { DashboardRange } from "@/types/DashboardTypes/HomeTypes";
 
-const RANGE_OPTIONS: DashboardRange[] = ["week", "month", "year"];
+const RANGE_OPTIONS: DashboardRange[] = ["day", "week", "month", "year"];
 
 const HomeContainer = () => {
   const { t } = useTranslation("dashboard");
-  const [selectedRange, setSelectedRange] =
-    useState<DashboardRange>("month");
-  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
-  const [isLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const selectedRange = useAppSelector((state) => state.home.selectedRange);
+  const isUpgradeModalOpen = useAppSelector(
+    (state) => state.home.isUpgradeModalOpen,
+  );
 
-  const payload = mockDashboardOverview;
+  const { data: response, isLoading, isError } = useGetArenaOverviewQuery();
+
+  if (isLoading) {
+    return <DashboardLoading />;
+  }
+
+  if (isError || !response?.data) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-[#ADADAD] text-sm">
+          {t("home.errorLoading", "Failed to load dashboard data.")}
+        </p>
+      </div>
+    );
+  }
+
+  const payload = response.data;
   const header = payload.analytics_header;
   const statsItems = payload.mark_1.items;
 
@@ -41,11 +63,9 @@ const HomeContainer = () => {
   const visibleRanges =
     revenueRanges.length > 0 ? revenueRanges : RANGE_OPTIONS;
 
-  const isBronze = payload.subscription.plan_code === "field_bronze_monthly";
-
-  if (isLoading) {
-    return <DashboardLoading />;
-  }
+  const isBronze =
+    payload.subscription.plan_code === "field_bronze_monthly" ||
+    !payload.subscription.can_view_advanced_analytics;
 
   return (
     <div className="">
@@ -62,14 +82,14 @@ const HomeContainer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <RevenueChart
             title={revenueSection.title}
-            valueDisplay={revenueSection.value}
+            valueDisplay={revenueSection.value_display}
             legends={revenueSection.legends}
             chartData={revenueSection.chart}
             selectedRange={selectedRange}
             rangeOptions={visibleRanges}
-            onRangeChange={setSelectedRange}
+            onRangeChange={(range) => dispatch(setSelectedRange(range))}
             isLocked={isBronze}
-            onUpgradeClick={() => setIsUpgradeModalOpen(true)}
+            onUpgradeClick={() => dispatch(openUpgradeModal())}
           />
 
           <BookingBarChart
@@ -80,7 +100,7 @@ const HomeContainer = () => {
             legends={payload.mark_4.legends}
             chartData={payload.mark_4.chart}
             isLocked={isBronze}
-            onUpgradeClick={() => setIsUpgradeModalOpen(true)}
+            onUpgradeClick={() => dispatch(openUpgradeModal())}
           />
 
           <SessionPieChart
@@ -88,15 +108,15 @@ const HomeContainer = () => {
             centerValueDisplay={payload.mark_3.center_value_display}
             items={payload.mark_3.items}
             isLocked={isBronze}
-            onUpgradeClick={() => setIsUpgradeModalOpen(true)}
+            onUpgradeClick={() => dispatch(openUpgradeModal())}
           />
         </div>
 
         {/* Data sections: Recent Booking, Today's Sessions, Upcoming Sessions */}
         <DataSectionsGrid
-          recentBookings={payload.recent_bookings}
-          todaySessions={payload.today_sessions}
-          upcomingSessions={payload.upcoming_sessions}
+          recentBookings={payload.mark_6.items}
+          todaySessions={payload.mark_7.items}
+          upcomingSessions={payload.mark_8.items}
           labels={{
             recentBooking: t("home.recentBooking", "Recent Booking"),
             todaySessions: t("home.todaySessions", "Today's Sessions"),
@@ -108,7 +128,7 @@ const HomeContainer = () => {
 
       <UpgradeModal
         isOpen={isUpgradeModalOpen}
-        onClose={() => setIsUpgradeModalOpen(false)}
+        onClose={() => dispatch(closeUpgradeModal())}
       />
     </div>
   );

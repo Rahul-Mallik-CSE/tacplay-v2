@@ -11,14 +11,13 @@ import TodaySessionCard from "./TodaySessionCard";
 import UpcomingSessionCard from "./UpcomingSessionCard";
 import type {
   RecentBookingItem,
-  TodaySessionItem,
-  UpcomingSessionItem,
+  SessionItem,
 } from "@/types/DashboardTypes/HomeTypes";
 
 interface DataSectionsGridProps {
   recentBookings: RecentBookingItem[];
-  todaySessions: TodaySessionItem[];
-  upcomingSessions: UpcomingSessionItem[];
+  todaySessions: SessionItem[];
+  upcomingSessions: SessionItem[];
   labels: {
     recentBooking: string;
     todaySessions: string;
