@@ -9,11 +9,29 @@
 // Arena Media & Info Types
 // ============================================================================
 
+/** Country information for arena location */
+export interface ArenaCountry {
+  id?: number
+  name: string
+  iso2?: string
+  isoCode?: string
+}
+
+/** City information for arena location */
+export interface ArenaCity {
+  id?: number
+  name: string
+  country?: ArenaCountry
+}
+
 /** Represents an image item in the arena media gallery */
 export interface ArenaMedia {
   id: number
+  file?: string
   file_url: string
+  media_type?: string
   is_primary: boolean
+  created_at?: string
 }
 
 /** User profile information for arena owner */
@@ -25,13 +43,41 @@ export interface ArenaUserInfo {
 
 /** Core arena information including location and media */
 export interface ArenaInfo {
+  id?: number
   field_name: string
   description: string
-  country: { name: string; isoCode: string } | null
-  city: { name: string } | null
+  country: ArenaCountry | null
+  city: ArenaCity | null
   full_address: string
-  user_info: ArenaUserInfo
-  media: ArenaMedia[]
+  user_info?: ArenaUserInfo
+  media?: ArenaMedia[]
+}
+
+/** API response structure for GET /api/arena/arena-info/ */
+export interface GetArenaInfoResponse {
+  success: boolean
+  message: string
+  meta?: Record<string, unknown>
+  data: ArenaInfo
+  requestId?: string
+}
+
+/** API response structure for PATCH /api/arena/arena-info/edit/ */
+export interface UpdateArenaInfoResponse {
+  success: boolean
+  message: string
+  meta?: Record<string, unknown>
+  data: ArenaInfo
+  requestId?: string
+}
+
+/** Payload structure for updating arena info */
+export interface UpdateArenaInfoPayload {
+  field_name: string
+  description: string
+  country: string
+  city: string
+  full_address: string
 }
 
 // ============================================================================

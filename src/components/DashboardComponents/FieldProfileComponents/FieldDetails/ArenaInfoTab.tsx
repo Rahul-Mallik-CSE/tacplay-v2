@@ -4,13 +4,14 @@
  * ArenaInfoTab.tsx
  * Editable form for arena basic information including name, description,
  * country and city selection (using country-state-city library), and address.
- * Uses EditSaveButton for edit/save toggle workflow.
+ * Fully integrated with GET /api/arena/arena-info/ and PATCH /api/arena/arena-info/edit/.
  */
 
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { Check, ChevronDown, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Select,
   SelectContent,
@@ -22,8 +23,12 @@ import { Country, City } from "country-state-city"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
+import { getErrorMessage } from "@/lib/auth"
 import type { ArenaInfoForm, ArenaInfoTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
-import { mockArenaInfo } from "../../../../mock-data/DashboardMockData/arena-management-mock-data"
+import {
+  useGetArenaInfoQuery,
+  useUpdateArenaInfoMutation,
+} from "@/redux/features/dashboard/field-profile/fieldProfileAPI"
 import SectionHeader from "../SectionHeader"
 import EditSaveButton from "../EditSaveButton"
 
@@ -178,21 +183,25 @@ function SearchableCitySelect({
   )
 }
 
-const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
+const ArenaInfoTab = ({ arenaInfo: propArenaInfo }: ArenaInfoTabProps) => {
   const { t } = useTranslation("dashboard")
+  const { data: apiData, isLoading } = useGetArenaInfoQuery()
+  const [updateArenaInfo, { isLoading: isUpdating }] = useUpdateArenaInfoMutation()
+
+  const arenaInfo = propArenaInfo ?? apiData?.data
+
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState<ArenaInfoForm | null>(null)
-  const [isSaving, setIsSaving] = useState(false)
 
   const allCountries = useMemo(() => Country.getAllCountries(), [])
 
   const baseForm = useMemo<ArenaInfoForm>(
     () => ({
-      field_name: arenaInfo.field_name ?? "",
-      description: arenaInfo.description ?? "",
-      country: arenaInfo.country?.name ?? "",
-      city: arenaInfo.city?.name ?? "",
-      full_address: arenaInfo.full_address ?? "",
+      field_name: arenaInfo?.field_name ?? "",
+      description: arenaInfo?.description ?? "",
+      country: arenaInfo?.country?.name ?? "",
+      city: arenaInfo?.city?.name ?? "",
+      full_address: arenaInfo?.full_address ?? "",
     }),
     [arenaInfo],
   )
@@ -248,17 +257,71 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
 
   const handleSave = async () => {
     if (!draft) return
-    setIsSaving(true)
+
+    if (!draft.field_name.trim()) {
+      toast.error(t("onboardingFields.arena.nameRequired", "Field name is required"))
+      return
+    }
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800))
-      toast.success(t("arena.arenaInfoTab.updated"))
+      const formData = new FormData()
+      formData.append("field_name", draft.field_name.trim())
+      formData.append("description", draft.description.trim())
+      formData.append("country", draft.country.trim())
+      formData.append("city", draft.city.trim())
+      formData.append("full_address", draft.full_address.trim())
+
+      const res = await updateArenaInfo(formData).unwrap()
+      toast.success(res.message || t("arena.arenaInfoTab.updated", "Arena info updated successfully"))
       setDraft(null)
       setIsEditing(false)
-    } catch {
-      toast.error(t("arena.arenaInfoTab.updateFailed"))
-    } finally {
-      setIsSaving(false)
+    } catch (error) {
+      toast.error(
+        getErrorMessage(
+          error,
+          t("arena.arenaInfoTab.updateFailed", "Failed to update arena info"),
+        ),
+      )
     }
+  }
+
+  if (isLoading && !propArenaInfo) {
+    return (
+      <div className="space-y-6">
+        <SectionHeader
+          title={t("onboardingFields.arena.title")}
+          subtitle={t("onboardingFields.arena.subtitle")}
+        />
+
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-11 w-full rounded-md" />
+          </div>
+
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="h-25 w-full rounded-md" />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-11 w-full rounded-md" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-11 w-full rounded-md" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="h-11 w-full rounded-md" />
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -362,7 +425,7 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
       <div className="flex justify-end">
         <EditSaveButton
           isEditing={isEditing}
-          isSaving={isSaving}
+          isSaving={isUpdating}
           onToggleEdit={handleToggleEdit}
           onSave={handleSave}
         />

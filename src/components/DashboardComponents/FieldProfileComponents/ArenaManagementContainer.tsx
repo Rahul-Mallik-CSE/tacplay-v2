@@ -35,8 +35,8 @@ export default function ArenaManagementContainer() {
     subscriptionStatus.plan_code === "field_bronze_monthly"
 
   const userInfo = arenaInfo.user_info
-  const fullName = userInfo.full_name || t("arena.arenaOwner")
-  const email = userInfo.email || ""
+  const fullName = userInfo?.full_name || t("arena.arenaOwner")
+  const email = userInfo?.email || ""
 
   const mediaList = arenaInfo.media || []
   const mappedUrls = mediaList
@@ -44,7 +44,7 @@ export default function ArenaManagementContainer() {
     .filter((url): url is string => !!url)
   const imageUrls = mappedUrls.length > 0 ? mappedUrls : ["/profile-cover.png"]
 
-  const profileImageUrl = toAbsoluteMediaUrl(userInfo.profile_image)
+  const profileImageUrl = toAbsoluteMediaUrl(userInfo?.profile_image)
 
   if (false) {
     return <ArenaManagementLoading />
