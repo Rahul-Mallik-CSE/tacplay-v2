@@ -29,6 +29,7 @@ import type {
 } from "@/types/DashboardTypes/ArenaManagementTypes"
 import {
   useGetFieldSetupQuery,
+  useCreateFieldSetupMutation,
   useUpdateFieldSetupMutation,
 } from "@/redux/features/dashboard/field-profile/fieldProfileAPI"
 import SectionHeader from "../SectionHeader"
@@ -38,9 +39,20 @@ import ToggleField from "../ToggleField"
 const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
   const { t } = useTranslation("dashboard")
   const { data: apiData, isLoading } = useGetFieldSetupQuery()
+  const [createFieldSetup, { isLoading: isCreating }] = useCreateFieldSetupMutation()
   const [updateFieldSetup, { isLoading: isUpdating }] = useUpdateFieldSetupMutation()
 
+  const isSaving = isCreating || isUpdating
   const fieldSetup = propFieldSetup ?? apiData?.data
+
+  const hasExistingSetup = Boolean(
+    apiData?.success &&
+      apiData?.data &&
+      ((apiData.data.minimum_players_per_team ?? 0) > 0 ||
+        (apiData.data.maximum_players_per_team ?? 0) > 0 ||
+        (apiData.data.default_session_duration ?? 0) > 0 ||
+        Boolean(apiData.data.base_price_per_player)),
+  )
 
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState<FieldSetupForm | null>(null)
@@ -172,11 +184,19 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
         allow_ranked_matches: Boolean(draft.allow_ranked_matches),
       }
 
-      const res = await updateFieldSetup(payload).unwrap()
-      toast.success(
-        res.message ||
-          t("arena.fieldSetupTab.updated", "Field setup updated successfully"),
-      )
+      if (!hasExistingSetup) {
+        const res = await createFieldSetup(payload).unwrap()
+        toast.success(
+          res.message ||
+            t("arena.fieldSetupTab.created", "Step 2 saved successfully"),
+        )
+      } else {
+        const res = await updateFieldSetup(payload).unwrap()
+        toast.success(
+          res.message ||
+            t("arena.fieldSetupTab.updated", "Field setup updated successfully"),
+        )
+      }
       setDraft(null)
       setIsEditing(false)
     } catch (error) {
@@ -443,7 +463,7 @@ const FieldSetupTab = ({ fieldSetup: propFieldSetup }: FieldSetupTabProps) => {
       <div className="flex justify-end">
         <EditSaveButton
           isEditing={isEditing}
-          isSaving={isUpdating}
+          isSaving={isSaving}
           disabled={Boolean(teamError || sessionError)}
           onToggleEdit={handleToggleEdit}
           onSave={handleSave}

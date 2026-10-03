@@ -4,33 +4,97 @@
  * OpeningHoursPage.tsx
  * Page component for managing field opening hours.
  * Allows setting operating hours for each day of the week with multiple time slots.
+ * Fully integrated with GET /api/arena/opening-hours/, PATCH /api/arena/opening-hours/,
+ * and fallback POST /api/arena/opening-hours/ for newly created or empty accounts.
  */
 
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { Skeleton } from "@/components/ui/skeleton"
+import { getErrorMessage } from "@/lib/auth"
 import DayScheduleRow, { type DayScheduleItem } from "./DayScheduleRow"
 import SectionHeader from "../SectionHeader"
 import EditSaveButton from "../EditSaveButton"
+import {
+  useGetOpeningHoursQuery,
+  useCreateOpeningHoursMutation,
+  useUpdateOpeningHoursMutation,
+} from "@/redux/features/dashboard/field-profile/fieldProfileAPI"
 
-const DEFAULT_SCHEDULE: DayScheduleItem[] = [
-  { day: "Monday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "21:00" }] },
-  { day: "Tuesday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "21:00" }] },
-  { day: "Wednesday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "21:00" }] },
-  { day: "Thursday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "21:00" }] },
-  { day: "Friday", isOpen: true, timeSlots: [{ openTime: "09:00", closeTime: "22:00" }] },
-  { day: "Saturday", isOpen: true, timeSlots: [{ openTime: "08:00", closeTime: "22:00" }] },
-  { day: "Sunday", isOpen: true, timeSlots: [{ openTime: "08:00", closeTime: "20:00" }] },
+const DAYS_OF_WEEK = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
 ]
+
+const DEFAULT_SCHEDULE: DayScheduleItem[] = DAYS_OF_WEEK.map((day) => ({
+  day,
+  isOpen: day !== "Sunday",
+  timeSlots: [{ openTime: "09:00", closeTime: "21:00" }],
+}))
 
 export default function OpeningHoursPage() {
   const { t } = useTranslation("dashboard")
-  const [schedule, setSchedule] = useState<DayScheduleItem[]>(DEFAULT_SCHEDULE)
+  const { data: apiData, isLoading } = useGetOpeningHoursQuery()
+  const [createOpeningHours, { isLoading: isCreating }] = useCreateOpeningHoursMutation()
+  const [updateOpeningHours, { isLoading: isUpdating }] = useUpdateOpeningHoursMutation()
+
+  const isSaving = isCreating || isUpdating
+
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState<DayScheduleItem[] | null>(null)
-  const [isSaving, setIsSaving] = useState(false)
 
-  const currentSchedule = isEditing ? (draft ?? schedule) : schedule
+  // Determine if opening hours already exist on the backend
+  const hasExistingHours = Boolean(
+    apiData?.success &&
+      apiData?.data?.weekly_hours &&
+      Array.isArray(apiData.data.weekly_hours) &&
+      apiData.data.weekly_hours.length > 0,
+  )
+
+  // Parse API weekly_hours or use defaults
+  const baseSchedule = useMemo<DayScheduleItem[]>(() => {
+    if (!apiData?.data?.weekly_hours || !Array.isArray(apiData.data.weekly_hours)) {
+      return DEFAULT_SCHEDULE
+    }
+
+    const apiHours = apiData.data.weekly_hours
+    return DAYS_OF_WEEK.map((dayName) => {
+      const match = apiHours.find(
+        (h) => h.day.toLowerCase() === dayName.toLowerCase(),
+      )
+
+      if (!match) {
+        return {
+          day: dayName,
+          isOpen: false,
+          timeSlots: [{ openTime: "09:00", closeTime: "21:00" }],
+        }
+      }
+
+      const slots =
+        match.slots && match.slots.length > 0
+          ? match.slots.map((s) => ({
+              id: s.id,
+              openTime: s.opening_time ? s.opening_time.slice(0, 5) : "09:00",
+              closeTime: s.closing_time ? s.closing_time.slice(0, 5) : "21:00",
+            }))
+          : [{ openTime: "09:00", closeTime: "21:00" }]
+
+      return {
+        day: dayName,
+        isOpen: Boolean(match.is_open),
+        timeSlots: slots,
+      }
+    })
+  }, [apiData])
+
+  const currentSchedule = isEditing ? (draft ?? baseSchedule) : baseSchedule
 
   const handleToggleEdit = () => {
     if (isEditing) {
@@ -38,23 +102,101 @@ export default function OpeningHoursPage() {
       setIsEditing(false)
       return
     }
-    setDraft(schedule.map((d) => ({ ...d, timeSlots: d.timeSlots.map((s) => ({ ...s })) })))
+    setDraft(
+      baseSchedule.map((d) => ({
+        ...d,
+        timeSlots: d.timeSlots.map((s) => ({ ...s })),
+      })),
+    )
     setIsEditing(true)
   }
 
   const handleSave = async () => {
     if (!draft) return
-    setIsSaving(true)
+
+    // Frontend validation: check that each open day has valid time slots
+    for (const item of draft) {
+      if (item.isOpen) {
+        if (!item.timeSlots || item.timeSlots.length === 0) {
+          toast.error(
+            t(
+              "arena.openingHoursTab.slotRequired",
+              `Please add at least one time slot for ${item.day}`,
+            ),
+          )
+          return
+        }
+
+        for (const slot of item.timeSlots) {
+          if (!slot.openTime || !slot.closeTime) {
+            toast.error(
+              t(
+                "arena.openingHoursTab.fillTimes",
+                `Please specify both opening and closing times for ${item.day}`,
+              ),
+            )
+            return
+          }
+
+          if (slot.openTime >= slot.closeTime) {
+            toast.error(
+              t(
+                "arena.openingHoursTab.timeRangeInvalid",
+                `${item.day}: Opening time (${slot.openTime}) must be earlier than closing time (${slot.closeTime})`,
+              ),
+            )
+            return
+          }
+        }
+      }
+    }
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800))
-      setSchedule(draft)
+      const payload = {
+        weekly_hours: draft.map((d) => ({
+          day: d.day.toLowerCase(),
+          is_open: d.isOpen,
+          slots: d.isOpen
+            ? d.timeSlots.map((s) => ({
+                opening_time: s.openTime,
+                closing_time: s.closeTime,
+              }))
+            : [],
+        })),
+      }
+
+      if (!hasExistingHours) {
+        const res = await createOpeningHours(payload).unwrap()
+        toast.success(
+          res.message ||
+            t(
+              "arena.openingHoursTab.created",
+              "Weekly opening hours created successfully",
+            ),
+        )
+      } else {
+        const res = await updateOpeningHours(payload).unwrap()
+        toast.success(
+          res.message ||
+            t(
+              "arena.openingHoursTab.updated",
+              "Weekly opening hours updated successfully",
+            ),
+        )
+      }
+
       setDraft(null)
       setIsEditing(false)
-      toast.success(t("arena.openingHoursTab.updated"))
-    } catch {
-      toast.error(t("arena.openingHoursTab.updateFailed"))
-    } finally {
-      setIsSaving(false)
+    } catch (error) {
+      toast.error(
+        getErrorMessage(
+          error,
+          t(
+            "arena.openingHoursTab.updateFailed",
+            "Failed to update opening hours",
+          ),
+        ),
+      )
     }
   }
 
@@ -65,7 +207,12 @@ export default function OpeningHoursPage() {
     })
   }
 
-  const updateTimeSlot = (dayIndex: number, slotIndex: number, field: "openTime" | "closeTime", value: string) => {
+  const updateTimeSlot = (
+    dayIndex: number,
+    slotIndex: number,
+    field: "openTime" | "closeTime",
+    value: string,
+  ) => {
     setDraft((prev) => {
       if (!prev) return prev
       return prev.map((item, i) => {
@@ -73,7 +220,7 @@ export default function OpeningHoursPage() {
         return {
           ...item,
           timeSlots: item.timeSlots.map((slot, si) =>
-            si === slotIndex ? { ...slot, [field]: value } : slot
+            si === slotIndex ? { ...slot, [field]: value } : slot,
           ),
         }
       })
@@ -93,6 +240,44 @@ export default function OpeningHoursPage() {
     })
   }
 
+  const removeTimeSlot = (dayIndex: number, slotIndex: number) => {
+    setDraft((prev) => {
+      if (!prev) return prev
+      return prev.map((item, i) => {
+        if (i !== dayIndex) return item
+        if (item.timeSlots.length <= 1) return item
+        return {
+          ...item,
+          timeSlots: item.timeSlots.filter((_, si) => si !== slotIndex),
+        }
+      })
+    })
+  }
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <SectionHeader
+          title={t("arena.openingHoursTab.title")}
+          subtitle={t("arena.openingHoursTab.subtitle")}
+        />
+
+        <div className="space-y-4">
+          {DAYS_OF_WEEK.map((day) => (
+            <div
+              key={day}
+              className="flex items-center gap-4 py-3 border-b border-white/5"
+            >
+              <Skeleton className="h-6 w-11 rounded-full" />
+              <Skeleton className="h-5 w-28" />
+              <Skeleton className="h-10 w-64 rounded-md ml-auto sm:ml-0" />
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <SectionHeader
@@ -100,29 +285,31 @@ export default function OpeningHoursPage() {
         subtitle={t("arena.openingHoursTab.subtitle")}
       />
 
-      <div className="space-y-4">
+      <div className="space-y-2 bg-card/30 border border-white/5 rounded-xl p-4 sm:p-6">
         {currentSchedule.map((day, index) => (
           <DayScheduleRow
             key={day.day}
             schedule={day}
             isEditing={isEditing}
             onToggleDay={(checked) => updateDay(index, { isOpen: checked })}
-            onUpdateTimeSlot={(slotIndex, field, value) => updateTimeSlot(index, slotIndex, field, value)}
+            onUpdateTimeSlot={(slotIndex, field, value) =>
+              updateTimeSlot(index, slotIndex, field, value)
+            }
             onAddTimeSlot={() => addTimeSlot(index)}
+            onRemoveTimeSlot={(slotIndex) => removeTimeSlot(index, slotIndex)}
           />
         ))}
       </div>
 
-      {isEditing && (
-        <div className="flex justify-end">
-          <EditSaveButton
-            isEditing={isEditing}
-            isSaving={isSaving}
-            onToggleEdit={handleToggleEdit}
-            onSave={handleSave}
-          />
-        </div>
-      )}
+      <div className="flex justify-end">
+        <EditSaveButton
+          isEditing={isEditing}
+          isSaving={isSaving}
+          onToggleEdit={handleToggleEdit}
+          onSave={handleSave}
+        />
+      </div>
     </div>
   )
 }
+

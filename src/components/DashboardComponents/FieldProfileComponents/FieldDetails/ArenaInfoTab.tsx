@@ -27,6 +27,7 @@ import { getErrorMessage } from "@/lib/auth"
 import type { ArenaInfoForm, ArenaInfoTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import {
   useGetArenaInfoQuery,
+  useCreateArenaInfoMutation,
   useUpdateArenaInfoMutation,
 } from "@/redux/features/dashboard/field-profile/fieldProfileAPI"
 import SectionHeader from "../SectionHeader"
@@ -186,9 +187,12 @@ function SearchableCitySelect({
 const ArenaInfoTab = ({ arenaInfo: propArenaInfo }: ArenaInfoTabProps) => {
   const { t } = useTranslation("dashboard")
   const { data: apiData, isLoading } = useGetArenaInfoQuery()
+  const [createArenaInfo, { isLoading: isCreating }] = useCreateArenaInfoMutation()
   const [updateArenaInfo, { isLoading: isUpdating }] = useUpdateArenaInfoMutation()
 
+  const isSaving = isCreating || isUpdating
   const arenaInfo = propArenaInfo ?? apiData?.data
+  const isNewAccount = !arenaInfo?.id
 
   const [isEditing, setIsEditing] = useState(false)
   const [draft, setDraft] = useState<ArenaInfoForm | null>(null)
@@ -271,8 +275,19 @@ const ArenaInfoTab = ({ arenaInfo: propArenaInfo }: ArenaInfoTabProps) => {
       formData.append("city", draft.city.trim())
       formData.append("full_address", draft.full_address.trim())
 
-      const res = await updateArenaInfo(formData).unwrap()
-      toast.success(res.message || t("arena.arenaInfoTab.updated", "Arena info updated successfully"))
+      if (isNewAccount) {
+        const res = await createArenaInfo(formData).unwrap()
+        toast.success(
+          res.message ||
+            t("arena.arenaInfoTab.created", "Step 1 saved successfully"),
+        )
+      } else {
+        const res = await updateArenaInfo(formData).unwrap()
+        toast.success(
+          res.message ||
+            t("arena.arenaInfoTab.updated", "Arena info updated successfully"),
+        )
+      }
       setDraft(null)
       setIsEditing(false)
     } catch (error) {
@@ -425,7 +440,7 @@ const ArenaInfoTab = ({ arenaInfo: propArenaInfo }: ArenaInfoTabProps) => {
       <div className="flex justify-end">
         <EditSaveButton
           isEditing={isEditing}
-          isSaving={isUpdating}
+          isSaving={isSaving}
           onToggleEdit={handleToggleEdit}
           onSave={handleSave}
         />

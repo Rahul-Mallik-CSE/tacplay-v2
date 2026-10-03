@@ -130,6 +130,62 @@ export interface UpdateFieldSetupResponse {
 }
 
 // ============================================================================
+// Opening Hours Types
+// ============================================================================
+
+/** Single time slot for opening hours */
+export interface OpeningHourSlot {
+  id?: number
+  opening_time: string
+  closing_time: string
+}
+
+/** Day schedule definition from backend */
+export interface DayOpeningHours {
+  day: string
+  is_open: boolean
+  slots: OpeningHourSlot[]
+}
+
+/** Full data structure returned from GET /api/arena/opening-hours/ */
+export interface WeeklyOpeningHoursData {
+  weekly_hours: DayOpeningHours[]
+  user_info?: ArenaUserInfo
+}
+
+/** API response for GET /api/arena/opening-hours/ */
+export interface GetOpeningHoursResponse {
+  success: boolean
+  message: string
+  meta?: Record<string, unknown>
+  data: WeeklyOpeningHoursData
+  requestId?: string
+}
+
+/** Payload for creating/updating opening hours */
+export interface UpdateOpeningHoursPayload {
+  weekly_hours: Array<{
+    day: string
+    is_open: boolean
+    slots: Array<{
+      opening_time: string
+      closing_time: string
+    }>
+  }>
+}
+
+/** API response for PATCH / POST /api/arena/opening-hours/ */
+export interface UpdateOpeningHoursResponse {
+  success: boolean
+  message: string
+  meta?: Record<string, unknown>
+  data: {
+    weekly_hours: DayOpeningHours[]
+  }
+  requestId?: string
+}
+
+// ============================================================================
 // Package Management Types
 // ============================================================================
 
