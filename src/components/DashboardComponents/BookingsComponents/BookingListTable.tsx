@@ -100,50 +100,50 @@ function BookingListTable() {
     accessor: keyof BookingListItem | ((row: BookingListItem) => React.ReactNode)
     className?: string
   }[] = [
-    {
-      header: t("bookings.columns.bookingId"),
-      accessor: (row: BookingListItem) => (
-        <span className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-custom-red" />
-          {row.display_booking_id}
-        </span>
-      ),
-    },
-    {
-      header: t("bookings.columns.playerName"),
-      accessor: "player_name",
-    },
-    {
-      header: t("bookings.columns.sessionDate"),
-      accessor: "match_date",
-    },
-    {
-      header: t("bookings.columns.package"),
-      accessor: "package_name",
-    },
-    {
-      header: t("bookings.columns.matchType"),
-      accessor: (row: BookingListItem) => (
-        <BookingMatchTypeDot type={row.match_type} />
-      ),
-    },
-    {
-      header: t("bookings.columns.amount"),
-      accessor: "amount_display",
-    },
-    {
-      header: t("bookings.columns.checkInStatus"),
-      accessor: (row: BookingListItem) => (
-        <BookingStatusBadge status={row.check_in_status} size="sm" />
-      ),
-    },
-    {
-      header: t("bookings.columns.status"),
-      accessor: (row: BookingListItem) => (
-        <BookingStatusBadge status={row.status} size="sm" />
-      ),
-    },
-  ]
+      {
+        header: t("bookings.columns.bookingId"),
+        accessor: (row: BookingListItem) => (
+          <span className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-custom-red" />
+            {row.display_booking_id}
+          </span>
+        ),
+      },
+      {
+        header: t("bookings.columns.playerName"),
+        accessor: "player_name",
+      },
+      {
+        header: t("bookings.columns.sessionDate"),
+        accessor: "match_date",
+      },
+      {
+        header: t("bookings.columns.package"),
+        accessor: "package_name",
+      },
+      {
+        header: t("bookings.columns.matchType"),
+        accessor: (row: BookingListItem) => (
+          <BookingMatchTypeDot type={row.match_type} />
+        ),
+      },
+      {
+        header: t("bookings.columns.amount"),
+        accessor: "amount_display",
+      },
+      {
+        header: t("bookings.columns.checkInStatus"),
+        accessor: (row: BookingListItem) => (
+          <BookingStatusBadge status={row.check_in_status} size="sm" />
+        ),
+      },
+      {
+        header: t("bookings.columns.status"),
+        accessor: (row: BookingListItem) => (
+          <BookingStatusBadge status={row.status} size="sm" />
+        ),
+      },
+    ]
 
   const actionRenderer = (row: BookingListItem) => (
     <DropdownMenu>
@@ -159,7 +159,7 @@ function BookingListTable() {
         align="end"
         className="bg-card border border-white/10 w-40"
       >
-        <DropdownMenuItem
+        {/* <DropdownMenuItem
           onClick={(e) => {
             e.stopPropagation()
             handleCancelClick(row)
@@ -168,7 +168,7 @@ function BookingListTable() {
         >
           <FaTrashAlt className="w-3.5 h-3.5" />
           {t("bookings.actions.cancel")}
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
         <DropdownMenuItem
           onClick={(e) => {
             e.stopPropagation()
@@ -195,20 +195,20 @@ function BookingListTable() {
           <p className="text-sm text-secondary mt-1">{t("bookings.subtitle")}</p>
         </div>
         <div className="flex items-center gap-3">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <BookingSearchBar value={search} onChange={handleSearchChange} />
-            </div>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <BookingSearchBar value={search} onChange={handleSearchChange} />
+          </div>
 
-            {/* Filter Button */}
-            <button
-              onClick={() => setFilterSheetOpen(true)}
-              className="flex items-center gap-2 bg-muted border border-white/10 rounded-lg px-4 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
-            >
-                  <Filter className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t("common.filter")}</span>
-            </button>
+          {/* Filter Button */}
+          <button
+            onClick={() => setFilterSheetOpen(true)}
+            className="flex items-center gap-2 bg-muted border border-white/10 rounded-lg px-4 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+          >
+            <Filter className="w-4 h-4" />
+            <span className="hidden sm:inline">{t("common.filter")}</span>
+          </button>
         </div>
-        
+
       </div>
 
       <CustomTable
