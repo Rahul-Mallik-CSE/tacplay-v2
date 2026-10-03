@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { getInitials } from "./SettingsProfileAvatar"
-import type { EditAccountDialogProps } from "@/types/DashboardTypes/SettingsTypes"
+import type { EditAccountDialogProps } from "@/types/CommonPageTypes/SettingsTypes"
 
 import { useUpdateProfileMutation } from "@/redux/features/shared/setting/settingAPI"
 import { getErrorMessage } from "@/lib/auth"

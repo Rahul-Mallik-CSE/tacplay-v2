@@ -8,7 +8,7 @@
 
 import React from "react"
 import { Eye, EyeOff } from "lucide-react"
-import type { SettingsProfileFieldProps } from "@/types/DashboardTypes/SettingsTypes"
+import type { SettingsProfileFieldProps } from "@/types/CommonPageTypes/SettingsTypes"
 
 function SettingsProfileField({
   label,

@@ -10,7 +10,7 @@ import React from "react"
 import { Pen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTranslation } from "react-i18next"
-import type { SettingsActionButtonsProps } from "@/types/DashboardTypes/SettingsTypes"
+import type { SettingsActionButtonsProps } from "@/types/CommonPageTypes/SettingsTypes"
 
 function SettingsActionButtons({
   onPasswordChange,

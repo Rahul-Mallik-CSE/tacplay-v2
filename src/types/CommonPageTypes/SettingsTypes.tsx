@@ -4,6 +4,29 @@
  * Centralizes all type definitions used across settings components.
  */
 
+
+
+export interface GetProfileResponse {
+  success: boolean;
+  message: string;
+  meta?: Record<string, unknown>;
+  data: FieldOwnerProfile;
+  requestId?: string;
+}
+
+export interface ChangePasswordRequest {
+  current_password: string;
+  new_password: string;
+  confirm_password: string;
+}
+
+export interface ChangePasswordResponse {
+  success: boolean;
+  message: string;
+  meta?: Record<string, unknown>;
+  requestId?: string;
+}
+
 /** Field owner profile data */
 export type FieldOwnerProfile = {
   id: number

@@ -9,7 +9,7 @@
 import React from "react"
 import Image from "next/image"
 import { toAbsoluteMediaUrl } from "@/lib/utils"
-import type { SettingsProfileAvatarProps } from "@/types/DashboardTypes/SettingsTypes"
+import type { SettingsProfileAvatarProps } from "@/types/CommonPageTypes/SettingsTypes"
 
 /** Generate initials from full name */
 export function getInitials(fullName: string): string {

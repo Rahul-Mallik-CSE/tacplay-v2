@@ -5,7 +5,7 @@
  * without API integration.
  */
 
-import type { FieldOwnerProfile } from "@/types/DashboardTypes/SettingsTypes"
+import type { FieldOwnerProfile } from "@/types/CommonPageTypes/SettingsTypes"
 
 /** Mock field owner profile data */
 export const mockFieldOwnerProfile: FieldOwnerProfile = {

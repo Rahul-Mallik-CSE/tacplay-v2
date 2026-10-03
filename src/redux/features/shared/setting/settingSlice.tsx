@@ -1,7 +1,7 @@
 /** @format */
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { FieldOwnerProfile } from "./settingAPI";
+import type { FieldOwnerProfile } from "@/types/CommonPageTypes/SettingsTypes";
 
 interface SettingState {
   profile: FieldOwnerProfile | null;

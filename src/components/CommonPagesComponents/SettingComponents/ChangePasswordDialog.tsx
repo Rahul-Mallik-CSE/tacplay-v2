@@ -21,7 +21,7 @@ import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { useChangePasswordMutation } from "@/redux/features/shared/setting/settingAPI"
 import { getErrorMessage } from "@/lib/auth"
-import type { ChangePasswordDialogProps } from "@/types/DashboardTypes/SettingsTypes"
+import type { ChangePasswordDialogProps } from "@/types/CommonPageTypes/SettingsTypes"
 
 function ChangePasswordDialog({
   open,
