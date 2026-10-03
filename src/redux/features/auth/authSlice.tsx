@@ -1,7 +1,7 @@
 /** @format */
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getAuthUser, hasAccessToken } from "@/lib/auth";
+import { getAuthUser, hasAccessToken, saveAuthUser } from "@/lib/auth";
 import type {
   AuthUser,
   AuthState,
@@ -49,6 +49,18 @@ const authSlice = createSlice({
     setAuthSession: (state, action: PayloadAction<AuthUser>) => {
       state.user = action.payload;
       state.isAuthenticated = true;
+      saveAuthUser(action.payload);
+    },
+    updateAuthUser: (state, action: PayloadAction<Partial<AuthUser>>) => {
+      if (state.user) {
+        state.user = {
+          ...state.user,
+          ...action.payload,
+        };
+      } else {
+        state.user = action.payload as AuthUser;
+      }
+      saveAuthUser(state.user);
     },
     clearAuthSession: (state) => {
       state.user = null;
@@ -75,6 +87,7 @@ const authSlice = createSlice({
 
 export const {
   setAuthSession,
+  updateAuthUser,
   clearAuthSession,
   setPendingVerification,
   clearPendingVerification,

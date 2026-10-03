@@ -26,6 +26,8 @@ import type { EditAccountDialogProps } from "@/types/CommonPageTypes/SettingsTyp
 import { useUpdateProfileMutation } from "@/redux/features/shared/setting/settingAPI"
 import { getErrorMessage } from "@/lib/auth"
 import { toAbsoluteMediaUrl } from "@/lib/utils"
+import { useAppDispatch } from "@/redux/hooks"
+import { updateAuthUser } from "@/redux/features/auth/authSlice"
 
 function EditAccountDialog({
   open,
@@ -33,6 +35,7 @@ function EditAccountDialog({
   profile,
 }: EditAccountDialogProps) {
   const { t } = useTranslation("dashboard")
+  const dispatch = useAppDispatch()
   const [fullName, setFullName] = useState(() => profile?.full_name || "")
   const [contactNumber, setContactNumber] = useState(
     () => profile?.contact_number || "",
@@ -94,6 +97,23 @@ function EditAccountDialog({
       }
 
       const res = await updateProfile(formData).unwrap()
+
+      if (res?.data) {
+        dispatch(
+          updateAuthUser({
+            full_name: res.data.full_name,
+            email: res.data.email_address,
+            profile_image: res.data.profile_image,
+          }),
+        )
+      } else {
+        dispatch(
+          updateAuthUser({
+            full_name: fullName.trim(),
+          }),
+        )
+      }
+
       toast.success(res.message || t("editAccount.updated", "Profile updated successfully"))
       onOpenChange(false)
       setSelectedImage(null)

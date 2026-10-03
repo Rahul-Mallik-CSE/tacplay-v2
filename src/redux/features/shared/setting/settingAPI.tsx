@@ -2,8 +2,7 @@
 
 import baseAPI from "@/redux/api/baseAPI";
 import { ChangePasswordRequest, ChangePasswordResponse, GetProfileResponse } from "@/types/CommonPageTypes/SettingsTypes";
-
-
+import { updateAuthUser } from "@/redux/features/auth/authSlice";
 
 const settingAPI = baseAPI.injectEndpoints({
   endpoints: (builder) => ({
@@ -13,6 +12,22 @@ const settingAPI = baseAPI.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Profile"],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data?.data) {
+            dispatch(
+              updateAuthUser({
+                full_name: data.data.full_name,
+                email: data.data.email_address,
+                profile_image: data.data.profile_image,
+              }),
+            );
+          }
+        } catch {
+          // ignore error
+        }
+      },
     }),
 
     updateProfile: builder.mutation<GetProfileResponse, FormData>({
@@ -22,6 +37,22 @@ const settingAPI = baseAPI.injectEndpoints({
         body,
       }),
       invalidatesTags: ["Profile"],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data?.data) {
+            dispatch(
+              updateAuthUser({
+                full_name: data.data.full_name,
+                email: data.data.email_address,
+                profile_image: data.data.profile_image,
+              }),
+            );
+          }
+        } catch {
+          // ignore error
+        }
+      },
     }),
 
     changePassword: builder.mutation<

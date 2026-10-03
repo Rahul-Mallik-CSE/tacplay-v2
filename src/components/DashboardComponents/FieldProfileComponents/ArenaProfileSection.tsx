@@ -31,19 +31,25 @@ export default function ArenaProfileSection({
 }: ArenaProfileSectionProps) {
   const { t } = useTranslation("dashboard")
   const initials = getInitials(fullName)
+  const [imageError, setImageError] = React.useState(false)
+
+  React.useEffect(() => {
+    setImageError(false)
+  }, [profileImageUrl])
 
   return (
     <div className="relative z-20 px-4 sm:px-6 pb-4">
       <div className="relative -mt-10 sm:-mt-12 md:-mt-14 mb-3 flex items-end justify-between">
         <div className="flex items-end gap-4">
           <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full border-4 border-card bg-muted overflow-hidden shrink-0 relative">
-            {profileImageUrl ? (
+            {profileImageUrl && !imageError ? (
               <Image
                 src={profileImageUrl}
                 alt={`${fullName} profile`}
                 fill
                 sizes="112px"
                 className="object-cover"
+                onError={() => setImageError(true)}
               />
             ) : (
               <div className="w-full h-full bg-linear-to-br from-custom-red/40 to-custom-yellow/40 flex items-center justify-center">

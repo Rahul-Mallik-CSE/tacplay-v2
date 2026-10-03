@@ -4,14 +4,14 @@
  * FieldProfileLayout.tsx
  * Shared layout for all field profile pages.
  * Includes static cover photo and profile section.
- * Navigation is handled by the main sidebar.
+ * Uses authenticated user data matching NavBar.
  */
 
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { toAbsoluteMediaUrl } from "@/lib/utils"
+import { useAppSelector } from "@/redux/hooks"
 import {
-  mockArenaInfo,
   mockSubscriptionStatus,
 } from "../../../mock-data/DashboardMockData/arena-management-mock-data"
 import CoverImageSlider from "./CoverImageSlider"
@@ -24,7 +24,7 @@ interface FieldProfileLayoutProps {
 export default function FieldProfileLayout({ children }: FieldProfileLayoutProps) {
   const { t } = useTranslation("dashboard")
 
-  const arenaInfo = mockArenaInfo
+  const { user } = useAppSelector((s) => s.auth)
   const subscriptionStatus = mockSubscriptionStatus
 
   const currentPlan = subscriptionStatus.plan_name
@@ -32,11 +32,9 @@ export default function FieldProfileLayout({ children }: FieldProfileLayoutProps
     currentPlan === "Bronze Plan" ||
     subscriptionStatus.plan_code === "field_bronze_monthly"
 
-  const userInfo = arenaInfo.user_info
-  const fullName = userInfo.full_name || t("arena.arenaOwner")
-  const email = userInfo.email || ""
-
-  const profileImageUrl = toAbsoluteMediaUrl(userInfo.profile_image)
+  const fullName = user?.full_name || t("arena.arenaOwner", "User")
+  const email = user?.email || ""
+  const profileImageUrl = toAbsoluteMediaUrl(user?.profile_image)
 
   return (
     <div className="w-full pt-3 pb-6 md:pb-12 md:pt-4">
