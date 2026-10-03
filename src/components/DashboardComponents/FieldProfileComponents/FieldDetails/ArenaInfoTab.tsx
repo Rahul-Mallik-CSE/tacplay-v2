@@ -3,11 +3,12 @@
 /**
  * ArenaInfoTab.tsx
  * Editable form for arena basic information including name, description,
- * country/city selection (using country-state-city library), and address.
- * Uses EditSaveHeader for edit/save toggle workflow.
+ * country and city selection (using country-state-city library), and address.
+ * Uses EditSaveButton for edit/save toggle workflow.
  */
 
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
+import { Check, ChevronDown, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {
@@ -17,14 +18,165 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { GetCountries, GetState, GetCity } from "react-country-state-city"
-import type { Country, State, City } from "react-country-state-city/dist/cjs/types"
+import { Country, City } from "country-state-city"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
-import type { ArenaInfo, ArenaInfoForm, ArenaInfoTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
+import { cn } from "@/lib/utils"
+import type { ArenaInfoForm, ArenaInfoTabProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import { mockArenaInfo } from "../../../../mock-data/DashboardMockData/arena-management-mock-data"
 import SectionHeader from "../SectionHeader"
 import EditSaveButton from "../EditSaveButton"
+
+function SearchableCitySelect({
+  value,
+  onChange,
+  disabled,
+  cities,
+  placeholder,
+  searchPlaceholder,
+}: {
+  value: string
+  onChange: (city: string) => void
+  disabled?: boolean
+  cities: string[]
+  placeholder: string
+  searchPlaceholder?: string
+}) {
+  const [open, setOpen] = useState(false)
+  const [search, setSearch] = useState("")
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false)
+      }
+    }
+    if (open) {
+      document.addEventListener("mousedown", handleOutsideClick)
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick)
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (!open) {
+      setSearch("")
+    }
+  }, [open])
+
+  const filteredCities = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    if (!q) {
+      return cities.slice(0, 100)
+    }
+    return cities.filter((c) => c.toLowerCase().includes(q)).slice(0, 100)
+  }, [cities, search])
+
+  const hasExactMatch = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    if (!q) return true
+    return cities.some((c) => c.toLowerCase() === q)
+  }, [cities, search])
+
+  return (
+    <div ref={dropdownRef} className="relative w-full">
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => !disabled && setOpen((prev) => !prev)}
+        className={cn(
+          "w-full bg-input/30 border border-white/10 text-primary h-11 px-3 py-2 text-sm rounded-md flex items-center justify-between transition-colors outline-none",
+          disabled
+            ? "cursor-not-allowed opacity-50"
+            : "cursor-pointer hover:bg-input/50 focus-visible:ring-1 focus-visible:ring-white/20",
+          !value && "text-muted-foreground",
+        )}
+      >
+        <span className="truncate">{value || placeholder}</span>
+        <ChevronDown
+          className={cn(
+            "w-4 h-4 text-muted-foreground transition-transform duration-200 shrink-0",
+            open && "rotate-180",
+          )}
+        />
+      </button>
+
+      {open && !disabled && (
+        <div className="absolute left-0 top-full mt-1.5 w-full z-50 bg-card border border-white/10 rounded-md shadow-2xl overflow-hidden backdrop-blur-md animate-in fade-in-0 zoom-in-95 duration-150">
+          <div className="p-2 border-b border-white/10 flex items-center gap-2 bg-input/20">
+            <Search className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+            <input
+              type="text"
+              autoFocus
+              placeholder={searchPlaceholder || "Search city..."}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full bg-transparent text-xs text-primary placeholder:text-muted-foreground outline-none"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="text-xs text-muted-foreground hover:text-primary px-1"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
+          <div className="max-h-60 overflow-y-auto p-1 scrollbar-thin">
+            {filteredCities.map((city) => {
+              const isSelected = city === value
+              return (
+                <button
+                  key={city}
+                  type="button"
+                  onClick={() => {
+                    onChange(city)
+                    setOpen(false)
+                  }}
+                  className={cn(
+                    "w-full flex items-center justify-between px-2.5 py-2 text-xs rounded-sm text-left transition-colors cursor-pointer",
+                    isSelected
+                      ? "bg-custom-yellow/20 text-custom-yellow font-semibold"
+                      : "text-primary hover:bg-white/5",
+                  )}
+                >
+                  <span className="truncate">{city}</span>
+                  {isSelected && <Check className="w-3.5 h-3.5 shrink-0 ml-2" />}
+                </button>
+              )
+            })}
+
+            {filteredCities.length === 0 && (
+              <div className="p-3 text-center text-xs text-muted-foreground">
+                No cities found
+              </div>
+            )}
+
+            {search.trim() && !hasExactMatch && (
+              <button
+                type="button"
+                onClick={() => {
+                  onChange(search.trim())
+                  setOpen(false)
+                }}
+                className="w-full mt-1 border-t border-white/10 px-2.5 py-2 text-xs text-left text-custom-yellow hover:bg-custom-yellow/10 transition-colors cursor-pointer flex items-center gap-1.5"
+              >
+                <span>Use &ldquo;{search.trim()}&rdquo;</span>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
   const { t } = useTranslation("dashboard")
@@ -32,16 +184,13 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
   const [draft, setDraft] = useState<ArenaInfoForm | null>(null)
   const [isSaving, setIsSaving] = useState(false)
 
-  const [countries, setCountries] = useState<Country[]>([])
-  const [states, setStates] = useState<State[]>([])
-  const [cities, setCities] = useState<City[]>([])
+  const allCountries = useMemo(() => Country.getAllCountries(), [])
 
   const baseForm = useMemo<ArenaInfoForm>(
     () => ({
       field_name: arenaInfo.field_name ?? "",
       description: arenaInfo.description ?? "",
       country: arenaInfo.country?.name ?? "",
-      state: "",
       city: arenaInfo.city?.name ?? "",
       full_address: arenaInfo.full_address ?? "",
     }),
@@ -50,86 +199,49 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
 
   const form = isEditing ? (draft ?? baseForm) : baseForm
 
+  const selectedCountry = useMemo(() => {
+    if (!form.country) return null
+    return (
+      allCountries.find(
+        (c) =>
+          c.name.toLowerCase() === form.country.toLowerCase() ||
+          c.isoCode.toLowerCase() === form.country.toLowerCase(),
+      ) ?? null
+    )
+  }, [allCountries, form.country])
+
   const countryOptions = useMemo(() => {
-    const options = countries.map((country) => ({
-      key: country.iso2,
+    const options = allCountries.map((country) => ({
+      key: country.isoCode,
       value: country.name,
     }))
     if (!form.country) return options
     const hasCurrent = options.some(
-      (country) => country.value === form.country,
+      (country) =>
+        country.value.toLowerCase() === form.country.toLowerCase() ||
+        country.key.toLowerCase() === form.country.toLowerCase(),
     )
     if (hasCurrent) return options
     return [...options, { key: `custom-${form.country}`, value: form.country }]
-  }, [countries, form.country])
-
-  const stateOptions = useMemo(() => {
-    const options = states.map((state) => ({
-      key: state.state_code,
-      value: state.name,
-    }))
-    if (!form.state) return options
-    const hasCurrent = options.some((state) => state.value === form.state)
-    if (hasCurrent) return options
-    return [...options, { key: `custom-${form.state}`, value: form.state }]
-  }, [states, form.state])
+  }, [allCountries, form.country])
 
   const cityOptions = useMemo(() => {
-    const options = cities.map((city) => ({
-      key: String(city.id),
-      value: city.name,
-    }))
-    if (!form.city) return options
-    const hasCurrent = options.some((city) => city.value === form.city)
-    if (hasCurrent) return options
-    return [...options, { key: `custom-${form.city}`, value: form.city }]
-  }, [cities, form.city])
+    if (!selectedCountry) return []
+    const rawCities = City.getCitiesOfCountry(selectedCountry.isoCode) || []
+    const uniqueNames = Array.from(new Set(rawCities.map((c) => c.name))).sort()
 
-  useEffect(() => {
-    let active = true
-    GetCountries().then((data) => {
-      if (!active) return
-      setCountries(Array.isArray(data) ? data : [])
-    })
-    return () => { active = false }
-  }, [])
-
-  useEffect(() => {
-    let active = true
-    const loadStates = async () => {
-      const selectedCountry = countries.find(
-        (item) => item.name === form.country,
-      )
-      if (!selectedCountry) { setStates([]); setCities([]); return }
-      const data = await GetState(selectedCountry.id)
-      if (!active) return
-      setStates(Array.isArray(data) ? data : [])
-      setCities([])
+    if (form.city && !uniqueNames.includes(form.city)) {
+      return [form.city, ...uniqueNames]
     }
-    loadStates()
-    return () => { active = false }
-  }, [countries, form.country])
-
-  useEffect(() => {
-    let active = true
-    const loadCities = async () => {
-      const selectedCountry = countries.find(
-        (item) => item.name === form.country,
-      )
-      const selectedState = states.find(
-        (item) => item.name === form.state,
-      )
-      if (!selectedCountry || !selectedState) { setCities([]); return }
-      const data = await GetCity(selectedCountry.id, selectedState.id)
-      if (!active) return
-      setCities(Array.isArray(data) ? data : [])
-    }
-    loadCities()
-    return () => { active = false }
-  }, [countries, states, form.country, form.state])
+    return uniqueNames
+  }, [selectedCountry, form.city])
 
   const handleToggleEdit = () => {
-    if (isEditing) { setDraft(null); setIsEditing(false); return }
+    if (isEditing) {
+      setDraft(null)
+      setIsEditing(false)
+      return
+    }
     setDraft(baseForm)
     setIsEditing(true)
   }
@@ -165,7 +277,7 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
             placeholder={t("onboardingFields.arena.namePlaceholder")}
             value={form.field_name}
             onChange={(e) =>
-              setDraft((p) => p ? { ...p, field_name: e.target.value } : p)
+              setDraft((p) => (p ? { ...p, field_name: e.target.value } : p))
             }
             readOnly={!isEditing}
             className="bg-input/30 border-white/10 text-primary h-11"
@@ -180,14 +292,14 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
             placeholder={t("onboardingFields.arena.descPlaceholder")}
             value={form.description}
             onChange={(e) =>
-              setDraft((p) => p ? { ...p, description: e.target.value } : p)
+              setDraft((p) => (p ? { ...p, description: e.target.value } : p))
             }
             readOnly={!isEditing}
             className="bg-input/30 border-white/10 text-primary min-h-25"
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-medium text-primary">
               {t("onboardingFields.arena.countryLabel")}
@@ -195,61 +307,39 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
             <Select
               value={form.country}
               onValueChange={(v) =>
-                setDraft((p) => p ? { ...p, country: v, state: "", city: "" } : p)
+                setDraft((p) => (p ? { ...p, country: v, city: "" } : p))
               }
               disabled={!isEditing}
             >
               <SelectTrigger className="w-full bg-input/30 border-white/10 text-primary h-11">
-                <SelectValue placeholder={t("onboardingFields.arena.countryPlaceholder")} />
+                <SelectValue
+                  placeholder={t("onboardingFields.arena.countryPlaceholder")}
+                />
               </SelectTrigger>
-              <SelectContent className="bg-card border-white/10">
+              <SelectContent className="bg-card border-white/10 max-h-60">
                 {countryOptions.map((c) => (
-                  <SelectItem key={c.key} value={c.value}>{c.value}</SelectItem>
+                  <SelectItem key={c.key} value={c.value}>
+                    {c.value}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-primary">
-              {t("onboardingFields.arena.stateLabel")}
-            </label>
-            <Select
-              value={form.state}
-              onValueChange={(v) =>
-                setDraft((p) => p ? { ...p, state: v, city: "" } : p)
-              }
-              disabled={!isEditing || !form.country}
-            >
-              <SelectTrigger className="w-full bg-input/30 border-white/10 text-primary h-11">
-                <SelectValue placeholder={t("onboardingFields.arena.statePlaceholder")} />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-white/10">
-                {stateOptions.map((s) => (
-                  <SelectItem key={s.key} value={s.value}>{s.value}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+
           <div className="space-y-2">
             <label className="text-sm font-medium text-primary">
               {t("onboardingFields.arena.cityLabel")}
             </label>
-            <Select
+            <SearchableCitySelect
               value={form.city}
-              onValueChange={(v) =>
-                setDraft((p) => p ? { ...p, city: v } : p)
+              onChange={(cityName) =>
+                setDraft((p) => (p ? { ...p, city: cityName } : p))
               }
-              disabled={!isEditing || !form.state}
-            >
-              <SelectTrigger className="w-full bg-input/30 border-white/10 text-primary h-11">
-                <SelectValue placeholder={t("onboardingFields.arena.cityPlaceholder")} />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-white/10">
-                {cityOptions.map((c) => (
-                  <SelectItem key={c.key} value={c.value}>{c.value}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              disabled={!isEditing || !form.country}
+              cities={cityOptions}
+              placeholder={t("onboardingFields.arena.cityPlaceholder")}
+              searchPlaceholder={t("arena.searchCity", "Search city...")}
+            />
           </div>
         </div>
 
@@ -261,7 +351,7 @@ const ArenaInfoTab = ({ arenaInfo = mockArenaInfo }: ArenaInfoTabProps) => {
             placeholder={t("onboardingFields.arena.addressPlaceholder")}
             value={form.full_address}
             onChange={(e) =>
-              setDraft((p) => p ? { ...p, full_address: e.target.value } : p)
+              setDraft((p) => (p ? { ...p, full_address: e.target.value } : p))
             }
             readOnly={!isEditing}
             className="bg-input/30 border-white/10 text-primary h-11"
