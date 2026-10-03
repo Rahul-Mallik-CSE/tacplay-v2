@@ -200,11 +200,50 @@ export interface BookingDetailsSheetProps {
   bookingId: number | null
 }
 
+/** Response structure for booking cancellation */
+export interface CancelBookingResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: {
+    booking_id: number
+    status: string
+    payment_status: string
+    cancellation_reason: string
+    cancelled_at: string
+    cancelled_player_ids: number[]
+    session_bookings_cancelled: number
+  }
+  requestId: string
+}
+
+/** Response structure for booking player check-in */
+export interface CheckInBookingResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: {
+    booking_id: number
+    session_id: number
+    check_in_status: string
+    check_in_status_display: string
+    checked_in_players: Array<{
+      session_booking_id: number
+      player_id: number
+      player_name: string
+      checked_in: boolean
+      checked_in_at: string
+    }>
+  }
+  requestId: string
+}
+
 /** Props for BookingDetailsConfirmDialog component */
 export interface BookingDetailsConfirmDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   onConfirm: () => void
+  isLoading?: boolean
 }
 
 /** Props for BookingCancelDialog component */
@@ -212,4 +251,5 @@ export interface BookingCancelDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   onConfirm: (reason: string) => void
+  isLoading?: boolean
 }

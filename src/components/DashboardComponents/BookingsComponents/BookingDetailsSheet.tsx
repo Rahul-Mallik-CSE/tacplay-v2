@@ -23,9 +23,14 @@ import BookingInfoRow from "./BookingInfoRow"
 import BookingStatusBadge from "./BookingStatusBadge"
 import BookingMatchTypeDot from "./BookingMatchTypeDot"
 import BookingDetailsConfirmDialog from "./BookingDetailsConfirmDialog"
-import { useGetBookingDetailsQuery } from "@/redux/features/dashboard/bookings/bookingsAPI"
+import {
+  useGetBookingDetailsQuery,
+  useCheckInBookingMutation,
+} from "@/redux/features/dashboard/bookings/bookingsAPI"
 import type { BookingDetailsSheetProps } from "@/types/DashboardTypes/BookingsTypes"
 import { Skeleton } from "@/components/ui/skeleton"
+import { toast } from "react-toastify"
+import { cn } from "@/lib/utils"
 
 function formatDate(dateString?: string | null): string {
   if (!dateString) return "-"
@@ -77,7 +82,28 @@ function BookingDetailsSheet({
     skip: !open || !bookingId,
   })
 
+  const [checkInBooking, { isLoading: isCheckingIn }] = useCheckInBookingMutation()
+
   const details = response?.data
+
+  const isCheckedIn =
+    details?.session_booking?.checked_in === true ||
+    details?.booking?.status === "checked_in"
+  const isCancelled = details?.booking?.status === "cancelled"
+
+  const handleConfirmCheckIn = async () => {
+    if (!bookingId) return
+    try {
+      const res = await checkInBooking(bookingId).unwrap()
+      toast.success(res.message || "Player checked in successfully.")
+      setConfirmOpen(false)
+    } catch (err: unknown) {
+      const errorMsg =
+        (err as { data?: { message?: string } })?.data?.message ||
+        "Failed to check in player."
+      toast.error(errorMsg)
+    }
+  }
 
   if (!open) return null
 
@@ -382,23 +408,40 @@ function BookingDetailsSheet({
             )}
           </div>
 
-          {/* Footer with action button - static as requested */}
+          {/* Footer with action button */}
           <SheetFooter className="px-5 pb-5 pt-2 justify-center">
-            <button
-              onClick={() => setConfirmOpen(true)}
-              className="w-full py-2.5 rounded-lg bg-custom-red text-white text-sm font-medium hover:bg-custom-red/80 transition-colors cursor-pointer"
-            >
-              {t("bookings.details.markCheckedIn", "Mark Checked In")}
-            </button>
+            {isLoading || (isFetching && !details) ? (
+              <Skeleton className="w-full h-10 rounded-lg" />
+            ) : isError || !details ? null : (
+              <button
+                disabled={isCheckedIn || isCancelled}
+                onClick={() => setConfirmOpen(true)}
+                className={cn(
+                  "w-full py-2.5 rounded-lg text-sm font-medium transition-colors",
+                  isCheckedIn
+                    ? "bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 cursor-not-allowed"
+                    : isCancelled
+                    ? "bg-white/5 text-secondary border border-white/10 cursor-not-allowed"
+                    : "bg-custom-red text-white hover:bg-custom-red/80 cursor-pointer"
+                )}
+              >
+                {isCheckedIn
+                  ? t("bookings.details.alreadyCheckedIn", "Checked In")
+                  : isCancelled
+                  ? t("bookings.details.bookingCancelled", "Booking Cancelled")
+                  : t("bookings.details.markCheckedIn", "Mark Checked In")}
+              </button>
+            )}
           </SheetFooter>
         </SheetContent>
       </Sheet>
 
-      {/* Confirmation dialog - static as requested */}
+      {/* Confirmation dialog */}
       <BookingDetailsConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        onConfirm={() => setConfirmOpen(false)}
+        onConfirm={handleConfirmCheckIn}
+        isLoading={isCheckingIn}
       />
     </>
   )

@@ -10,8 +10,9 @@
 import React, { useMemo, useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { BsThreeDotsVertical } from "react-icons/bs"
-import { FaRegEye } from "react-icons/fa"
+import { FaRegEye, FaTrashAlt } from "react-icons/fa"
 import { Filter, X, RefreshCw, AlertCircle } from "lucide-react"
+import { toast } from "react-toastify"
 import CustomTable from "@/components/SharedComponents/CustomTable"
 import BookingSearchBar from "./BookingSearchBar"
 import BookingStatusBadge from "./BookingStatusBadge"
@@ -26,7 +27,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useGetBookingsQuery } from "@/redux/features/dashboard/bookings/bookingsAPI"
+import {
+  useGetBookingsQuery,
+  useCancelBookingMutation,
+} from "@/redux/features/dashboard/bookings/bookingsAPI"
 import type { BookingListItem, BookingListQuery } from "@/types/DashboardTypes/BookingsTypes"
 
 function formatDate(dateString?: string | null): string {
@@ -54,6 +58,7 @@ function BookingListTable() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null)
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false)
+  const [cancelBookingId, setCancelBookingId] = useState<number | null>(null)
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
   const [bookingFilters, setBookingFilters] = useState<Record<string, string[]>>({
     Status: [],
@@ -120,6 +125,8 @@ function BookingListTable() {
     refetch,
   } = useGetBookingsQuery(queryParams)
 
+  const [cancelBooking, { isLoading: isCancelling }] = useCancelBookingMutation()
+
   const handleSearchChange = (value: string) => {
     setSearch(value)
   }
@@ -132,6 +139,29 @@ function BookingListTable() {
   const handleViewDetails = (row: BookingListItem) => {
     setSelectedBookingId(row.booking_id)
     setSheetOpen(true)
+  }
+
+  const handleCancelClick = (row: BookingListItem) => {
+    setCancelBookingId(row.booking_id)
+    setCancelDialogOpen(true)
+  }
+
+  const handleCancelConfirm = async (reason: string) => {
+    if (!cancelBookingId) return
+    try {
+      const res = await cancelBooking({
+        bookingId: cancelBookingId,
+        reason: reason.trim() || "Player requested cancellation",
+      }).unwrap()
+      toast.success(res.message || "Booking cancelled successfully.")
+      setCancelDialogOpen(false)
+      setCancelBookingId(null)
+    } catch (err: unknown) {
+      const errorMsg =
+        (err as { data?: { message?: string } })?.data?.message ||
+        "Failed to cancel booking."
+      toast.error(errorMsg)
+    }
   }
 
   const handleRemoveFilter = (groupTitle: string, value: string) => {
@@ -306,6 +336,17 @@ function BookingListTable() {
         <DropdownMenuItem
           onClick={(e) => {
             e.stopPropagation()
+            handleCancelClick(row)
+          }}
+          disabled={row.status === "cancelled"}
+          className="cursor-pointer text-custom-red focus:text-custom-red focus:bg-white/5 gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <FaTrashAlt className="w-3.5 h-3.5 text-custom-red" />
+          {t("bookings.actions.cancel", "Cancel")}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation()
             handleViewDetails(row)
           }}
           className="cursor-pointer text-primary gap-2 focus:bg-white/5"
@@ -446,11 +487,15 @@ function BookingListTable() {
         bookingId={selectedBookingId}
       />
 
-      {/* Cancel Dialog (kept for future actions) */}
+      {/* Cancel Dialog */}
       <BookingCancelDialog
         open={cancelDialogOpen}
-        onOpenChange={setCancelDialogOpen}
-        onConfirm={() => setCancelDialogOpen(false)}
+        onOpenChange={(open) => {
+          setCancelDialogOpen(open)
+          if (!open) setCancelBookingId(null)
+        }}
+        onConfirm={handleCancelConfirm}
+        isLoading={isCancelling}
       />
 
       {/* Filter Sheet */}

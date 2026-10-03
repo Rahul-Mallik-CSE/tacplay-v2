@@ -5,6 +5,8 @@ import type {
   BookingListQuery,
   BookingListResponse,
   BookingDetailsResponse,
+  CancelBookingResponse,
+  CheckInBookingResponse,
 } from "@/types/DashboardTypes/BookingsTypes";
 
 const bookingsAPI = baseAPI.injectEndpoints({
@@ -78,9 +80,40 @@ const bookingsAPI = baseAPI.injectEndpoints({
       }),
       providesTags: (_result, _error, id) => [{ type: "Bookings", id }],
     }),
+
+    cancelBooking: builder.mutation<
+      CancelBookingResponse,
+      { bookingId: number; reason: string }
+    >({
+      query: ({ bookingId, reason }) => ({
+        url: `/api/arena/bookings/${bookingId}/cancel/`,
+        method: "POST",
+        body: { reason },
+      }),
+      invalidatesTags: (_result, _error, { bookingId }) => [
+        "Bookings",
+        { type: "Bookings", id: bookingId },
+      ],
+    }),
+
+    checkInBooking: builder.mutation<CheckInBookingResponse, number>({
+      query: (bookingId) => ({
+        url: `/api/arena/bookings/${bookingId}/check-in/`,
+        method: "POST",
+      }),
+      invalidatesTags: (_result, _error, bookingId) => [
+        "Bookings",
+        { type: "Bookings", id: bookingId },
+      ],
+    }),
   }),
 });
 
-export const { useGetBookingsQuery, useGetBookingDetailsQuery } = bookingsAPI;
+export const {
+  useGetBookingsQuery,
+  useGetBookingDetailsQuery,
+  useCancelBookingMutation,
+  useCheckInBookingMutation,
+} = bookingsAPI;
 
 export default bookingsAPI;
