@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import PermissionCategorySection from "./PermissionCategorySection"
 import RoleCreatedSuccessModal from "./RoleCreatedSuccessModal"
 import { mockPermissionCategories } from "../../../../mock-data/DashboardMockData/staff-mock-data"
@@ -11,6 +11,8 @@ import type { PermissionCategory } from "@/types/CommonPageTypes/StaffTypes"
 function CreateRoleForm() {
   const { t } = useTranslation("dashboard")
   const router = useRouter()
+  const pathname = usePathname()
+  const basePath = pathname.startsWith("/admin") ? "/admin" : "/dashboard"
 
   const [roleName, setRoleName] = useState("")
   const [categories, setCategories] = useState<PermissionCategory[]>(mockPermissionCategories)
@@ -67,7 +69,7 @@ function CreateRoleForm() {
 
   const handleAssignStaff = () => {
     setSuccessModalOpen(false)
-    router.push("/dashboard/staff/staff-management/add-staff")
+    router.push(`${basePath}/staff/staff-management/add-staff`)
   }
 
   return (

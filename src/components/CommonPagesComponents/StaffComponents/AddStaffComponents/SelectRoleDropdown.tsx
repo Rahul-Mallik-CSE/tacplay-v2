@@ -2,11 +2,17 @@
 
 import React, { useState, useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import { ChevronRight, Search, Plus } from "lucide-react"
+import { ChevronRight, Search, Plus, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { SelectRoleDropdownProps } from "@/types/CommonPageTypes/StaffTypes"
 
-function SelectRoleDropdown({ value, onChange, roles, onCreateNewRole }: SelectRoleDropdownProps) {
+function SelectRoleDropdown({
+  value,
+  onChange,
+  roles = [],
+  onCreateNewRole,
+  isLoading = false,
+}: SelectRoleDropdownProps) {
   const { t } = useTranslation("dashboard")
   const [isOpen, setIsOpen] = useState(false)
   const [search, setSearch] = useState("")
@@ -26,7 +32,9 @@ function SelectRoleDropdown({ value, onChange, roles, onCreateNewRole }: SelectR
     role.name.toLowerCase().includes(search.toLowerCase())
   )
 
-  const selectedRole = roles.find((r) => r.name === value)
+  const selectedRole = roles.find(
+    (r) => r.name === value || String(r.id) === String(value)
+  )
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -35,17 +43,32 @@ function SelectRoleDropdown({ value, onChange, roles, onCreateNewRole }: SelectR
       </label>
       <button
         type="button"
+        disabled={isLoading}
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "w-full flex items-center justify-between px-4 py-3 rounded-lg border text-sm text-left transition-colors cursor-pointer",
           isOpen
             ? "border-custom-yellow/50 bg-muted"
             : "border-white/10 bg-muted hover:border-white/20",
-          selectedRole ? "text-primary" : "text-secondary"
+          selectedRole ? "text-primary" : "text-secondary",
+          isLoading && "opacity-60 cursor-not-allowed"
         )}
       >
-        <span>{selectedRole ? selectedRole.name : t("staff.selectRole")}</span>
-        <ChevronRight className={cn("w-4 h-4 transition-transform", isOpen && "rotate-90")} />
+        <span>
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin text-custom-yellow" />
+              Loading roles...
+            </span>
+          ) : selectedRole ? (
+            selectedRole.name
+          ) : (
+            t("staff.selectRole")
+          )}
+        </span>
+        <ChevronRight
+          className={cn("w-4 h-4 transition-transform", isOpen && "rotate-90")}
+        />
       </button>
 
       {isOpen && (
@@ -55,7 +78,7 @@ function SelectRoleDropdown({ value, onChange, roles, onCreateNewRole }: SelectR
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary" />
               <input
                 type="text"
-                placeholder={t("staff.searchPlaceholder")}
+                placeholder={t("staff.searchPlaceholder", "Search")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-9 pr-4 py-2 rounded-lg bg-muted border border-white/10 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-custom-yellow/50"
@@ -70,7 +93,7 @@ function SelectRoleDropdown({ value, onChange, roles, onCreateNewRole }: SelectR
                 setIsOpen(false)
                 onCreateNewRole()
               }}
-              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-custom-red hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-custom-red hover:bg-white/5 rounded-lg transition-colors cursor-pointer font-medium"
             >
               <Plus className="w-4 h-4" />
               {t("staff.createNewRole")}
@@ -83,14 +106,14 @@ function SelectRoleDropdown({ value, onChange, roles, onCreateNewRole }: SelectR
                 key={role.id}
                 type="button"
                 onClick={() => {
-                  onChange(role.name)
+                  onChange(role.name, role.id)
                   setIsOpen(false)
                   setSearch("")
                 }}
                 className={cn(
                   "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer",
-                  value === role.name
-                    ? "bg-custom-red/10 text-custom-red"
+                  selectedRole?.id === role.id
+                    ? "bg-custom-red/10 text-custom-red font-medium"
                     : "text-primary hover:bg-white/5"
                 )}
               >
