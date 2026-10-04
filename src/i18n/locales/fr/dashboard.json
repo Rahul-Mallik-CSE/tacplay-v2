@@ -199,7 +199,9 @@
       "editButton": "Modifier",
       "editing": "Enregistrement...",
       "updated": "Session mise à jour avec succès.",
-      "updateFailed": "Échec de la mise à jour de la session."
+      "updateFailed": "Échec de la mise à jour de la session.",
+      "viewSessionInfo": "Voir les infos de la session",
+      "viewPlayerInfo": "Voir les infos du joueur"
     },
     "create": {
       "title": "Créer une nouvelle session",

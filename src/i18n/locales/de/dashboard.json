@@ -199,7 +199,9 @@
       "editButton": "Bearbeiten",
       "editing": "Speichern...",
       "updated": "Sitzung erfolgreich aktualisiert.",
-      "updateFailed": "Sitzung konnte nicht aktualisiert werden."
+      "updateFailed": "Sitzung konnte nicht aktualisiert werden.",
+      "viewSessionInfo": "Sitzungsinfo anzeigen",
+      "viewPlayerInfo": "Spielerinfo anzeigen"
     },
     "create": {
       "title": "Neue Sitzung erstellen",

@@ -3,12 +3,13 @@
 /**
  * CreateSessionContainer.tsx
  * Main container component for the Create Session page.
- * Manages form state, validation, and submission.
- * Uses local state for demonstration without API integration.
+ * Manages form state, validation, and submission via:
+ * - POST /api/session/owner/sessions/create/ (FormData)
+ * Supports both "manual_player" (with team names & logos) and "teams" modes.
  */
 
-import React, { useMemo, useRef, useState } from "react"
-import { ArrowLeft, Calendar, Upload, Clock } from "lucide-react"
+import React, { useMemo, useRef, useState, useEffect } from "react"
+import { ArrowLeft, Calendar, Upload, Clock, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -19,6 +20,8 @@ import SessionFormField from "./SessionFormField"
 import SessionCustomSelect from "./SessionCustomSelect"
 import SessionFileUpload from "./SessionFileUpload"
 import TimePicker from "@/components/SharedComponents/TimePicker"
+import { useCreateSessionMutation } from "@/redux/features/dashboard/session/sessionAPI"
+import { useGetArenaInfoQuery } from "@/redux/features/dashboard/field-profile/fieldProfileAPI"
 
 /** Session type options */
 type SessionType = "teams" | "manual_player"
@@ -40,6 +43,9 @@ type CreateSessionForm = {
   team_a_name: string
   team_b_name: string
   entry_fee: string
+  field_name: string
+  field_type: string
+  game_type: string
 }
 
 /** Default form values */
@@ -49,16 +55,19 @@ const DEFAULT_FORM: CreateSessionForm = {
   session_visibility: "premium",
   description: "",
   match_date: "",
-  start_time: "",
-  end_time: "",
-  booking_cut_off_time: "12",
+  start_time: "10:00",
+  end_time: "11:00",
+  booking_cut_off_time: "2",
   booking_cut_off_unit: "hours",
-  team_a_player: "",
-  team_b_player: "",
-  session_type: "teams",
-  team_a_name: "",
-  team_b_name: "",
-  entry_fee: "",
+  team_a_player: "5",
+  team_b_player: "5",
+  session_type: "manual_player",
+  team_a_name: "Red",
+  team_b_name: "Blue",
+  entry_fee: "20",
+  field_name: "",
+  field_type: "Indoor",
+  game_type: "Paintball",
 }
 
 /** Validate time format (HH:MM) */
@@ -74,33 +83,57 @@ const convertToMinutes = (time: string) => {
   return (hour % 24) * 60 + minute
 }
 
+/** Extract 12h time string and AM/PM period */
+const formatTimeAndPeriod = (time24: string) => {
+  if (!time24 || !isValidTime(time24)) return { time: "10:00", period: "AM" }
+  const [hStr, mStr] = time24.split(":")
+  const h = Number(hStr)
+  const minute = mStr || "00"
+  const period = h >= 12 ? "PM" : "AM"
+  const hour12 = h % 12 === 0 ? 12 : h % 12
+  return {
+    time: `${String(hour12).padStart(2, "0")}:${minute}`,
+    period,
+  }
+}
+
 function CreateSessionContainer() {
   const router = useRouter()
   const { t } = useTranslation("dashboard")
+
+  // Prefill arena information if available
+  const { data: arenaData } = useGetArenaInfoQuery()
+
+  // API mutation
+  const [createSession, { isLoading: isCreating }] = useCreateSessionMutation()
 
   // Select options
   const selectOptions = useMemo(
     () => ({
       matchType: [
-        { label: t("sessions.create.options.ranked"), value: "ranked" },
-        { label: t("sessions.create.options.social"), value: "social" },
+        { label: t("sessions.create.options.ranked", "Ranked"), value: "ranked" },
+        { label: t("sessions.create.options.social", "Social"), value: "social" },
       ],
       sessionVisibility: [
-        { label: t("sessions.create.options.premium"), value: "premium" },
-        { label: t("sessions.create.options.public"), value: "public" },
-        { label: t("sessions.create.options.private"), value: "private" },
+        { label: t("sessions.create.options.premium", "Premium"), value: "premium" },
+        { label: t("sessions.create.options.public", "Public"), value: "public" },
+        { label: t("sessions.create.options.private", "Private"), value: "private" },
       ],
       bookingCutOffUnit: [
-        { label: t("sessions.create.options.hours"), value: "hours" },
-        { label: t("sessions.create.options.minutes"), value: "minutes" },
-        { label: t("sessions.create.options.days"), value: "days" },
+        { label: t("sessions.create.options.hours", "Hours"), value: "hours" },
+        { label: t("sessions.create.options.minutes", "Minutes"), value: "minutes" },
+        { label: t("sessions.create.options.days", "Days"), value: "days" },
       ],
       sessionType: [
-        { label: t("sessions.create.options.team"), value: "teams" },
-        { label: t("sessions.create.options.individualPlayer"), value: "manual_player" },
+        { label: t("sessions.create.options.individualPlayer", "Individual Player"), value: "manual_player" },
+        { label: t("sessions.create.options.team", "Teams"), value: "teams" },
+      ],
+      fieldType: [
+        { label: "Indoor", value: "Indoor" },
+        { label: "Outdoor", value: "Outdoor" },
       ],
     }),
-    [t],
+    [t]
   )
 
   // Form state
@@ -109,16 +142,23 @@ function CreateSessionContainer() {
   const [matchTypeOpen, setMatchTypeOpen] = useState(false)
   const [visibilityOpen, setVisibilityOpen] = useState(false)
   const [cutOffUnitOpen, setCutOffUnitOpen] = useState(false)
+  const [fieldTypeOpen, setFieldTypeOpen] = useState(false)
   const [teamALogo, setTeamALogo] = useState<File | null>(null)
   const [teamBLogo, setTeamBLogo] = useState<File | null>(null)
-  const [isCreating, setIsCreating] = useState(false)
+
+  // Auto-set field name from arena info when loaded
+  useEffect(() => {
+    if (arenaData?.data?.field_name && !form.field_name) {
+      setForm((prev) => ({ ...prev, field_name: arenaData.data.field_name }))
+    }
+  }, [arenaData, form.field_name])
 
   // Refs for file inputs
   const teamARef = useRef<HTMLInputElement>(null)
   const teamBRef = useRef<HTMLInputElement>(null)
   const matchDateRef = useRef<HTMLInputElement>(null)
 
-  /** Open native date/time picker */
+  /** Open native date picker */
   const openNativePicker = (inputRef: React.RefObject<HTMLInputElement | null>) => {
     const input = inputRef.current
     if (!input) return
@@ -135,53 +175,44 @@ function CreateSessionContainer() {
   const durationDisplay = useMemo(() => {
     const start = convertToMinutes(form.start_time)
     const end = convertToMinutes(form.end_time)
-    if (start === null || end === null) return t("sessions.create.autoCount")
+    if (start === null || end === null) return t("sessions.create.autoCount", "Auto count")
     const resolvedEnd = end <= start ? end + 24 * 60 : end
     const durationMinutes = resolvedEnd - start
     return durationMinutes > 0
-      ? `${durationMinutes} ${t("sessions.create.min")}`
-      : t("sessions.create.autoCount")
+      ? `${durationMinutes} ${t("sessions.create.min", "min")}`
+      : t("sessions.create.autoCount", "Auto count")
   }, [form.end_time, form.start_time, t])
 
   /** Handle form field change */
   const handleFieldChange = <T extends keyof CreateSessionForm>(
     key: T,
-    value: CreateSessionForm[T],
+    value: CreateSessionForm[T]
   ) => {
     setForm((previous) => ({ ...previous, [key]: value }))
   }
 
   /** Validate form */
   const validateForm = (): string | null => {
-    if (!form.session_name.trim()) return t("sessions.create.validation.sessionNameRequired")
-    if (!form.description.trim()) return t("sessions.create.validation.descriptionRequired")
-    if (!form.match_date) return t("sessions.create.validation.matchDateRequired")
-    if (!isValidTime(form.start_time)) return t("sessions.create.validation.startTimeFormat")
-    if (!isValidTime(form.end_time)) return t("sessions.create.validation.endTimeFormat")
-
-    const start = convertToMinutes(form.start_time)
-    const end = convertToMinutes(form.end_time)
-    if (start === null || end === null) return t("sessions.create.validation.invalidTimes")
-
-    const resolvedEnd = end <= start ? end + 24 * 60 : end
-    if (resolvedEnd - start <= 0) return t("sessions.create.validation.endTimeAfterStart")
+    if (!form.session_name.trim()) return t("sessions.create.validation.sessionNameRequired", "Session name is required")
+    if (!form.description.trim()) return t("sessions.create.validation.descriptionRequired", "Description is required")
+    if (!form.match_date) return t("sessions.create.validation.matchDateRequired", "Match date is required")
+    if (!isValidTime(form.start_time)) return t("sessions.create.validation.startTimeFormat", "Invalid start time")
+    if (!isValidTime(form.end_time)) return t("sessions.create.validation.endTimeFormat", "Invalid end time")
 
     const cutOff = Number(form.booking_cut_off_time)
-    if (!Number.isInteger(cutOff) || cutOff <= 0) return t("sessions.create.validation.cutOffPositive")
+    if (!Number.isInteger(cutOff) || cutOff <= 0) return t("sessions.create.validation.cutOffPositive", "Booking cut-off time must be positive")
 
     const teamAPlayers = Number(form.team_a_player)
     const teamBPlayers = Number(form.team_b_player)
-    if (!Number.isInteger(teamAPlayers) || teamAPlayers <= 0) return t("sessions.create.validation.teamAPlayersPositive")
-    if (!Number.isInteger(teamBPlayers) || teamBPlayers <= 0) return t("sessions.create.validation.teamBPlayersPositive")
+    if (!Number.isInteger(teamAPlayers) || teamAPlayers <= 0) return t("sessions.create.validation.teamAPlayersPositive", "Team A players must be a positive integer")
+    if (!Number.isInteger(teamBPlayers) || teamBPlayers <= 0) return t("sessions.create.validation.teamBPlayersPositive", "Team B players must be a positive integer")
 
     const entryFee = Number(form.entry_fee)
-    if (Number.isNaN(entryFee) || entryFee < 0) return t("sessions.create.validation.entryFeePositive")
+    if (Number.isNaN(entryFee) || entryFee < 0) return t("sessions.create.validation.entryFeePositive", "Entry fee must be a valid number")
 
     if (form.session_type === "manual_player") {
-      if (!form.team_a_name.trim()) return t("sessions.create.validation.teamANameRequired")
-      if (!form.team_b_name.trim()) return t("sessions.create.validation.teamBNameRequired")
-      if (!teamALogo) return t("sessions.create.validation.teamALogoRequired")
-      if (!teamBLogo) return t("sessions.create.validation.teamBLogoRequired")
+      if (!form.team_a_name.trim()) return t("sessions.create.validation.teamANameRequired", "Team A name is required")
+      if (!form.team_b_name.trim()) return t("sessions.create.validation.teamBNameRequired", "Team B name is required")
     }
 
     return null
@@ -197,17 +228,49 @@ function CreateSessionContainer() {
       return
     }
 
-    setIsCreating(true)
+    const { time: startTimeStr, period: startPeriod } = formatTimeAndPeriod(form.start_time)
+    const { time: endTimeStr, period: endPeriod } = formatTimeAndPeriod(form.end_time)
+
+    const formData = new FormData()
+    formData.append("session_name", form.session_name.trim())
+    formData.append("match_type", form.match_type)
+    formData.append("session_visibility", form.session_visibility)
+    formData.append("description", form.description.trim())
+    formData.append("match_date", form.match_date)
+    formData.append("start_time", startTimeStr)
+    formData.append("start_time_period", startPeriod)
+    formData.append("end_time", endTimeStr)
+    formData.append("end_time_period", endPeriod)
+    formData.append("booking_cut_off_time", String(Number(form.booking_cut_off_time)))
+    formData.append("booking_cut_off_unit", form.booking_cut_off_unit)
+    formData.append("team_a_player", String(Number(form.team_a_player)))
+    formData.append("team_b_player", String(Number(form.team_b_player)))
+    formData.append("session_type", form.session_type)
+    formData.append("entry_fee", String(Number(form.entry_fee)))
+    formData.append("field_name", form.field_name.trim() || arenaData?.data?.field_name || "Tacplay Arena")
+    formData.append("field_type", form.field_type.trim() || "Indoor")
+    formData.append("game_type", form.game_type.trim() || "Paintball")
+
+    if (form.session_type === "manual_player") {
+      formData.append("team_a_name", form.team_a_name.trim())
+      formData.append("team_b_name", form.team_b_name.trim())
+      if (teamALogo) {
+        formData.append("team_a_logo", teamALogo)
+      }
+      if (teamBLogo) {
+        formData.append("team_b_logo", teamBLogo)
+      }
+    }
 
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      toast.success(t("sessions.create.messages.success"))
+      const res = await createSession(formData).unwrap()
+      toast.success(res.message || t("sessions.create.messages.success", "Session created successfully."))
       router.push("/dashboard/sessions")
-    } catch {
-      toast.error(t("sessions.create.messages.failed"))
-    } finally {
-      setIsCreating(false)
+    } catch (err: unknown) {
+      const errorMsg =
+        (err as { data?: { message?: string } })?.data?.message ||
+        t("sessions.create.messages.failed", "Failed to create session.")
+      toast.error(errorMsg)
     }
   }
 
@@ -222,11 +285,11 @@ function CreateSessionContainer() {
             </button>
           </Link>
           <h1 className="text-2xl sm:text-3xl font-bold text-primary">
-            {t("sessions.create.title")}
+            {t("sessions.create.title", "Create New Session")}
           </h1>
         </div>
         <p className="text-sm text-secondary ml-10">
-          {t("sessions.create.subtitle")}
+          {t("sessions.create.subtitle", "Set a new match session with teams, players, pricing and ranking rules.")}
         </p>
       </div>
 
@@ -235,22 +298,22 @@ function CreateSessionContainer() {
         {/* Session Details Section */}
         <section className="space-y-4">
           <h2 className="text-lg font-semibold text-primary">
-            {t("sessions.create.sessionDetails")}
+            {t("sessions.create.sessionDetails", "Session Details")}
           </h2>
 
-          <SessionFormField label={t("sessions.create.sessionName")}>
+          <SessionFormField label={t("sessions.create.sessionName", "Session Name")}>
             <input
               type="text"
-              placeholder={t("sessions.create.enterSessionName")}
+              placeholder={t("sessions.create.enterSessionName", "Enter session name")}
               className="w-full px-4 py-2.5 rounded-lg bg-transparent border border-white/10 text-sm text-primary placeholder:text-secondary/60 outline-none focus:border-custom-red/50 transition-colors"
               value={form.session_name}
               onChange={(event) => handleFieldChange("session_name", event.target.value)}
             />
           </SessionFormField>
 
-          <SessionFormField label={t("sessions.create.matchType")}>
+          <SessionFormField label={t("sessions.create.matchType", "Match Type")}>
             <SessionCustomSelect
-              placeholder={t("sessions.create.selectMatchType")}
+              placeholder={t("sessions.create.selectMatchType", "Select match type")}
               options={selectOptions.matchType}
               value={form.match_type}
               open={matchTypeOpen}
@@ -262,9 +325,9 @@ function CreateSessionContainer() {
             />
           </SessionFormField>
 
-          <SessionFormField label={t("sessions.create.sessionVisibility")}>
+          <SessionFormField label={t("sessions.create.sessionVisibility", "Session Visibility")}>
             <SessionCustomSelect
-              placeholder={t("sessions.create.selectVisibility")}
+              placeholder={t("sessions.create.selectVisibility", "Select visibility")}
               options={selectOptions.sessionVisibility}
               value={form.session_visibility}
               open={visibilityOpen}
@@ -276,10 +339,10 @@ function CreateSessionContainer() {
             />
           </SessionFormField>
 
-          <SessionFormField label={t("sessions.create.description")}>
+          <SessionFormField label={t("sessions.create.description", "Description")}>
             <textarea
               rows={4}
-              placeholder={t("sessions.create.enterDescription")}
+              placeholder={t("sessions.create.enterDescription", "Enter session description")}
               className="w-full px-4 py-2.5 rounded-lg bg-transparent border border-white/10 text-sm text-primary placeholder:text-secondary/60 outline-none focus:border-custom-red/50 transition-colors resize-none min-h-24"
               value={form.description}
               onChange={(event) => handleFieldChange("description", event.target.value)}
@@ -290,10 +353,10 @@ function CreateSessionContainer() {
         {/* Date & Time Configuration Section */}
         <section className="space-y-4">
           <h2 className="text-lg font-semibold text-primary">
-            {t("sessions.create.dateTimeConfig")}
+            {t("sessions.create.dateTimeConfig", "Date & Time Configuration")}
           </h2>
 
-          <SessionFormField label={t("sessions.create.matchDate")}>
+          <SessionFormField label={t("sessions.create.matchDate", "Match Date")}>
             <div className="relative">
               <input
                 ref={matchDateRef}
@@ -304,7 +367,7 @@ function CreateSessionContainer() {
               />
               <button
                 type="button"
-                aria-label={t("sessions.create.openDatePicker")}
+                aria-label={t("sessions.create.openDatePicker", "Open date picker")}
                 onClick={() => openNativePicker(matchDateRef)}
                 className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors"
               >
@@ -314,13 +377,13 @@ function CreateSessionContainer() {
           </SessionFormField>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <SessionFormField label={t("sessions.create.startTime")}>
+            <SessionFormField label={t("sessions.create.startTime", "Start Time")}>
               <TimePicker
                 value={form.start_time}
                 onChange={(val) => handleFieldChange("start_time", val)}
               />
             </SessionFormField>
-            <SessionFormField label={t("sessions.create.endTime")}>
+            <SessionFormField label={t("sessions.create.endTime", "End Time")}>
               <TimePicker
                 value={form.end_time}
                 onChange={(val) => handleFieldChange("end_time", val)}
@@ -328,7 +391,7 @@ function CreateSessionContainer() {
             </SessionFormField>
           </div>
 
-          <SessionFormField label={t("sessions.create.duration")}>
+          <SessionFormField label={t("sessions.create.duration", "Duration")}>
             <div className="relative">
               <input
                 type="text"
@@ -340,18 +403,18 @@ function CreateSessionContainer() {
             </div>
           </SessionFormField>
 
-          <SessionFormField label={t("sessions.create.bookingCutOffTime")}>
+          <SessionFormField label={t("sessions.create.bookingCutOffTime", "Booking Cut-Off Time")}>
             <div className="flex gap-2">
               <input
                 type="number"
                 min={1}
-                placeholder={t("sessions.create.enterCutOffValue")}
+                placeholder={t("sessions.create.enterCutOffValue", "Enter cut-off value")}
                 className="flex-1 px-4 py-2.5 rounded-lg bg-transparent border border-white/10 text-sm text-primary placeholder:text-secondary/60 outline-none focus:border-custom-red/50 transition-colors"
                 value={form.booking_cut_off_time}
                 onChange={(event) => handleFieldChange("booking_cut_off_time", event.target.value)}
               />
               <SessionCustomSelect
-                placeholder={t("sessions.create.unit")}
+                placeholder={t("sessions.create.unit", "Unit")}
                 options={selectOptions.bookingCutOffUnit}
                 value={form.booking_cut_off_unit}
                 open={cutOffUnitOpen}
@@ -369,25 +432,25 @@ function CreateSessionContainer() {
         {/* Teams & Capacity Section */}
         <section className="space-y-4">
           <h2 className="text-lg font-semibold text-primary">
-            {t("sessions.create.teamsCapacity")}
+            {t("sessions.create.teamsCapacity", "Teams & Capacity")}
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <SessionFormField label={t("sessions.create.teamAPlayer")}>
+            <SessionFormField label={t("sessions.create.teamAPlayer", "Team A Player")}>
               <input
                 type="number"
                 min={1}
-                placeholder={t("sessions.create.enterTeamAPlayers")}
+                placeholder={t("sessions.create.enterTeamAPlayers", "Enter Team A players")}
                 className="w-full px-4 py-2.5 rounded-lg bg-transparent border border-white/10 text-sm text-primary placeholder:text-secondary/60 outline-none focus:border-custom-red/50 transition-colors"
                 value={form.team_a_player}
                 onChange={(event) => handleFieldChange("team_a_player", event.target.value)}
               />
             </SessionFormField>
-            <SessionFormField label={t("sessions.create.teamBPlayer")}>
+            <SessionFormField label={t("sessions.create.teamBPlayer", "Team B Player")}>
               <input
                 type="number"
                 min={1}
-                placeholder={t("sessions.create.enterTeamBPlayers")}
+                placeholder={t("sessions.create.enterTeamBPlayers", "Enter Team B players")}
                 className="w-full px-4 py-2.5 rounded-lg bg-transparent border border-white/10 text-sm text-primary placeholder:text-secondary/60 outline-none focus:border-custom-red/50 transition-colors"
                 value={form.team_b_player}
                 onChange={(event) => handleFieldChange("team_b_player", event.target.value)}
@@ -395,9 +458,9 @@ function CreateSessionContainer() {
             </SessionFormField>
           </div>
 
-          <SessionFormField label={t("sessions.create.sessionType")}>
+          <SessionFormField label={t("sessions.create.sessionType", "Session Type")}>
             <SessionCustomSelect
-              placeholder={t("sessions.create.selectTeamMode")}
+              placeholder={t("sessions.create.selectTeamMode", "Select session type")}
               options={selectOptions.sessionType}
               value={form.session_type}
               open={sessionTypeOpen}
@@ -409,23 +472,23 @@ function CreateSessionContainer() {
             />
           </SessionFormField>
 
-          {/* Conditional Team Fields */}
+          {/* Conditional Team Fields (Manual Player Mode) */}
           {form.session_type === "manual_player" && (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <SessionFormField label={t("sessions.create.teamAName")}>
+                <SessionFormField label={t("sessions.create.teamAName", "Team A Name")}>
                   <input
                     type="text"
-                    placeholder={t("sessions.create.enterTeamAName")}
+                    placeholder={t("sessions.create.enterTeamAName", "Enter Team A name")}
                     className="w-full px-4 py-2.5 rounded-lg bg-transparent border border-white/10 text-sm text-primary placeholder:text-secondary/60 outline-none focus:border-custom-red/50 transition-colors"
                     value={form.team_a_name}
                     onChange={(event) => handleFieldChange("team_a_name", event.target.value)}
                   />
                 </SessionFormField>
-                <SessionFormField label={t("sessions.create.teamBName")}>
+                <SessionFormField label={t("sessions.create.teamBName", "Team B Name")}>
                   <input
                     type="text"
-                    placeholder={t("sessions.create.enterTeamBName")}
+                    placeholder={t("sessions.create.enterTeamBName", "Enter Team B name")}
                     className="w-full px-4 py-2.5 rounded-lg bg-transparent border border-white/10 text-sm text-primary placeholder:text-secondary/60 outline-none focus:border-custom-red/50 transition-colors"
                     value={form.team_b_name}
                     onChange={(event) => handleFieldChange("team_b_name", event.target.value)}
@@ -435,7 +498,7 @@ function CreateSessionContainer() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Team A Logo */}
-                <SessionFormField label={t("sessions.create.teamALogo")}>
+                <SessionFormField label={t("sessions.create.teamALogo", "Team A Logo")}>
                   <div className="space-y-3">
                     <div
                       onClick={() => teamARef.current?.click()}
@@ -443,10 +506,10 @@ function CreateSessionContainer() {
                     >
                       <Upload className="w-6 h-6 text-secondary" />
                       <p className="text-xs text-secondary text-center">
-                        {t("sessions.create.uploadInstructions")}
+                        {t("sessions.create.uploadInstructions", "Click to upload team logo")}
                       </p>
                       <p className="text-[10px] text-secondary/60 text-center">
-                        {t("sessions.create.uploadLimit")}
+                        PNG, JPG up to 5MB
                       </p>
                     </div>
                     <button
@@ -454,7 +517,7 @@ function CreateSessionContainer() {
                       onClick={() => teamARef.current?.click()}
                       className="cursor-pointer px-4 py-1.5 text-xs font-medium bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-md hover:bg-emerald-600/30 transition-colors"
                     >
-                      {t("sessions.create.uploadLogo")}
+                      {t("sessions.create.uploadLogo", "Upload Logo")}
                     </button>
                     <input
                       type="file"
@@ -470,7 +533,7 @@ function CreateSessionContainer() {
                 </SessionFormField>
 
                 {/* Team B Logo */}
-                <SessionFormField label={t("sessions.create.teamBLogo")}>
+                <SessionFormField label={t("sessions.create.teamBLogo", "Team B Logo")}>
                   <div className="space-y-3">
                     <div
                       onClick={() => teamBRef.current?.click()}
@@ -478,10 +541,10 @@ function CreateSessionContainer() {
                     >
                       <Upload className="w-6 h-6 text-secondary" />
                       <p className="text-xs text-secondary text-center">
-                        {t("sessions.create.uploadInstructions")}
+                        {t("sessions.create.uploadInstructions", "Click to upload team logo")}
                       </p>
                       <p className="text-[10px] text-secondary/60 text-center">
-                        {t("sessions.create.uploadLimit")}
+                        PNG, JPG up to 5MB
                       </p>
                     </div>
                     <button
@@ -489,7 +552,7 @@ function CreateSessionContainer() {
                       onClick={() => teamBRef.current?.click()}
                       className="cursor-pointer px-4 py-1.5 text-xs font-medium bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-md hover:bg-emerald-600/30 transition-colors"
                     >
-                      {t("sessions.create.uploadLogo")}
+                      {t("sessions.create.uploadLogo", "Upload Logo")}
                     </button>
                     <input
                       type="file"
@@ -508,17 +571,57 @@ function CreateSessionContainer() {
           )}
         </section>
 
+        {/* Field & Game Details Section */}
+        <section className="space-y-4">
+          <h2 className="text-lg font-semibold text-primary">Field & Game Information</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <SessionFormField label="Field Name">
+              <input
+                type="text"
+                placeholder="e.g. RedValley Sports Arena"
+                className="w-full px-4 py-2.5 rounded-lg bg-transparent border border-white/10 text-sm text-primary placeholder:text-secondary/60 outline-none focus:border-custom-red/50 transition-colors"
+                value={form.field_name}
+                onChange={(event) => handleFieldChange("field_name", event.target.value)}
+              />
+            </SessionFormField>
+
+            <SessionFormField label="Field Type">
+              <SessionCustomSelect
+                placeholder="Select field type"
+                options={selectOptions.fieldType}
+                value={form.field_type}
+                open={fieldTypeOpen}
+                onToggle={() => setFieldTypeOpen(!fieldTypeOpen)}
+                onSelect={(val) => {
+                  handleFieldChange("field_type", val)
+                  setFieldTypeOpen(false)
+                }}
+              />
+            </SessionFormField>
+
+            <SessionFormField label="Game Type">
+              <input
+                type="text"
+                placeholder="e.g. Paintball, hockey"
+                className="w-full px-4 py-2.5 rounded-lg bg-transparent border border-white/10 text-sm text-primary placeholder:text-secondary/60 outline-none focus:border-custom-red/50 transition-colors"
+                value={form.game_type}
+                onChange={(event) => handleFieldChange("game_type", event.target.value)}
+              />
+            </SessionFormField>
+          </div>
+        </section>
+
         {/* Pricing & Payment Section */}
         <section className="space-y-4">
           <h2 className="text-lg font-semibold text-primary">
-            {t("sessions.create.pricingPayment")}
+            {t("sessions.create.pricingPayment", "Pricing & Payment")}
           </h2>
 
-          <SessionFormField label={t("sessions.create.entryFee")}>
+          <SessionFormField label={t("sessions.create.entryFee", "Entry Fee (€)")}>
             <input
               type="number"
               min={0}
-              placeholder={t("sessions.create.enterEntryFee")}
+              placeholder={t("sessions.create.enterEntryFee", "Enter entry fee")}
               className="w-full px-4 py-2.5 rounded-lg bg-transparent border border-white/10 text-sm text-primary placeholder:text-secondary/60 outline-none focus:border-custom-red/50 transition-colors"
               value={form.entry_fee}
               onChange={(event) => handleFieldChange("entry_fee", event.target.value)}
@@ -533,11 +636,22 @@ function CreateSessionContainer() {
               type="button"
               className="cursor-pointer bg-transparent px-10 py-2.5 rounded-lg border border-white/10 text-primary text-sm font-medium hover:bg-white/5 transition-colors"
             >
-              {t("sessions.create.cancel")}
+              {t("sessions.create.cancel", "Cancel")}
             </Button>
           </Link>
-          <Button type="submit" disabled={isCreating} className="cursor-pointer">
-            {isCreating ? t("sessions.create.creating") : t("sessions.create.createSession")}
+          <Button
+            type="submit"
+            disabled={isCreating}
+            className="cursor-pointer bg-custom-red hover:bg-custom-red/80 text-white px-8 py-2.5 rounded-lg font-semibold transition-colors disabled:opacity-50"
+          >
+            {isCreating ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                {t("sessions.create.creating", "Creating...")}
+              </span>
+            ) : (
+              t("sessions.create.createSession", "Create Session")
+            )}
           </Button>
         </div>
       </form>

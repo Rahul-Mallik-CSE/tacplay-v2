@@ -199,7 +199,9 @@
       "editButton": "Editar",
       "editing": "Guardando...",
       "updated": "Sesión actualizada correctamente.",
-      "updateFailed": "Error al actualizar la sesión."
+      "updateFailed": "Error al actualizar la sesión.",
+      "viewSessionInfo": "Ver información de la sesión",
+      "viewPlayerInfo": "Ver información del jugador"
     },
     "create": {
       "title": "Crear nueva sesión",

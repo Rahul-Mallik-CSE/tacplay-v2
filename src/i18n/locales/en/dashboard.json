@@ -208,7 +208,8 @@
       "editing": "Saving...",
       "updated": "Session updated successfully.",
       "updateFailed": "Failed to update session.",
-      "viewSessionInfo": "View Session Info"
+      "viewSessionInfo": "View Session Info",
+      "viewPlayerInfo": "View Player Info"
     },
     "create": {
       "title": "Create New Session",

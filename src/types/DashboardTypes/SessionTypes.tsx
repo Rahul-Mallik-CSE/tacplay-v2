@@ -1,7 +1,7 @@
 /**
  * SessionTypes.tsx
  * Shared TypeScript types and interfaces for the Sessions feature.
- * Centralizes all type definitions used across session components.
+ * Centralizes all type definitions used across session components and API endpoints.
  */
 
 /** Status filter options for session list */
@@ -12,109 +12,137 @@ export type SessionStatusFilter =
   | "completed"
   | "full"
   | "cancelled"
+  | string
 
 /** Match type filter options for session list */
-export type SessionMatchTypeFilter = "all" | "ranked" | "social"
+export type SessionMatchTypeFilter = "all" | "ranked" | "social" | string
 
 /** Query parameters for fetching sessions list */
-export type SessionsListQuery = {
-  page: number
-  limit: number
-  status?: SessionStatusFilter
-  match_type?: SessionMatchTypeFilter
+export interface SessionsListQuery {
+  page?: number
+  limit?: number
+  status?: string
+  match_type?: string
+  search?: string
+  session_visibility?: string
+  session_type?: string
+  match_date?: string
+  staff_id?: number | string
+  date_from?: string
+  date_to?: string
+  sort_by?: string
+  sort_order?: "asc" | "desc"
+}
+
+/** Assigned staff on a session list item */
+export interface SessionAssignedStaffSummary {
+  id: number
+  staff_name: string
+  role_id?: number
+  role_name?: string
+  email?: string
+  profile_image?: string | null
+}
+
+/** Price object in session list item */
+export interface SessionPrice {
+  amount: string
+  display: string
 }
 
 /** Single session item in the list table */
-export type SessionsListItem = {
+export interface SessionsListItem {
   id: number
   session_id: string
   session_name: string
   date: string
   time: string
-  date_time: string
+  date_time?: string
+  assigned_staff?: SessionAssignedStaffSummary[]
+  assign_staff?: string
   match_type: string
   match_type_display: string
-  assign_staff: string
   player: string
   booked: string
-  price: number
+  price: SessionPrice | number | string
   status: string
   status_display: string
-  disabled: boolean
+  disabled?: boolean
 }
 
 /** API response structure for sessions list */
-export type SessionsListResponse = {
+export interface SessionsListResponse {
   meta: {
     page: number
     limit: number
     total: number
     totalPage: number
+    filters?: {
+      search?: string
+      match_type?: string
+      session_visibility?: string
+      session_type?: string
+      status?: string
+      match_date?: string
+      staff_id?: string
+      date_from?: string
+      date_to?: string
+      sort_by?: string
+      sort_order?: string
+    }
   }
   data: SessionsListItem[]
 }
 
-/** Detailed session response with team players */
-export type SessionDetailsResponse = {
+/** Staff member from GET /api/session/owner/sessions/staff/ */
+export interface SessionStaffItem {
+  id: number
+  staff_name: string
+  email: string
+  phone: string
+  profile_image: string | null
+  role_id: number
+  role_name: string
+  active_sessions: number
+  is_active: boolean
+}
+
+/** Response for GET /api/session/owner/sessions/staff/ */
+export interface SessionStaffListResponse {
   success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: SessionStaffItem[]
+  requestId?: string
+}
+
+/** Payload for POST /api/session/owner/sessions/{id}/assign-staff/ */
+export interface AssignStaffPayload {
+  staff_ids: number[]
+}
+
+/** Response for POST /api/session/owner/sessions/{id}/assign-staff/ */
+export interface AssignStaffResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
   data: {
-    id: number
-    session_id: string
+    session_id: number
     session_name: string
-    match_type: string
-    match_type_display: string
-    session_visibility: string
-    description: string
-    match_date: string
-    start_time: string
-    start_time_period: string
-    end_time: string
-    end_time_period: string
-    time: string
-    duration: number
-    booking_cut_off_time: number
-    booking_cut_off_unit: string
-    team_a_player: number
-    team_b_player: number
-    session_type: string
-    team_a_name: string
-    team_b_name: string
-    team_a_logo: string | null
-    team_b_logo: string | null
-    entry_fee: number
-    team_a_score: number
-    team_b_score: number
-    status: string
-    status_display: string
-    owner: number
-    top_summary: {
-      team_a: {
-        name: string
-        logo: string | null
-        score: number
-      }
-      team_b: {
-        name: string
-        logo: string | null
-        score: number
-      }
-      team_full: {
-        booked_display: string
-        team_a_booked: number
-        team_b_booked: number
-        team_a_capacity: number
-        team_b_capacity: number
-        team_a_display: string
-        team_b_display: string
-      }
-    }
-    team_a_players: SessionTeamPlayer[]
-    team_b_players: SessionTeamPlayer[]
+    assigned_staff: Array<{
+      id: number
+      staff_name: string
+      email?: string
+      profile_image?: string | null
+      role_id?: number
+      role_name?: string
+    }>
   }
+  requestId?: string
 }
 
 /** Player data within a session team */
-export type SessionTeamPlayer = {
+export interface SessionTeamPlayer {
   player_id: number
   booking_id: number
   name: string
@@ -143,8 +171,67 @@ export type SessionTeamPlayer = {
   awarded_score: number
 }
 
-/** Session info response for info sheet */
-export type SessionInfoResponse = {
+/** Detailed session response with team players from GET /api/session/owner/sessions/{id}/ */
+export interface SessionDetailsResponse {
+  success: boolean
+  data: {
+    id: number
+    session_id: string
+    session_name: string
+    match_type: string
+    match_type_display: string
+    session_visibility: string
+    description: string
+    match_date: string
+    start_time: string
+    start_time_period: string
+    end_time: string
+    end_time_period: string
+    time: string
+    duration: number
+    booking_cut_off_time: number
+    booking_cut_off_unit: string
+    team_a_player: number
+    team_b_player: number
+    session_type: string
+    team_a_name: string | null
+    team_b_name: string | null
+    team_a_logo: string | null
+    team_b_logo: string | null
+    entry_fee: number
+    team_a_score: number
+    team_b_score: number
+    status: string
+    status_display: string
+    owner: number
+    top_summary: {
+      team_a: {
+        name: string | null
+        logo: string | null
+        score: number
+      }
+      team_b: {
+        name: string | null
+        logo: string | null
+        score: number
+      }
+      team_full: {
+        booked_display: string
+        team_a_booked: number
+        team_b_booked: number
+        team_a_capacity: number
+        team_b_capacity: number
+        team_a_display: string
+        team_b_display: string
+      }
+    }
+    team_a_players: SessionTeamPlayer[]
+    team_b_players: SessionTeamPlayer[]
+  }
+}
+
+/** Session info response for info sheet GET /api/session/owner/sessions/{id}/info/ */
+export interface SessionInfoResponse {
   success: boolean
   message: string
   meta: Record<string, unknown>
@@ -187,11 +274,37 @@ export type SessionInfoResponse = {
       primary_button: string
     }
   }
-  requestId: string
+  requestId?: string
 }
 
-/** Player info response for player details sheet */
-export type SessionPlayerInfoResponse = {
+/** Response for match start POST /api/session/owner/sessions/{id}/start/ */
+export interface SessionStartMatchResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: {
+    id: number
+    status: string
+    status_display: string
+  }
+  requestId?: string
+}
+
+/** Response for match cancel PATCH /api/session/owner/sessions/{id}/cancel/ */
+export interface SessionCancelMatchResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: {
+    id: number
+    status: string
+    status_display: string
+  }
+  requestId?: string
+}
+
+/** Player info response for player details sheet GET /api/session/owner/sessions/{sessionId}/players/{bookingId}/ */
+export interface SessionPlayerInfoResponse {
   success: boolean
   message: string
   meta: Record<string, unknown>
@@ -230,58 +343,16 @@ export type SessionPlayerInfoResponse = {
       show_submit_button: boolean
     }
   }
-  requestId: string
+  requestId?: string
 }
 
-/** Action response for session operations */
-export type SessionActionResponse = {
-  success: boolean
-  message: string
-  meta: Record<string, unknown>
-  data: {
-    id: number
-    status: string
-    status_display: string
-  }
-  requestId: string
-}
-
-/** Payload for submitting session result */
-export type SessionSubmitResultPayload =
-  | {
-      team_a_result: "win" | "loss" | "draw"
-      team_b_result: "win" | "loss" | "draw"
-    }
-  | {
-      players: Array<{
-        booking_id: number
-        result: "win" | "loss" | "draw"
-      }>
-    }
-
-/** Response for submitting session result */
-export type SessionSubmitResultResponse = {
-  success: boolean
-  message: string
-  meta: Record<string, unknown>
-  data: {
-    id: number
-    status: string
-    status_display: string
-    team_a_score?: number
-    team_b_score?: number
-    champion?: string | null
-  }
-  requestId: string
-}
-
-/** Payload for checking in players */
-export type SessionCheckInPayload = {
+/** Payload for checking in players POST /api/session/owner/sessions/{id}/check-in/ */
+export interface SessionCheckInPayload {
   booking_ids: number[]
 }
 
 /** Response for checking in players */
-export type SessionCheckInResponse = {
+export interface SessionCheckInResponse {
   success: boolean
   message: string
   meta: Record<string, unknown>
@@ -293,18 +364,50 @@ export type SessionCheckInResponse = {
     total_player_count: number
     checked_in_display: string
   }
-  requestId: string
+  requestId?: string
 }
 
-/** Response for creating a session */
-export type CreateSessionResponse = {
+/** Payload for submitting session result POST /api/session/owner/sessions/{id}/submit-result/ */
+export type SessionSubmitResultPayload =
+  | {
+      team_a_result: "win" | "loss" | "draw" | string
+      team_b_result: "win" | "loss" | "draw" | string
+    }
+  | {
+      players: Array<{
+        booking_id: number
+        result: "win" | "loss" | "draw" | string
+      }>
+    }
+
+/** Response for submitting session result */
+export interface SessionSubmitResultResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: {
+    id: number
+    status: string
+    status_display: string
+    team_a_score?: number
+    team_b_score?: number
+    champion?: string | null
+  }
+  requestId?: string
+}
+
+/** Response for creating a session POST /api/session/owner/sessions/create/ */
+export interface CreateSessionResponse {
   success: boolean
   message: string
   data: {
     id: number
-    team_a_logo: string | null
-    team_b_logo: string | null
+    team_a_logo?: string | null
+    team_b_logo?: string | null
     session_name: string
+    field_name?: string
+    field_type?: string
+    game_type?: string
     match_type: string
     session_visibility: string
     description: string
@@ -313,24 +416,51 @@ export type CreateSessionResponse = {
     start_time_period: string
     end_time: string
     end_time_period: string
-    duration: number
+    duration?: number
     booking_cut_off_time: number
     booking_cut_off_unit: string
     team_a_player: number
     team_b_player: number
     session_type: string
-    team_a_name: string | null
-    team_b_name: string | null
+    team_a_name?: string | null
+    team_b_name?: string | null
     entry_fee: number
-    team_a_score: number
-    team_b_score: number
+    team_a_score?: number
+    team_b_score?: number
     status: string
-    owner: number
+    owner?: number
   }
 }
 
-/** Payload for creating a session (FormData) */
-export type CreateSessionPayload = FormData
+/** Result summary response GET /api/session/owner/sessions/{id}/result-summary/ */
+export interface SessionResultSummaryResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: {
+    session_id: string
+    session_name: string
+    match_date: string
+    time: string
+    field_name: string
+    champion: string | null
+    team_a: {
+      name: string | null
+      logo: string | null
+      score: number
+      result: string
+      result_display: string
+    }
+    team_b: {
+      name: string | null
+      logo: string | null
+      score: number
+      result: string
+      result_display: string
+    }
+  }
+  requestId?: string
+}
 
 /** Props for SessionMatchTypeDot component */
 export interface SessionMatchTypeDotProps {
@@ -344,10 +474,10 @@ export interface SessionStatusBadgeProps {
 
 /** Props for SessionFilters component */
 export interface SessionFiltersProps {
-  status: SessionStatusFilter
-  matchType: SessionMatchTypeFilter
-  onStatusChange: (status: SessionStatusFilter) => void
-  onMatchTypeChange: (matchType: SessionMatchTypeFilter) => void
+  status?: string
+  matchType?: string
+  onStatusChange: (status: string) => void
+  onMatchTypeChange: (matchType: string) => void
 }
 
 /** Props for SessionInfoSheet component */
@@ -355,6 +485,8 @@ export interface SessionInfoSheetProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   sessionId: number | null
+  onMatchStatusChange?: () => void
+  onViewResultSummary?: () => void
 }
 
 /** Props for EditSessionSheet component */
@@ -370,6 +502,7 @@ export interface PlayerDetailsSheetProps {
   onOpenChange: (open: boolean) => void
   sessionId: number | null
   bookingId: number | null
+  onSuccess?: () => void
 }
 
 /** Props for AssignStaffSheet component */
@@ -378,6 +511,8 @@ export interface AssignStaffSheetProps {
   onOpenChange: (open: boolean) => void
   sessionId: number | null
   sessionName?: string
+  currentStaffIds?: number[]
+  onAssigned?: () => void
 }
 
 /** Props for SessionConfirmModal component */
@@ -386,4 +521,11 @@ export interface SessionConfirmModalProps {
   onOpenChange: (open: boolean) => void
   onConfirm: () => void
   type: "assign" | "cancel"
+}
+
+/** Props for SessionResultSummaryModal component */
+export interface SessionResultSummaryModalProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  sessionId: number | null
 }
