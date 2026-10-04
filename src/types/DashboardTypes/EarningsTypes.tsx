@@ -6,9 +6,20 @@
 
 /** Query parameters for fetching earnings list */
 export type EarningsListQuery = {
-  page: number
-  limit: number
+  page?: number
+  limit?: number
   search?: string
+  plan?: string
+  payment_method?: string
+  currency?: string
+  session_id?: string | number
+  session_type?: string
+  date_from?: string
+  date_to?: string
+  amount_min?: string | number
+  amount_max?: string | number
+  sort_by?: string
+  order?: string
 }
 
 /** Earnings summary statistics */

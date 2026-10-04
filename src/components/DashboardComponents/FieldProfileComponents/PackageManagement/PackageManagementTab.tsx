@@ -16,7 +16,10 @@ import { mockPackageManagement } from "../../../../mock-data/DashboardMockData/a
 import SectionHeader from "../SectionHeader"
 import EditSaveButton from "../EditSaveButton"
 import PackageCard from "./PackageCard"
-
+import {
+  useGetPackagesQuery,
+  useUpdatePackagesMutation,
+} from "@/redux/features/dashboard/field-profile/fieldProfileAPI"
 
 const EMPTY_PACKAGE: PackageForm = {
   package_name: "",
@@ -27,16 +30,20 @@ const EMPTY_PACKAGE: PackageForm = {
 }
 
 const PackageManagementTab = ({
-  packageManagement = mockPackageManagement,
+  packageManagement,
 }: PackageManagementTabProps) => {
   const { t } = useTranslation("dashboard")
+  const { data: apiData } = useGetPackagesQuery()
+  const [updatePackagesMutation, { isLoading: isUpdating }] = useUpdatePackagesMutation()
+
   const [isEditing, setIsEditing] = useState(false)
   const [draftPackages, setDraftPackages] = useState<PackageForm[] | null>(null)
-  const [isSaving, setIsSaving] = useState(false)
+
+  const livePackages = apiData?.data?.packages ?? packageManagement?.packages ?? mockPackageManagement.packages
 
   const basePackages = useMemo(
     () =>
-      (packageManagement.packages ?? []).map((item) => ({
+      livePackages.map((item) => ({
         id: item.id,
         package_name: item.package_name,
         description: item.description,
@@ -44,7 +51,7 @@ const PackageManagementTab = ({
         include_items: item.include_items,
         is_active: item.is_active,
       })),
-    [packageManagement],
+    [livePackages],
   )
 
   const packages = isEditing ? (draftPackages ?? basePackages) : basePackages
@@ -57,18 +64,29 @@ const PackageManagementTab = ({
 
   const handleSave = async () => {
     if (!draftPackages) return
-    setIsSaving(true)
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800))
-      toast.success(t("arena.packagesTab.updated"))
+      const payload = {
+        packages: draftPackages.map((p) => ({
+          package_name: p.package_name.trim(),
+          description: p.description.trim(),
+          package_fee: String(p.package_fee).trim(),
+          include_items: p.include_items,
+          is_active: p.is_active ?? true,
+        })),
+      }
+      const res = await updatePackagesMutation(payload).unwrap()
+      toast.success(res?.message || t("arena.packagesTab.updated"))
       setDraftPackages(null)
       setIsEditing(false)
-    } catch {
-      toast.error(t("arena.packagesTab.updateFailed"))
-    } finally {
-      setIsSaving(false)
+    } catch (err: unknown) {
+      const errorMsg =
+        (err as { data?: { message?: string } })?.data?.message ||
+        t("arena.packagesTab.updateFailed")
+      toast.error(errorMsg)
     }
   }
+
+  const isSaving = isUpdating
 
   const updatePackage = (index: number, patch: Partial<PackageForm>) => {
     setDraftPackages((p) =>

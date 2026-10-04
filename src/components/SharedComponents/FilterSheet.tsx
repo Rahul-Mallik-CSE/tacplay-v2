@@ -65,6 +65,7 @@ interface FilterSheetProps {
   onFilterChange: (filters: Record<string, string[]>) => void
   onApply?: () => void
   onReset?: () => void
+  children?: React.ReactNode
 }
 
 export default function FilterSheet({
@@ -76,6 +77,7 @@ export default function FilterSheet({
   onFilterChange,
   onApply,
   onReset,
+  children,
 }: FilterSheetProps) {
   const { t } = useTranslation("dashboard")
 
@@ -144,6 +146,7 @@ export default function FilterSheet({
               onToggle={(value) => handleToggle(group.title, value)}
             />
           ))}
+          {children}
         </div>
 
         <SheetFooter className="border-t border-white/5 px-5 py-4 flex-row gap-3">

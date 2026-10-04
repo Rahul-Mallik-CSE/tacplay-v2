@@ -53,38 +53,41 @@ export default function PackageActionDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-1 z-50 bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[180px]">
+        <div className="absolute right-0 top-full mt-1 z-50 bg-card rounded-lg shadow-lg border border-white/10 py-1 min-w-[180px]">
+          {/*
           <button
             onClick={(e) => {
               e.stopPropagation()
               onDelete(pkg)
               setIsOpen(false)
             }}
-            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-white/5 transition-colors cursor-pointer"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-4 h-4 text-destructive" />
             {t("arena.packagesTab.deletePackage")}
           </button>
+          */}
           <button
             onClick={(e) => {
               e.stopPropagation()
               onEdit(pkg)
               setIsOpen(false)
             }}
-            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
           >
-            <Pencil className="w-4 h-4" />
+            <Pencil className="w-4 h-4 text-secondary" />
             {t("arena.packagesTab.editPackage")}
           </button>
+          {/*
           <button
             onClick={(e) => {
               e.stopPropagation()
               onDuplicate(pkg)
               setIsOpen(false)
             }}
-            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-white/5 transition-colors cursor-pointer"
           >
-            <Copy className="w-4 h-4" />
+            <Copy className="w-4 h-4 text-secondary" />
             {t("arena.packagesTab.duplicate")}
           </button>
           <button
@@ -93,11 +96,12 @@ export default function PackageActionDropdown({
               onDeactivate(pkg)
               setIsOpen(false)
             }}
-            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-white/5 transition-colors cursor-pointer"
           >
-            <AlertTriangle className="w-4 h-4" />
+            <AlertTriangle className="w-4 h-4 text-yellow-500" />
             {t("arena.packagesTab.deactivate")}
           </button>
+          */}
         </div>
       )}
     </div>

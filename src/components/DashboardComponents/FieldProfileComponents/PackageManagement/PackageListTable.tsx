@@ -13,18 +13,8 @@ import { Search, Funnel, SlidersHorizontal } from "lucide-react"
 import FilterSheet from "@/components/SharedComponents/FilterSheet"
 import type { PackageItem, PackageListTableProps } from "@/types/DashboardTypes/ArenaManagementTypes"
 import PackageActionDropdown from "./PackageActionDropdown"
-import Image from "next/image"
 
 type PackageRow = PackageItem & Record<string, unknown>
-
-const PACKAGE_IMAGES = [
-  "https://images.unsplash.com/photo-1544298621-a21e4e4cb0a3?w=120&h=120&fit=crop",
-  "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=120&h=120&fit=crop",
-  "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=120&h=120&fit=crop",
-  "https://images.unsplash.com/photo-1529926706528-db9e5010cd3e?w=120&h=120&fit=crop",
-  "https://images.unsplash.com/photo-1461896836934-bd45ba8fcb3b?w=120&h=120&fit=crop",
-  "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=120&h=120&fit=crop",
-]
 
 export default function PackageListTable({
   packages,
@@ -42,26 +32,11 @@ export default function PackageListTable({
 
   const filteredPackages = packages.filter((pkg) => {
     const matchesSearch = !search.trim() || pkg.package_name.toLowerCase().includes(search.toLowerCase())
-    const typeFilters = packageFilters[t("filterSheet.type", "Type")] || []
     const statusFilters = packageFilters[t("filterSheet.status", "Status")] || []
-    const matchesType = typeFilters.length === 0 || typeFilters.includes(pkg.type || "")
     const matchesStatus = statusFilters.length === 0 ||
       statusFilters.includes(pkg.is_active ? "Active" : "Inactive")
-    return matchesSearch && matchesType && matchesStatus
+    return matchesSearch && matchesStatus
   })
-
-  const getTypeBadge = (type?: string) => {
-    switch (type) {
-      case "Public":
-        return "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-      case "Private":
-        return "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-      case "Ranked":
-        return "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-      default:
-        return "bg-secondary/20 text-secondary border border-secondary/30"
-    }
-  }
 
   const getStatusBadge = (isActive: boolean) => {
     return isActive
@@ -72,54 +47,38 @@ export default function PackageListTable({
   const columns = [
     {
       header: t("arena.packagesTab.packageName"),
-      accessor: (row: PackageRow, index: number) => (
-        <div className="flex items-center gap-3">
-          <Image
-            src={PACKAGE_IMAGES[index % PACKAGE_IMAGES.length]}
-            height={40}
-            width={40}
-            alt={row.package_name as string}
-            className="w-10 h-10 rounded-md object-cover shrink-0"
-          />
-          <div>
-            <p className="text-sm font-medium text-primary">{row.package_name as string}</p>
-            <p className="text-xs text-muted-foreground">{row.description as string}</p>
-          </div>
+      accessor: (row: PackageRow) => (
+        <div className="space-y-1">
+          <p className="text-sm font-semibold text-primary">{row.package_name as string}</p>
+          {row.description && (
+            <p className="text-xs text-muted-foreground line-clamp-2 max-w-sm">
+              {row.description as string}
+            </p>
+          )}
+          {Array.isArray(row.include_items) && row.include_items.length > 0 && (
+            <div className="flex flex-wrap gap-1 pt-1">
+              {row.include_items.slice(0, 3).map((item, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-secondary border border-white/10"
+                >
+                  {item}
+                </span>
+              ))}
+              {row.include_items.length > 3 && (
+                <span className="text-[10px] text-muted-foreground px-1 self-center">
+                  +{row.include_items.length - 3} more
+                </span>
+              )}
+            </div>
+          )}
         </div>
       ),
-    },
-    {
-      header: t("arena.packagesTab.typeLabel"),
-      accessor: (row: PackageRow) => {
-        const type = row.type as string
-        return (
-          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getTypeBadge(type)}`}>
-            {type}
-          </span>
-        )
-      },
     },
     {
       header: t("arena.packagesTab.price"),
       accessor: (row: PackageRow) => (
         <span className="text-sm text-primary font-medium">€ {row.package_fee as string}</span>
-      ),
-    },
-    {
-      header: t("arena.packagesTab.paint"),
-      accessor: (row: PackageRow) => (
-        <span className="text-sm text-primary">{row.paint_count as string}</span>
-      ),
-    },
-    {
-      header: t("arena.packagesTab.booking"),
-      accessor: (row: PackageRow) => (
-        <div className="flex items-center gap-1">
-          <span className="text-sm text-primary">{row.booking_count as number}</span>
-          <span className={`text-xs ${(row.booking_change as number) >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-            ↑ {(row.booking_change as number)}%
-          </span>
-        </div>
       ),
     },
     {
@@ -193,7 +152,7 @@ export default function PackageListTable({
               >
                 {columns.map((col, colIdx) => (
                   <td key={colIdx} className="p-3 text-primary/80 text-xs sm:text-sm whitespace-nowrap">
-                    {col.accessor(pkg as PackageRow, index)}
+                    {col.accessor(pkg as PackageRow)}
                   </td>
                 ))}
                 <td className="p-3 text-right">
@@ -216,14 +175,6 @@ export default function PackageListTable({
         onOpenChange={setFilterSheetOpen}
         title={t("common.filter")}
         filterGroups={[
-          {
-            title: t("filterSheet.type", "Type"),
-            options: [
-              { label: "Public", value: "Public" },
-              { label: "Private", value: "Private" },
-              { label: "Ranked", value: "Ranked" },
-            ],
-          },
           {
             title: t("filterSheet.status", "Status"),
             options: [

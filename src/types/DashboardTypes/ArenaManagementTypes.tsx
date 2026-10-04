@@ -5,6 +5,8 @@
  * to ensure consistency and reduce duplication.
  */
 
+import type { EarningsListItem } from "./EarningsTypes"
+
 // ============================================================================
 // Arena Media & Info Types
 // ============================================================================
@@ -197,6 +199,8 @@ export interface PackageItem {
   package_fee: string
   include_items: string[]
   is_active: boolean
+  created_at?: string
+  updated_at?: string
   date_time?: string
   type?: "Public" | "Private" | "Ranked"
   paint_count?: string
@@ -204,9 +208,73 @@ export interface PackageItem {
   booking_change?: number
 }
 
-/** Wrapper for package management data */
+/** User info included in package management API */
+export interface PackageManagementUserData {
+  full_name: string
+  email: string
+  profile_image: string | null
+}
+
+/** Wrapper for package management data from GET /api/arena/package-management/ */
 export interface PackageManagementData {
   packages: PackageItem[]
+  user_info?: PackageManagementUserData
+}
+
+/** Response for GET /api/arena/package-management/ */
+export interface GetPackageManagementResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: PackageManagementData
+  requestId?: string
+}
+
+/** Payload item for creating package step-3 */
+export interface CreatePackageItemPayload {
+  package_name: string
+  description: string
+  package_fee: string
+  include_items: string[]
+}
+
+/** Payload for POST /api/arena/completion-flow/step-3-package-management/ */
+export interface CreatePackagesPayload {
+  packages: CreatePackageItemPayload[]
+}
+
+/** Response for POST /api/arena/completion-flow/step-3-package-management/ */
+export interface CreatePackagesResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: Record<string, unknown>
+  requestId?: string
+}
+
+/** Payload item for updating package */
+export interface UpdatePackageItemPayload {
+  package_name: string
+  description: string
+  package_fee: string
+  include_items: string[]
+  is_active?: boolean
+}
+
+/** Payload for PATCH /api/arena/package-management/edit/ */
+export interface UpdatePackagesPayload {
+  packages: UpdatePackageItemPayload[]
+}
+
+/** Response for PATCH /api/arena/package-management/edit/ */
+export interface UpdatePackagesResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: {
+    packages: PackageItem[]
+  }
+  requestId?: string
 }
 
 // ============================================================================
@@ -366,11 +434,23 @@ export interface ArenaProfileSectionProps {
 export interface BillingsHeaderProps {
   search: string
   onSearchChange: (value: string) => void
+  onFilterClick?: () => void
+  activeFilterCount?: number
+  totalRevenueDisplay?: string
 }
 
 /** Props for Billings Table component */
 export interface BillingsTableProps {
-  data: BillingHistoryItem[]
+  data: (BillingHistoryItem | EarningsListItem)[]
+  isLoading?: boolean
+  serverPagination?: boolean
+  currentPage?: number
+  totalPages?: number
+  itemsPerPage?: number
+  totalCount?: number
+  onPageChange?: (page: number) => void
+  onItemsPerPageChange?: (itemsPerPage: number) => void
+  onRowClick?: (item: EarningsListItem) => void
 }
 
 /** Props for Manage Cover Images Modal component */

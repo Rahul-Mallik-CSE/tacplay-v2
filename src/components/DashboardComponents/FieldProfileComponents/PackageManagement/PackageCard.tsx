@@ -78,13 +78,15 @@ export default function PackageCard({
           {t("onboardingFields.packages.feeLabel")}
         </label>
         <Input
-          type="number"
+          type="text"
           inputMode="decimal"
-          step="0.01"
           value={pkg.package_fee}
-          onChange={(event) =>
-            onUpdate(index, { package_fee: event.target.value })
-          }
+          onChange={(event) => {
+            const val = event.target.value
+            if (val === "" || /^\d*\.?\d{0,2}$/.test(val)) {
+              onUpdate(index, { package_fee: val })
+            }
+          }}
           readOnly={!isEditing}
           className="bg-input/30 border-white/10 text-primary h-11"
         />
