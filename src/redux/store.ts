@@ -7,6 +7,7 @@ import homeReducer from "@/redux/features/dashboard/home/homeSlice";
 import bookingsReducer from "@/redux/features/dashboard/bookings/bookingsSlice";
 import fieldProfileReducer from "@/redux/features/dashboard/field-profile/fieldProfileSlice";
 import staffReducer from "@/redux/features/shared/staff/staffSlice";
+import analyticsReducer from "@/redux/features/dashboard/analytics/analyticsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     bookings: bookingsReducer,
     fieldProfile: fieldProfileReducer,
     staff: staffReducer,
+    analytics: analyticsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseAPI.middleware),
