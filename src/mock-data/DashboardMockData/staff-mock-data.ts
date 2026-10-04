@@ -8,7 +8,7 @@ import type {
   StaffDetails,
   StaffRole,
   PermissionCategory,
-} from "@/types/DashboardTypes/StaffTypes"
+} from "@/types/CommonPageTypes/StaffTypes"
 
 // ============================================================================
 // Staff List Data

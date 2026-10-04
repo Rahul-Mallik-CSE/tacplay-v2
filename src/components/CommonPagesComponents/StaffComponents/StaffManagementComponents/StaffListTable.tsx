@@ -12,7 +12,7 @@ import StaffAvatar from "./StaffAvatar"
 import StaffActionDropdown from "./StaffActionDropdown"
 import StaffDetailsSheet from "./StaffDetailsSheet"
 import { mockStaffListData } from "../../../../mock-data/DashboardMockData/staff-mock-data"
-import type { StaffMember } from "@/types/DashboardTypes/StaffTypes"
+import type { StaffMember } from "@/types/CommonPageTypes/StaffTypes"
 
 function StaffListTable() {
   const { t } = useTranslation("dashboard")
@@ -71,41 +71,41 @@ function StaffListTable() {
     accessor: keyof StaffMember | ((row: StaffMember) => React.ReactNode)
     className?: string
   }[] = [
-    {
-      header: t("staff.columns.staff"),
-      accessor: (row: StaffMember) => (
-        <div className="flex items-center gap-3">
-          <StaffAvatar src={row.avatar} alt={row.full_name} />
-          <div>
-            <p className="text-sm font-medium text-primary">{row.full_name}</p>
-            <p className="text-xs text-secondary">{row.email}</p>
+      {
+        header: t("staff.columns.staff"),
+        accessor: (row: StaffMember) => (
+          <div className="flex items-center gap-3">
+            <StaffAvatar src={row.avatar} alt={row.full_name} />
+            <div>
+              <p className="text-sm font-medium text-primary">{row.full_name}</p>
+              <p className="text-xs text-secondary">{row.email}</p>
+            </div>
           </div>
-        </div>
-      ),
-    },
-    {
-      header: t("staff.columns.role"),
-      accessor: "role",
-    },
-    {
-      header: t("staff.columns.assignedSessions"),
-      accessor: "assigned_sessions",
-    },
-    {
-      header: t("staff.columns.checkedInToday"),
-      accessor: "checked_in_today",
-    },
-    {
-      header: t("staff.columns.lastLogin"),
-      accessor: "last_login",
-    },
-    {
-      header: t("staff.columns.status"),
-      accessor: (row: StaffMember) => (
-        <StaffStatusBadge status={row.status} size="sm" />
-      ),
-    },
-  ]
+        ),
+      },
+      {
+        header: t("staff.columns.role"),
+        accessor: "role",
+      },
+      {
+        header: t("staff.columns.assignedSessions"),
+        accessor: "assigned_sessions",
+      },
+      {
+        header: t("staff.columns.checkedInToday"),
+        accessor: "checked_in_today",
+      },
+      {
+        header: t("staff.columns.lastLogin"),
+        accessor: "last_login",
+      },
+      {
+        header: t("staff.columns.status"),
+        accessor: (row: StaffMember) => (
+          <StaffStatusBadge status={row.status} size="sm" />
+        ),
+      },
+    ]
 
   const actionRenderer = (row: StaffMember) => (
     <StaffActionDropdown staff={row} onViewDetails={handleViewDetails} />

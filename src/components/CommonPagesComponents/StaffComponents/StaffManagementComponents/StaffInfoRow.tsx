@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import type { StaffInfoRowProps } from "@/types/DashboardTypes/StaffTypes"
+import type { StaffInfoRowProps } from "@/types/CommonPageTypes/StaffTypes"
 
 function StaffInfoRow({ label, value }: StaffInfoRowProps) {
   return (

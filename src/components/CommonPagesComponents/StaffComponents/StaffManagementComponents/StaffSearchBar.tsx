@@ -3,7 +3,7 @@
 import React from "react"
 import { Search } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import type { StaffSearchBarProps } from "@/types/DashboardTypes/StaffTypes"
+import type { StaffSearchBarProps } from "@/types/CommonPageTypes/StaffTypes"
 
 function StaffSearchBar({ value, onChange }: StaffSearchBarProps) {
   const { t } = useTranslation("dashboard")

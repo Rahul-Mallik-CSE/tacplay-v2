@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import PermissionCategorySection from "./PermissionCategorySection"
 import RoleCreatedSuccessModal from "./RoleCreatedSuccessModal"
 import { mockPermissionCategories } from "../../../../mock-data/DashboardMockData/staff-mock-data"
-import type { PermissionCategory } from "@/types/DashboardTypes/StaffTypes"
+import type { PermissionCategory } from "@/types/CommonPageTypes/StaffTypes"
 
 function CreateRoleForm() {
   const { t } = useTranslation("dashboard")
@@ -22,10 +22,10 @@ function CreateRoleForm() {
       prev.map((cat) =>
         cat.id === categoryId
           ? {
-              ...cat,
-              enabled,
-              permissions: cat.permissions.map((p) => ({ ...p, enabled })),
-            }
+            ...cat,
+            enabled,
+            permissions: cat.permissions.map((p) => ({ ...p, enabled })),
+          }
           : cat
       )
     )
@@ -40,11 +40,11 @@ function CreateRoleForm() {
       prev.map((cat) =>
         cat.id === categoryId
           ? {
-              ...cat,
-              permissions: cat.permissions.map((p) =>
-                p.id === permissionId ? { ...p, enabled } : p
-              ),
-            }
+            ...cat,
+            permissions: cat.permissions.map((p) =>
+              p.id === permissionId ? { ...p, enabled } : p
+            ),
+          }
           : cat
       )
     )

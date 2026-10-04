@@ -2,7 +2,7 @@
 
 import React from "react"
 import { useTranslation } from "react-i18next"
-import type { AssignedSession } from "@/types/DashboardTypes/StaffTypes"
+import type { AssignedSession } from "@/types/CommonPageTypes/StaffTypes"
 
 const STATUS_COLORS: Record<string, string> = {
   Ongoing: "bg-emerald-500",

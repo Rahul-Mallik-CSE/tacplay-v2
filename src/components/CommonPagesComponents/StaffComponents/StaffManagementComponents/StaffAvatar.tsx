@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import type { StaffAvatarProps } from "@/types/DashboardTypes/StaffTypes"
+import type { StaffAvatarProps } from "@/types/CommonPageTypes/StaffTypes"
 
 function StaffAvatar({ src, alt, size = "md" }: StaffAvatarProps) {
   const sizeClasses = {

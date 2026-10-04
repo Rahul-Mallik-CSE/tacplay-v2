@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { ChevronRight, Search, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
-import type { SelectRoleDropdownProps } from "@/types/DashboardTypes/StaffTypes"
+import type { SelectRoleDropdownProps } from "@/types/CommonPageTypes/StaffTypes"
 
 function SelectRoleDropdown({ value, onChange, roles, onCreateNewRole }: SelectRoleDropdownProps) {
   const { t } = useTranslation("dashboard")

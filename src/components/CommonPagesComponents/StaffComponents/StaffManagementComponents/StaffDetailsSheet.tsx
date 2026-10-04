@@ -16,7 +16,7 @@ import StaffStatusBadge from "./StaffStatusBadge"
 import StaffInfoRow from "./StaffInfoRow"
 import AssignedSessionRow from "./AssignedSessionRow"
 import { mockStaffDetails } from "../../../../mock-data/DashboardMockData/staff-mock-data"
-import type { StaffDetailsSheetProps } from "@/types/DashboardTypes/StaffTypes"
+import type { StaffDetailsSheetProps } from "@/types/CommonPageTypes/StaffTypes"
 
 function StaffDetailsSheet({
   open,

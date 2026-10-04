@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import type { StaffStatusBadgeProps } from "@/types/DashboardTypes/StaffTypes"
+import type { StaffStatusBadgeProps } from "@/types/CommonPageTypes/StaffTypes"
 
 const STATUS_COLORS: Record<string, string> = {
   Active: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",

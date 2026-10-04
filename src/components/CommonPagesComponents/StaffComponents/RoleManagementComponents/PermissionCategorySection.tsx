@@ -13,7 +13,7 @@ import {
 } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import PermissionSwitch from "./PermissionSwitch"
-import type { PermissionCategorySectionProps } from "@/types/DashboardTypes/StaffTypes"
+import type { PermissionCategorySectionProps } from "@/types/CommonPageTypes/StaffTypes"
 
 const ICON_MAP: Record<string, React.ElementType> = {
   LayoutGrid,

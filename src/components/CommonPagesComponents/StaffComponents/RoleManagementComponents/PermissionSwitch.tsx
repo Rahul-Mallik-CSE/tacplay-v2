@@ -3,7 +3,7 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { Switch } from "@/components/ui/switch"
-import type { PermissionSwitchProps } from "@/types/DashboardTypes/StaffTypes"
+import type { PermissionSwitchProps } from "@/types/CommonPageTypes/StaffTypes"
 
 function PermissionSwitch({ label, checked, onCheckedChange }: PermissionSwitchProps) {
   return (

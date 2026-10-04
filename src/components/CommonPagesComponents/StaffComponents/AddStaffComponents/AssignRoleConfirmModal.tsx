@@ -11,7 +11,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { CheckCircle } from "lucide-react"
-import type { AssignRoleConfirmModalProps } from "@/types/DashboardTypes/StaffTypes"
+import type { AssignRoleConfirmModalProps } from "@/types/CommonPageTypes/StaffTypes"
 
 function AssignRoleConfirmModal({
   open,

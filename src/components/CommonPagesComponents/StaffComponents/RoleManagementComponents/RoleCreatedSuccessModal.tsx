@@ -11,7 +11,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { CheckCircle } from "lucide-react"
-import type { RoleCreatedSuccessModalProps } from "@/types/DashboardTypes/StaffTypes"
+import type { RoleCreatedSuccessModalProps } from "@/types/CommonPageTypes/StaffTypes"
 
 function RoleCreatedSuccessModal({
   open,

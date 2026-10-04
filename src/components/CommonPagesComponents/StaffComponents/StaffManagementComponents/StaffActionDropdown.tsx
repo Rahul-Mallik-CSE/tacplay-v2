@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import type { StaffMember } from "@/types/DashboardTypes/StaffTypes"
+import type { StaffMember } from "@/types/CommonPageTypes/StaffTypes"
 
 interface StaffActionDropdownProps {
   staff: StaffMember
