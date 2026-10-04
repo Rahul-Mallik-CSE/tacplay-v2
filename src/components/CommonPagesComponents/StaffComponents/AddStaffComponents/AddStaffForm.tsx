@@ -9,6 +9,7 @@ import { toast } from "react-toastify"
 import SelectRoleDropdown from "./SelectRoleDropdown"
 import AssignRoleConfirmModal from "./AssignRoleConfirmModal"
 import { useGetRolesQuery, useCreateStaffMutation } from "@/redux/features/shared/staff/staffAPI"
+import { getErrorMessage } from "@/lib/auth"
 
 function AddStaffForm() {
   const { t } = useTranslation("dashboard")
@@ -112,12 +113,12 @@ function AddStaffForm() {
       setConfirmOpen(false)
       router.push(`${basePath}/staff/staff-management`)
     } catch (err: any) {
-      const errorMessage =
-        err?.data?.message ||
-        err?.data?.detail ||
-        (typeof err?.data === "object" ? Object.values(err.data).flat().join(" ") : null) ||
+      const errorMessage = getErrorMessage(
+        err,
         "Failed to create staff member. Please try again."
+      )
       toast.error(errorMessage)
+      setConfirmOpen(false)
     }
   }
 

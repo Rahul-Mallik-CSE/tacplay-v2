@@ -13,6 +13,7 @@ import {
   useUpdateStaffMutation,
 } from "@/redux/features/shared/staff/staffAPI"
 import { toAbsoluteMediaUrl } from "@/lib/utils"
+import { getErrorMessage } from "@/lib/auth"
 
 function EditStaffForm() {
   const { t } = useTranslation("dashboard")
@@ -134,11 +135,10 @@ function EditStaffForm() {
       toast.success(res?.message || "Staff updated successfully.")
       router.push(`${basePath}/staff/staff-management`)
     } catch (err: any) {
-      const errorMessage =
-        err?.data?.message ||
-        err?.data?.detail ||
-        (typeof err?.data === "object" ? Object.values(err.data).flat().join(" ") : null) ||
+      const errorMessage = getErrorMessage(
+        err,
         "Failed to update staff member. Please try again."
+      )
       toast.error(errorMessage)
     }
   }

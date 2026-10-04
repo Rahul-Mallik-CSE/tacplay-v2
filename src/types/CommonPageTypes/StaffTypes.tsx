@@ -83,6 +83,23 @@ export interface RoleListResponse {
   data: RoleItem[]
 }
 
+export interface PermissionOption {
+  code: string
+  name: string
+}
+
+export interface PermissionGroup {
+  key: string
+  name: string
+  permissions: PermissionOption[]
+}
+
+export interface PermissionsListResponse {
+  success: boolean
+  message: string
+  data: PermissionGroup[]
+}
+
 export interface StaffQueryParams {
   search?: string
   role_name?: string
@@ -109,6 +126,18 @@ export interface UpdateStaffPayload {
 export interface UpdateStaffStatusPayload {
   id: number
   is_active: boolean
+}
+
+export interface CreateRolePayload {
+  role_name: string
+  permissions: string[]
+}
+
+export interface UpdateRolePayload {
+  id: number
+  role_name?: string
+  permissions?: string[]
+  is_active?: boolean
 }
 
 export interface ApiResponse<T = unknown> {
@@ -231,8 +260,13 @@ export interface AssignRoleConfirmModalProps {
 export interface RoleCreatedSuccessModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onCreateAnother: () => void
-  onAssignStaff: () => void
+  onCreateRole?: () => void
+  onCreateAndAssignStaff?: () => void
+  onCreateAnother?: () => void
+  onAssignStaff?: () => void
+  roleName?: string
+  permissionsCount?: number
+  isLoading?: boolean
 }
 
 /** Props for SelectRoleDropdown component */

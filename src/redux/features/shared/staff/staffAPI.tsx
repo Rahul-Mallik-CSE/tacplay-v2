@@ -5,9 +5,13 @@ import type {
   StaffListResponse,
   StaffDetailResponse,
   RoleListResponse,
+  PermissionsListResponse,
   StaffQueryParams,
   ApiResponse,
   StaffItem,
+  RoleItem,
+  CreateRolePayload,
+  UpdateRolePayload,
 } from "@/types/CommonPageTypes/StaffTypes";
 
 export const staffAPI = baseAPI.injectEndpoints({
@@ -52,6 +56,48 @@ export const staffAPI = baseAPI.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Roles"],
+    }),
+
+    getRoleDetails: builder.query<ApiResponse<RoleItem>, number>({
+      query: (id) => ({
+        url: `/api/field-owner/roles/${id}/`,
+        method: "GET",
+      }),
+      providesTags: (_result, _error, id) => [{ type: "Roles", id }],
+    }),
+
+    getPermissions: builder.query<PermissionsListResponse, void>({
+      query: () => ({
+        url: "/api/field-owner/permissions/",
+        method: "GET",
+      }),
+      providesTags: ["Roles"],
+    }),
+
+    createRole: builder.mutation<ApiResponse<RoleItem>, CreateRolePayload>({
+      query: (body) => ({
+        url: "/api/field-owner/roles/",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Roles"],
+    }),
+
+    updateRole: builder.mutation<ApiResponse<RoleItem>, UpdateRolePayload>({
+      query: ({ id, ...body }) => ({
+        url: `/api/field-owner/roles/${id}/`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Roles"],
+    }),
+
+    deleteRole: builder.mutation<ApiResponse<Record<string, unknown>>, number>({
+      query: (id) => ({
+        url: `/api/field-owner/roles/${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Roles"],
     }),
 
     createStaff: builder.mutation<ApiResponse<StaffItem>, FormData>({
@@ -110,6 +156,11 @@ export const {
   useGetStaffListQuery,
   useGetStaffDetailsQuery,
   useGetRolesQuery,
+  useGetRoleDetailsQuery,
+  useGetPermissionsQuery,
+  useCreateRoleMutation,
+  useUpdateRoleMutation,
+  useDeleteRoleMutation,
   useCreateStaffMutation,
   useUpdateStaffMutation,
   useUpdateStaffStatusMutation,

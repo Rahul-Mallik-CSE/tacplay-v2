@@ -10,12 +10,14 @@ import {
   CreditCard,
   Megaphone,
   HelpCircle,
+  Shield,
 } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import PermissionSwitch from "./PermissionSwitch"
 import type { PermissionCategorySectionProps } from "@/types/CommonPageTypes/StaffTypes"
 
 const ICON_MAP: Record<string, React.ElementType> = {
+  // Named icons
   LayoutGrid,
   Calendar,
   QrCode,
@@ -24,6 +26,16 @@ const ICON_MAP: Record<string, React.ElementType> = {
   CreditCard,
   Megaphone,
   HelpCircle,
+  Shield,
+  // API category keys
+  dashboard_overview: LayoutGrid,
+  booking_session: Calendar,
+  scanner_checkin: QrCode,
+  scores_matches: Trophy,
+  management: Users,
+  billing_subscription: CreditCard,
+  marketing_permissions: Megaphone,
+  other: HelpCircle,
 }
 
 function PermissionCategorySection({
@@ -31,10 +43,10 @@ function PermissionCategorySection({
   onCategoryToggle,
   onPermissionToggle,
 }: PermissionCategorySectionProps) {
-  const IconComponent = ICON_MAP[category.icon] || LayoutGrid
+  const IconComponent = ICON_MAP[category.icon] || ICON_MAP[category.id] || LayoutGrid
 
   return (
-    <div className="border border-white/10 rounded-lg overflow-hidden">
+    <div className="border border-white/10 rounded-lg overflow-hidden bg-card/40">
       <div className="flex items-center justify-between px-4 py-3 bg-muted/50">
         <div className="flex items-center gap-3">
           <IconComponent className="w-5 h-5 text-secondary" />
@@ -44,7 +56,7 @@ function PermissionCategorySection({
           checked={category.enabled}
           onCheckedChange={(checked) => onCategoryToggle(category.id, checked)}
           size="sm"
-          className="data-[state=checked]:bg-custom-yellow data-[state=unchecked]:bg-input"
+          className="data-[state=checked]:bg-custom-yellow data-[state=unchecked]:bg-input cursor-pointer"
         />
       </div>
 

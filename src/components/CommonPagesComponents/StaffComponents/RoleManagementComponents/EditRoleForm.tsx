@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { useRouter, usePathname } from "next/navigation"
-import { ListFilter, Loader2 } from "lucide-react"
+import { useRouter, useParams, usePathname } from "next/navigation"
+import { ArrowLeft, ListFilter, Loader2 } from "lucide-react"
 import { toast } from "react-toastify"
 import PermissionCategorySection from "./PermissionCategorySection"
-import RoleCreatedSuccessModal from "./RoleCreatedSuccessModal"
 import {
+  useGetRolesQuery,
   useGetPermissionsQuery,
-  useCreateRoleMutation,
+  useUpdateRoleMutation,
 } from "@/redux/features/shared/staff/staffAPI"
 import { getErrorMessage } from "@/lib/auth"
 import type { PermissionCategory } from "@/types/CommonPageTypes/StaffTypes"
@@ -52,37 +52,35 @@ const CATEGORY_LABEL_KEYS: Record<string, string> = {
   other: "staff.permissions.other",
 }
 
-function CreateRoleForm() {
+function EditRoleForm() {
   const { t } = useTranslation("dashboard")
   const router = useRouter()
   const pathname = usePathname()
+  const params = useParams()
+  const roleId = params.roleId as string
   const basePath = pathname.startsWith("/admin") ? "/admin" : "/dashboard"
 
+  const { data: rolesResponse, isLoading: rolesLoading } = useGetRolesQuery()
   const { data: permissionsResponse, isLoading: permissionsLoading } = useGetPermissionsQuery()
-  const [createRole, { isLoading: isCreating }] = useCreateRoleMutation()
+  const [updateRole, { isLoading: isUpdating }] = useUpdateRoleMutation()
 
   const [roleName, setRoleName] = useState("")
   const [selectedPermissions, setSelectedPermissions] = useState<Set<string>>(new Set())
   const [disabledCategories, setDisabledCategories] = useState<Set<string>>(new Set())
-  const [successModalOpen, setSuccessModalOpen] = useState(false)
   const [error, setError] = useState("")
 
-  // Default permissions if API hasn't loaded yet or initial set
+  const role = rolesResponse?.data?.find((r) => String(r.id) === String(roleId))
   const permissionGroups = permissionsResponse?.data || []
 
-  // Initialize selected permissions once data arrives if empty
+  // Pre-fill existing role details
   useEffect(() => {
-    if (permissionGroups.length > 0 && selectedPermissions.size === 0) {
-      // Default initial pre-checks (common sensible defaults or none)
-      const defaults = new Set<string>()
-      permissionGroups.forEach((group) => {
-        if (group.permissions && group.permissions.length > 0) {
-          defaults.add(group.permissions[0].code)
-        }
-      })
-      setSelectedPermissions(defaults)
+    if (role) {
+      setRoleName(role.role_name || "")
+      if (role.permissions) {
+        setSelectedPermissions(new Set(role.permissions))
+      }
     }
-  }, [permissionGroups])
+  }, [role])
 
   // Build categories with translated labels and code values
   const categories: PermissionCategory[] = useMemo(() => {
@@ -94,7 +92,7 @@ function CreateRoleForm() {
         const permLabelKey = PERMISSION_LABEL_KEYS[p.code]
         const permDisplayName = permLabelKey ? t(permLabelKey as never, p.name) : p.name
         return {
-          id: p.code, // Exact code sent to API
+          id: p.code,
           name: permDisplayName,
           enabled: selectedPermissions.has(p.code),
         }
@@ -154,7 +152,6 @@ function CreateRoleForm() {
       return next
     })
 
-    // If a permission is checked, ensure category switch is marked enabled
     if (enabled && disabledCategories.has(categoryKey)) {
       setDisabledCategories((prev) => {
         const next = new Set(prev)
@@ -164,7 +161,8 @@ function CreateRoleForm() {
     }
   }
 
-  const handleSave = () => {
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault()
     if (!roleName.trim()) {
       setError(t("staff.validation.roleNameRequired", "Role name is required."))
       return
@@ -173,42 +171,50 @@ function CreateRoleForm() {
       toast.error("Please select at least one permission for this role.")
       return
     }
-    setError("")
-    setSuccessModalOpen(true)
-  }
-
-  const executeCreateRole = async (targetDestination: "roles" | "assignStaff") => {
-    const payload = {
-      role_name: roleName.trim(),
-      permissions: Array.from(selectedPermissions),
-    }
 
     try {
-      const res = await createRole(payload).unwrap()
-      toast.success(res?.message || "Role created successfully.")
-      setSuccessModalOpen(false)
-
-      if (targetDestination === "roles") {
-        router.push(`${basePath}/staff/role-management/all-roles`)
-      } else {
-        router.push(`${basePath}/staff/staff-management/add-staff`)
-      }
+      const res = await updateRole({
+        id: Number(roleId),
+        role_name: roleName.trim(),
+        permissions: Array.from(selectedPermissions),
+      }).unwrap()
+      toast.success(res?.message || "Role updated successfully.")
+      router.push(`${basePath}/staff/role-management/all-roles`)
     } catch (err: any) {
-      const errMsg = getErrorMessage(err, "Failed to create role. Please try again.")
+      const errMsg = getErrorMessage(err, "Failed to update role. Please try again.")
       toast.error(errMsg)
     }
+  }
+
+  if (rolesLoading || permissionsLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <Loader2 className="w-8 h-8 animate-spin text-custom-yellow mb-2" />
+        <p className="text-sm text-secondary">Loading role configuration...</p>
+      </div>
+    )
   }
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-primary">
-            {t("staff.createRoleTitle")}
-          </h1>
-          <p className="text-secondary text-sm mt-1">
-            {t("staff.createRoleSubtitle")}
-          </p>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => router.push(`${basePath}/staff/role-management/all-roles`)}
+            className="p-2 rounded-lg border border-white/10 hover:bg-white/5 text-primary transition-colors cursor-pointer shrink-0"
+            aria-label="Back to All Roles"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-primary">
+              Edit Role
+            </h1>
+            <p className="text-secondary text-sm mt-1">
+              Modify role name and permission access.
+            </p>
+          </div>
         </div>
 
         <button
@@ -223,7 +229,7 @@ function CreateRoleForm() {
 
       <div className="h-px bg-white/10" />
 
-      <div className="space-y-6">
+      <form onSubmit={handleSave} className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-primary mb-2">
             {t("staff.roleName")}
@@ -249,48 +255,38 @@ function CreateRoleForm() {
             {t("staff.permissionSubtitle")}
           </p>
 
-          {permissionsLoading ? (
-            <div className="flex flex-col items-center justify-center py-16">
-              <Loader2 className="w-8 h-8 animate-spin text-custom-yellow mb-2" />
-              <p className="text-sm text-secondary">Loading permissions list...</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {categories.map((category) => (
-                <PermissionCategorySection
-                  key={category.id}
-                  category={category}
-                  onCategoryToggle={handleCategoryToggle}
-                  onPermissionToggle={handlePermissionToggle}
-                />
-              ))}
-            </div>
-          )}
+          <div className="space-y-4">
+            {categories.map((category) => (
+              <PermissionCategorySection
+                key={category.id}
+                category={category}
+                onCategoryToggle={handleCategoryToggle}
+                onPermissionToggle={handlePermissionToggle}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-end gap-3 pt-4">
           <button
-            onClick={handleSave}
-            disabled={isCreating}
+            type="button"
+            onClick={() => router.push(`${basePath}/staff/role-management/all-roles`)}
+            className="px-6 py-2.5 rounded-lg border border-white/10 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+          >
+            {t("staff.cancel", "Cancel")}
+          </button>
+          <button
+            type="submit"
+            disabled={isUpdating}
             className="flex items-center gap-2 px-8 py-2.5 rounded-lg bg-custom-red text-white text-sm font-medium hover:bg-custom-red/80 transition-colors cursor-pointer disabled:opacity-50"
           >
-            {isCreating && <Loader2 className="w-4 h-4 animate-spin" />}
-            {t("common.save", "Save")}
+            {isUpdating && <Loader2 className="w-4 h-4 animate-spin" />}
+            {t("common.saveChanges", "Save Changes")}
           </button>
         </div>
-      </div>
-
-      <RoleCreatedSuccessModal
-        open={successModalOpen}
-        onOpenChange={setSuccessModalOpen}
-        onCreateRole={() => executeCreateRole("roles")}
-        onCreateAndAssignStaff={() => executeCreateRole("assignStaff")}
-        roleName={roleName}
-        permissionsCount={selectedPermissions.size}
-        isLoading={isCreating}
-      />
+      </form>
     </div>
   )
 }
 
-export default CreateRoleForm
+export default EditRoleForm

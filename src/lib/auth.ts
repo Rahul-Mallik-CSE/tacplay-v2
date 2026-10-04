@@ -177,18 +177,26 @@ export const getErrorMessage = (
   const deepDataError = data?.data ? findFirstErrorString(data.data) : null;
   const deepErrorsError = data?.errors ? findFirstErrorString(data.errors) : null;
 
-  if (data?.message && data.message.trim().toLowerCase() !== "validation error") {
-    message = data.message;
-  } else if (deepDataError) {
+  const normalizedMessage =
+    data?.message?.trim().toLowerCase().replace(/\.+$/, "") || "";
+  const isGenericValidationError =
+    normalizedMessage === "validation error" ||
+    normalizedMessage === "validation failed" ||
+    normalizedMessage === "invalid data" ||
+    normalizedMessage === "error";
+
+  if (deepDataError) {
     message = deepDataError;
   } else if (deepErrorsError) {
     message = deepErrorsError;
-  } else if (data?.message) {
+  } else if (data?.message && !isGenericValidationError) {
     message = data.message;
   } else if (data?.detail) {
     message = data.detail;
   } else if (data?.error) {
     message = data.error;
+  } else if (data?.message) {
+    message = data.message;
   } else if (typeof error === "string") {
     message = error;
   }
