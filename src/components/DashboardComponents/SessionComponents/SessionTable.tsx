@@ -19,6 +19,7 @@ import SessionStatusBadge from "./SessionStatusBadge"
 import AssignStaffSheet from "./AssignStaffSheet"
 import CustomTable from "@/components/SharedComponents/CustomTable"
 import FilterSheet, { FilterGroup } from "@/components/SharedComponents/FilterSheet"
+import { SessionTableSkeleton } from "./SessionLoading"
 import {
   useGetSessionsQuery,
   useGetSessionStaffQuery,
@@ -614,10 +615,7 @@ function SessionTable() {
 
       {/* Table / Loading */}
       {isLoading ? (
-        <div className="p-16 flex flex-col items-center justify-center space-y-3 bg-card/40 rounded-xl border border-white/5">
-          <Loader2 className="w-8 h-8 text-custom-red animate-spin" />
-          <p className="text-sm text-secondary">Loading sessions...</p>
-        </div>
+        <SessionTableSkeleton rowCount={itemsPerPage || 8} />
       ) : (
         <div className="relative">
           {isFetching && (
