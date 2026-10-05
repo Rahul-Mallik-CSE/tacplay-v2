@@ -1305,6 +1305,9 @@
     "pushNotifications": "Push-Benachrichtigung",
     "voucherTitle": "Gutschein",
     "createNewVoucher": "Neuen Gutschein erstellen",
+    "createEmail": "E-Mail erstellen",
+    "createSms": "SMS erstellen",
+    "createNotification": "Benachrichtigung erstellen",
     "columns": {
       "campaigns": "Kampagnen",
       "type": "Typ",

@@ -1,7 +1,7 @@
 "use client"
 
 import { useTranslation } from "react-i18next"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { Mail, MessageSquare, Bell, Tag } from "lucide-react"
 import { mockQuickActions } from "@/mock-data/DashboardMockData/marketing-mock-data"
 
@@ -22,6 +22,38 @@ const colorMap: Record<string, string> = {
 export default function QuickActions() {
   const { t } = useTranslation("dashboard")
   const router = useRouter()
+  const pathname = usePathname()
+  const basePath = pathname.startsWith("/admin") ? "/admin" : "/dashboard"
+
+  const getActionHref = (icon: string) => {
+    switch (icon) {
+      case "email":
+        return `${basePath}/marketing/email/create-email`
+      case "sms":
+        return `${basePath}/marketing/sms/create-sms`
+      case "push":
+        return `${basePath}/marketing/push-notification/create-push`
+      case "voucher":
+        return `${basePath}/marketing/vouchers/create-voucher`
+      default:
+        return `${basePath}/marketing`
+    }
+  }
+
+  const getActionLabel = (action: (typeof mockQuickActions)[number]) => {
+    switch (action.icon) {
+      case "email":
+        return t("marketing.createEmailCampaign", action.label)
+      case "sms":
+        return t("marketing.createSmsCampaign", action.label)
+      case "push":
+        return t("marketing.createPushCampaign", action.label)
+      case "voucher":
+        return t("marketing.createVoucherDiscount", action.label)
+      default:
+        return action.label
+    }
+  }
 
   return (
     <div className="bg-card border border-white/5 rounded-xl p-4 md:p-5">
@@ -32,13 +64,15 @@ export default function QuickActions() {
         {mockQuickActions.map((action, index) => (
           <button
             key={index}
-            onClick={() => router.push(action.href)}
+            onClick={() => router.push(getActionHref(action.icon))}
             className="w-full flex items-center gap-3 p-3 rounded-xl border border-white/5 hover:bg-white/5 transition-colors cursor-pointer"
           >
             <span className={`p-2.5 rounded-full ${colorMap[action.color]}`}>
               {iconMap[action.icon]}
             </span>
-            <span className="text-sm font-medium text-primary">{action.label}</span>
+            <span className="text-sm font-medium text-primary">
+              {getActionLabel(action)}
+            </span>
           </button>
         ))}
       </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useRouter, usePathname } from "next/navigation"
 import { Search } from "lucide-react"
 import CustomTable from "@/components/SharedComponents/CustomTable"
 import CampaignActionMenu from "../CommonComponents/CampaignActionMenu"
@@ -12,6 +13,9 @@ import type { Campaign } from "@/types/DashboardTypes/MarketingTypes"
 
 export default function SmsCampaignsTable() {
   const { t } = useTranslation("dashboard")
+  const router = useRouter()
+  const pathname = usePathname()
+  const basePath = pathname.startsWith("/admin") ? "/admin" : "/dashboard"
   const [search, setSearch] = useState("")
 
   const smsCampaigns = mockCampaigns.filter((c) => c.type === "SMS")
@@ -78,15 +82,23 @@ export default function SmsCampaignsTable() {
         <h1 className="text-2xl md:text-3xl font-bold text-primary">
           {t("marketing.smsCampaigns")}
         </h1>
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary" />
-          <input
-            type="text"
-            placeholder={t("common.search")}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-primary placeholder:text-secondary focus:outline-none focus:border-white/20"
-          />
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="relative flex-1 sm:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary" />
+            <input
+              type="text"
+              placeholder={t("common.search")}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-primary placeholder:text-secondary focus:outline-none focus:border-white/20"
+            />
+          </div>
+          <button
+            onClick={() => router.push(`${basePath}/marketing/sms/create-sms`)}
+            className="px-4 py-2 bg-custom-red text-white rounded-lg text-sm font-medium hover:bg-custom-red/80 transition-colors cursor-pointer whitespace-nowrap"
+          >
+            {t("marketing.createSms", "Create SMS")}
+          </button>
         </div>
       </div>
       <CustomTable

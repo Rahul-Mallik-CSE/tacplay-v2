@@ -72,10 +72,10 @@ export const mockActiveVouchers: ActiveVoucher[] = [
 // ============================================================================
 
 export const mockQuickActions: QuickAction[] = [
-  { label: "Create Email Campaign", href: "/dashboard/marketing/overview/create-email", icon: "email", color: "blue" },
-  { label: "Create SMS Campaign", href: "/dashboard/marketing/overview/create-sms", icon: "sms", color: "green" },
-  { label: "Create Push Campaign", href: "/dashboard/marketing/overview/create-push", icon: "push", color: "purple" },
-  { label: "Create Voucher/Discount", href: "/dashboard/marketing/overview/create-voucher", icon: "voucher", color: "orange" },
+  { label: "Create Email Campaign", href: "/marketing/email/create-email", icon: "email", color: "blue" },
+  { label: "Create SMS Campaign", href: "/marketing/sms/create-sms", icon: "sms", color: "green" },
+  { label: "Create Push Campaign", href: "/marketing/push-notification/create-push", icon: "push", color: "purple" },
+  { label: "Create Voucher/Discount", href: "/marketing/vouchers/create-voucher", icon: "voucher", color: "orange" },
 ]
 
 // ============================================================================

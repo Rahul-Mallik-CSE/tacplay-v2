@@ -1,10 +1,14 @@
 "use client"
 
 import { useTranslation } from "react-i18next"
+import { useRouter, usePathname } from "next/navigation"
 import { mockTopPerformingCampaigns } from "@/mock-data/DashboardMockData/marketing-mock-data"
 
 export default function TopPerformingCampaigns() {
   const { t } = useTranslation("dashboard")
+  const router = useRouter()
+  const pathname = usePathname()
+  const basePath = pathname.startsWith("/admin") ? "/admin" : "/dashboard"
 
   return (
     <div className="bg-card border border-white/5 rounded-xl p-4 md:p-5">
@@ -12,7 +16,10 @@ export default function TopPerformingCampaigns() {
         <h3 className="text-base md:text-lg font-semibold text-primary">
           {t("marketing.topPerformingCampaigns")}
         </h3>
-        <button className="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer">
+        <button
+          onClick={() => router.push(`${basePath}/marketing/campaigns`)}
+          className="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+        >
           {t("marketing.viewAll")}
         </button>
       </div>

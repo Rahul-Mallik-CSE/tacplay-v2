@@ -1,6 +1,7 @@
 "use client"
 
 import { useTranslation } from "react-i18next"
+import { useRouter, usePathname } from "next/navigation"
 import { mockActiveVouchers } from "@/mock-data/DashboardMockData/marketing-mock-data"
 
 function truncateCode(code: string, maxLen = 8): string {
@@ -12,6 +13,9 @@ function truncateCode(code: string, maxLen = 8): string {
 
 export default function ActiveVouchers() {
   const { t } = useTranslation("dashboard")
+  const router = useRouter()
+  const pathname = usePathname()
+  const basePath = pathname.startsWith("/admin") ? "/admin" : "/dashboard"
 
   return (
     <div className="bg-card border border-white/5 rounded-xl p-4 md:p-5">
@@ -19,7 +23,10 @@ export default function ActiveVouchers() {
         <h3 className="text-base md:text-lg font-semibold text-primary">
           {t("marketing.activeVoucher")}
         </h3>
-        <button className="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer">
+        <button
+          onClick={() => router.push(`${basePath}/marketing/vouchers`)}
+          className="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+        >
           {t("marketing.viewAll")}
         </button>
       </div>

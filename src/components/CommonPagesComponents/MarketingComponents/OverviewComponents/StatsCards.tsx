@@ -2,6 +2,7 @@
 
 import { DollarSign, Mail, MessageSquare, Bell } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { useRouter, usePathname } from "next/navigation"
 
 const iconMap: Record<string, React.ReactNode> = {
   dollar: <DollarSign className="w-5 h-5 text-primary" />,
@@ -20,6 +21,24 @@ interface StatCard {
 
 export default function StatsCards() {
   const { t } = useTranslation("dashboard")
+  const router = useRouter()
+  const pathname = usePathname()
+  const basePath = pathname.startsWith("/admin") ? "/admin" : "/dashboard"
+
+  const getStatHref = (icon: string) => {
+    switch (icon) {
+      case "dollar":
+        return `${basePath}/marketing/campaigns`
+      case "email":
+        return `${basePath}/marketing/email`
+      case "sms":
+        return `${basePath}/marketing/sms`
+      case "push":
+        return `${basePath}/marketing/push-notification`
+      default:
+        return undefined
+    }
+  }
 
   const stats: StatCard[] = [
     { title: t("marketing.totalCampaigns"), value: 18, subtitle: t("marketing.allTime"), icon: "dollar" },
@@ -30,26 +49,32 @@ export default function StatsCards() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-      {stats.map((stat, index) => (
-        <div
-          key={index}
-          className="bg-card border border-white/5 rounded-xl p-4 md:p-5 flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm text-secondary">{stat.title}</span>
-            <span className="p-2 bg-white/5 rounded-lg">{iconMap[stat.icon]}</span>
-          </div>
-          <div>
-            <p className="text-2xl md:text-3xl font-bold text-primary">{stat.value}</p>
-            <div className="flex items-center gap-1 mt-1">
-              {stat.change && (
-                <span className="text-xs text-green-400">{stat.change}</span>
-              )}
-              <span className="text-xs text-secondary">{stat.subtitle}</span>
+      {stats.map((stat, index) => {
+        const href = getStatHref(stat.icon)
+        return (
+          <div
+            key={index}
+            onClick={() => {
+              if (href) router.push(href)
+            }}
+            className="bg-card border border-white/5 hover:border-white/15 rounded-xl p-4 md:p-5 flex flex-col justify-between cursor-pointer transition-colors"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm text-secondary">{stat.title}</span>
+              <span className="p-2 bg-white/5 rounded-lg">{iconMap[stat.icon]}</span>
+            </div>
+            <div>
+              <p className="text-2xl md:text-3xl font-bold text-primary">{stat.value}</p>
+              <div className="flex items-center gap-1 mt-1">
+                {stat.change && (
+                  <span className="text-xs text-green-400">{stat.change}</span>
+                )}
+                <span className="text-xs text-secondary">{stat.subtitle}</span>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }

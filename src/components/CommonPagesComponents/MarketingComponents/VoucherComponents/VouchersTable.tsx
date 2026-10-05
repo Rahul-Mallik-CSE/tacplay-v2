@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { Search } from "lucide-react"
 import CustomTable from "@/components/SharedComponents/CustomTable"
 import VoucherActionMenu from "../CommonComponents/VoucherActionMenu"
@@ -13,6 +13,8 @@ import type { Voucher } from "@/types/DashboardTypes/MarketingTypes"
 export default function VouchersTable() {
   const { t } = useTranslation("dashboard")
   const router = useRouter()
+  const pathname = usePathname()
+  const basePath = pathname.startsWith("/admin") ? "/admin" : "/dashboard"
   const [search, setSearch] = useState("")
 
   const filteredVouchers = mockVouchers.filter(
@@ -70,7 +72,7 @@ export default function VouchersTable() {
             />
           </div>
           <button
-            onClick={() => router.push("/dashboard/marketing/overview/create-voucher")}
+            onClick={() => router.push(`${basePath}/marketing/vouchers/create-voucher`)}
             className="px-4 py-2 bg-custom-red text-white rounded-lg text-sm font-medium hover:bg-custom-red/80 transition-colors cursor-pointer whitespace-nowrap"
           >
             {t("marketing.createNewVoucher")}

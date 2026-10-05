@@ -1,7 +1,7 @@
 "use client"
 
 import { useTranslation } from "react-i18next"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { Filter } from "lucide-react"
 import { useState } from "react"
 import CustomTable from "@/components/SharedComponents/CustomTable"
@@ -15,6 +15,8 @@ import type { Campaign } from "@/types/DashboardTypes/MarketingTypes"
 export default function RecentCampaigns() {
   const { t } = useTranslation("dashboard")
   const router = useRouter()
+  const pathname = usePathname()
+  const basePath = pathname.startsWith("/admin") ? "/admin" : "/dashboard"
   const [filterSheetOpen, setFilterSheetOpen] = useState(false)
   const [campaignFilters, setCampaignFilters] = useState<Record<string, string[]>>({})
 
@@ -98,7 +100,7 @@ export default function RecentCampaigns() {
         <div className="flex items-center gap-2">
           
           <button
-            onClick={() => router.push("/dashboard/marketing/campaigns")}
+            onClick={() => router.push(`${basePath}/marketing/campaigns`)}
             className="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer"
           >
             {t("marketing.viewAllCampaigns")}

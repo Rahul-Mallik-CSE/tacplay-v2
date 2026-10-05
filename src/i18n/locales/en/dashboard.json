@@ -1335,6 +1335,9 @@
     "pushNotifications": "Push Notification",
     "voucherTitle": "Voucher",
     "createNewVoucher": "Create New Voucher",
+    "createEmail": "Create Email",
+    "createSms": "Create SMS",
+    "createNotification": "Create Notification",
     "columns": {
       "campaigns": "Campaigns",
       "type": "Type",
