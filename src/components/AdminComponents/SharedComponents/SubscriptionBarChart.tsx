@@ -17,14 +17,28 @@ import type { SubscriptionChartData } from "@/types/AdminTypes/AnalyticsTypes"
 interface SubscriptionBarChartProps {
   data: SubscriptionChartData[]
   title?: string
+  selectedPeriod?: string
+  periodOptions?: Array<{ label: string; value: string }>
+  onPeriodChange?: (period: string) => void
 }
 
 export default function SubscriptionBarChart({
   data,
   title,
+  selectedPeriod,
+  periodOptions,
+  onPeriodChange,
 }: SubscriptionBarChartProps) {
   const { t } = useTranslation("dashboard")
-  const [timeRange, setTimeRange] = useState("Day")
+  const [internalTimeRange, setInternalTimeRange] = useState("day")
+
+  const activePeriod = selectedPeriod || internalTimeRange
+  const defaultOptions = [
+    { label: t("adminAnalytics.day"), value: "day" },
+    { label: t("adminAnalytics.week"), value: "week" },
+    { label: t("adminAnalytics.month"), value: "month" },
+  ]
+  const options = periodOptions && periodOptions.length > 0 ? periodOptions : defaultOptions
 
   return (
     <div className="rounded-xl border border-white/5 bg-card p-4 sm:p-6">
@@ -33,13 +47,18 @@ export default function SubscriptionBarChart({
           {title || t("adminAnalytics.subscriptionChart")}
         </h3>
         <select
-          value={timeRange}
-          onChange={(e) => setTimeRange(e.target.value)}
+          value={activePeriod}
+          onChange={(e) => {
+            setInternalTimeRange(e.target.value)
+            onPeriodChange?.(e.target.value)
+          }}
           className="bg-muted border border-white/10 text-primary text-xs rounded-md px-3 py-1.5 outline-none cursor-pointer"
         >
-          <option value="Day">{t("adminAnalytics.day")}</option>
-          <option value="Week">{t("adminAnalytics.week")}</option>
-          <option value="Month">{t("adminAnalytics.month")}</option>
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
       </div>
       <div className="flex items-center gap-4 mb-4">

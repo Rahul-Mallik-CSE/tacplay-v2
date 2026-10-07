@@ -10,6 +10,8 @@ import staffReducer from "@/redux/features/shared/staff/staffSlice";
 import analyticsReducer from "@/redux/features/dashboard/analytics/analyticsSlice";
 import sessionReducer from "@/redux/features/dashboard/session/sessionSlice";
 import marketingReducer from "@/redux/features/shared/marketing/marketingSlice";
+import adminOverviewReducer from "@/redux/features/admin/overview/overviewSlice";
+import adminEarningReducer from "@/redux/features/admin/earning/earningSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +24,8 @@ export const store = configureStore({
     analytics: analyticsReducer,
     session: sessionReducer,
     marketing: marketingReducer,
+    adminOverview: adminOverviewReducer,
+    adminEarning: adminEarningReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseAPI.middleware),

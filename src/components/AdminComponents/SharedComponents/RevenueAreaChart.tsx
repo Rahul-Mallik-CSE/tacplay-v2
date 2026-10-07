@@ -16,6 +16,9 @@ import type { RevenueOverTimeData } from "@/types/AdminTypes/AnalyticsTypes"
 interface RevenueAreaChartProps {
   data: RevenueOverTimeData[]
   title?: string
+  selectedPeriod?: string
+  periodOptions?: Array<{ label: string; value: string }>
+  onPeriodChange?: (period: string) => void
 }
 
 const CustomTooltip = ({
@@ -31,8 +34,7 @@ const CustomTooltip = ({
     const value = payload[0].value
     return (
       <div className="bg-white text-gray-900 px-3 py-2 rounded-lg shadow-lg text-sm">
-        <p className="font-bold">${value.toLocaleString()}</p>
-        <p className="text-emerald-500 text-xs">(+4.3%)</p>
+        <p className="font-bold">€{value.toLocaleString()}</p>
       </div>
     )
   }
@@ -42,9 +44,20 @@ const CustomTooltip = ({
 export default function RevenueAreaChart({
   data,
   title,
+  selectedPeriod,
+  periodOptions,
+  onPeriodChange,
 }: RevenueAreaChartProps) {
   const { t } = useTranslation("dashboard")
-  const [timeRange, setTimeRange] = useState("Month")
+  const [internalTimeRange, setInternalTimeRange] = useState("month")
+
+  const activePeriod = selectedPeriod || internalTimeRange
+  const defaultOptions = [
+    { label: t("adminAnalytics.month"), value: "month" },
+    { label: t("adminAnalytics.week"), value: "week" },
+    { label: t("adminAnalytics.day"), value: "day" },
+  ]
+  const options = periodOptions && periodOptions.length > 0 ? periodOptions : defaultOptions
 
   return (
     <div className="rounded-xl border border-white/5 bg-card p-4 sm:p-6">
@@ -53,13 +66,18 @@ export default function RevenueAreaChart({
           {title || t("adminAnalytics.revenueOverTime")}
         </h3>
         <select
-          value={timeRange}
-          onChange={(e) => setTimeRange(e.target.value)}
+          value={activePeriod}
+          onChange={(e) => {
+            setInternalTimeRange(e.target.value)
+            onPeriodChange?.(e.target.value)
+          }}
           className="bg-muted border border-white/10 text-primary text-xs rounded-md px-3 py-1.5 outline-none cursor-pointer"
         >
-          <option value="Month">{t("adminAnalytics.month")}</option>
-          <option value="Week">{t("adminAnalytics.week")}</option>
-          <option value="Day">{t("adminAnalytics.day")}</option>
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
       </div>
       <div className="h-[250px] sm:h-[300px]">
