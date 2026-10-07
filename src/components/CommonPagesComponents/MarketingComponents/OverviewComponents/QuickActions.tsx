@@ -80,17 +80,17 @@ export default function QuickActions({ data }: QuickActionsProps) {
 
   return (
     <div className="bg-card border border-white/5 rounded-xl p-4 md:p-5 flex flex-col h-[360px]">
-      <div className="flex-shrink-0 mb-4">
+      <div className="flex-shrink-0 mb-3">
         <h3 className="text-base md:text-lg font-semibold text-primary">{title}</h3>
       </div>
-      <div className="flex-1 overflow-y-auto pr-1 space-y-3">
+      <div className="flex-1 overflow-y-auto pr-1 space-y-2.5">
         {items.map((item, index) => {
           const config = resolveActionConfig(item)
           return (
             <button
               key={config.key || index}
               onClick={() => router.push(config.href)}
-              className="w-full flex items-center gap-3 p-3 rounded-xl border border-white/5 hover:bg-white/5 hover:border-white/10 transition-colors cursor-pointer text-left"
+              className="w-full flex items-center gap-3 py-2.5 px-3 rounded-xl border border-white/5 hover:bg-white/5 hover:border-white/10 transition-colors cursor-pointer text-left"
             >
               <span className={`p-2.5 rounded-full ${config.colorClass}`}>
                 {config.icon}
