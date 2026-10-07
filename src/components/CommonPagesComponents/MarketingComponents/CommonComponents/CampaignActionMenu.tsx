@@ -3,10 +3,14 @@
 import { useState, useRef, useEffect } from "react"
 import { MoreVertical, Trash2, Pencil, Copy } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import type { Campaign, RecentCampaignItem } from "@/types/CommonPageTypes/MarketingTypes"
+import type {
+  Campaign,
+  RecentCampaignItem,
+  CampaignListItem,
+} from "@/types/CommonPageTypes/MarketingTypes"
 
 interface CampaignActionMenuProps {
-  campaign: Campaign | RecentCampaignItem
+  campaign: Campaign | RecentCampaignItem | CampaignListItem
   onDelete?: (id: number) => void
   onEdit?: (id: number) => void
   onDuplicate?: (id: number) => void

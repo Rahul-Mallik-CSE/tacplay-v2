@@ -355,9 +355,68 @@ export interface VoucherStatusBadgeProps {
   status: VoucherStatus | string;
 }
 
+// ============================================================================
+// Campaign List & Creation API Types
+// ============================================================================
+
+export interface CampaignQueryParams {
+  search?: string;
+  campaign_type?: string;
+  page?: number;
+  limit?: number;
+  status?: string;
+}
+
+export interface CampaignListItem {
+  id: number;
+  campaign_name: string;
+  campaign_type: "email" | "sms" | "push" | string;
+  audience: string;
+  audience_count: number;
+  scheduled_at: string | null;
+  bookings: number;
+  revenue: string;
+  status: string;
+  created_at: string;
+}
+
+export interface CampaignListMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPage: number;
+}
+
+export interface CampaignListResponse {
+  success: boolean;
+  message: string;
+  meta: CampaignListMeta;
+  data: CampaignListItem[];
+  requestId?: string;
+}
+
+export interface CreateSmsPayload {
+  campaign_name: string;
+  audience: string;
+  sender_id: string;
+  sms_body: string;
+  notification_type: string;
+  schedule_type: string;
+  action: string;
+  scheduled_at?: string | null;
+}
+
+export interface CreateCampaignResponse {
+  success: boolean;
+  message: string;
+  meta?: Record<string, unknown>;
+  data?: Record<string, unknown>;
+  requestId?: string;
+}
+
 /** Props for CampaignActionMenu component */
 export interface CampaignActionMenuProps {
-  campaign: Campaign | RecentCampaignItem;
+  campaign: Campaign | RecentCampaignItem | CampaignListItem;
   onDelete?: (id: number) => void;
   onEdit?: (id: number) => void;
   onDuplicate?: (id: number) => void;
