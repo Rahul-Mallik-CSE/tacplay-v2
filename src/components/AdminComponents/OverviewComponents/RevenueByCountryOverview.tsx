@@ -65,11 +65,11 @@ export default function RevenueByCountryOverview({
           ))}
         </select>
       </div>
-      <div className="flex flex-col lg:flex-row gap-6">
-        <div className="flex-1">
+      <div className="flex flex-col lg:flex-row gap-6 items-center">
+        <div className="flex-1 min-w-0 w-full">
           <CountryList data={formattedData} />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0 w-full">
           <WorldMap highlightedCountries={highlightedCountries} />
         </div>
       </div>
