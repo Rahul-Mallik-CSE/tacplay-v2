@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { MoreVertical, Trash2, Pencil, Copy } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import type { VoucherActionMenuProps } from "@/types/DashboardTypes/MarketingTypes"
+import type { VoucherActionMenuProps } from "@/types/CommonPageTypes/MarketingTypes"
 
 export default function VoucherActionMenu({ voucher, onDelete, onEdit, onDuplicate }: VoucherActionMenuProps) {
   const { t } = useTranslation("dashboard")

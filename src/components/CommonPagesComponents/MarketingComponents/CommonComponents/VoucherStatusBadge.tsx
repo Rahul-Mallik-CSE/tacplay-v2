@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import type { VoucherStatusBadgeProps } from "@/types/DashboardTypes/MarketingTypes"
+import type { VoucherStatusBadgeProps } from "@/types/CommonPageTypes/MarketingTypes"
 
 const statusStyles: Record<string, string> = {
   Active: "bg-green-500/20 text-green-400 border border-green-500/30",

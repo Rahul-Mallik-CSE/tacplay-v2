@@ -9,7 +9,7 @@ import CampaignActionMenu from "../CommonComponents/CampaignActionMenu"
 import CampaignTypeBadge from "../CommonComponents/CampaignTypeBadge"
 import CampaignStatusBadge from "../CommonComponents/CampaignStatusBadge"
 import { mockCampaigns } from "@/mock-data/DashboardMockData/marketing-mock-data"
-import type { Campaign } from "@/types/DashboardTypes/MarketingTypes"
+import type { Campaign } from "@/types/CommonPageTypes/MarketingTypes"
 
 export default function SmsCampaignsTable() {
   const { t } = useTranslation("dashboard")

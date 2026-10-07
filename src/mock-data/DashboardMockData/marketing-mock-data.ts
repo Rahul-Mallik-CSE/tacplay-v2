@@ -9,7 +9,7 @@ import type {
   TopPerformingCampaign,
   ActiveVoucher,
   QuickAction,
-} from "@/types/DashboardTypes/MarketingTypes"
+} from "@/types/CommonPageTypes/MarketingTypes"
 
 // ============================================================================
 // Marketing Overview Stats

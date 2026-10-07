@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { MoreVertical, Trash2, Pencil, Copy } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import type { CampaignActionMenuProps } from "@/types/DashboardTypes/MarketingTypes"
+import type { CampaignActionMenuProps } from "@/types/CommonPageTypes/MarketingTypes"
 
 export default function CampaignActionMenu({ campaign, onDelete, onEdit, onDuplicate }: CampaignActionMenuProps) {
   const { t } = useTranslation("dashboard")

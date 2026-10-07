@@ -10,7 +10,7 @@ import CampaignActionMenu from "../CommonComponents/CampaignActionMenu"
 import CampaignTypeBadge from "../CommonComponents/CampaignTypeBadge"
 import CampaignStatusBadge from "../CommonComponents/CampaignStatusBadge"
 import { mockCampaigns } from "@/mock-data/DashboardMockData/marketing-mock-data"
-import type { Campaign } from "@/types/DashboardTypes/MarketingTypes"
+import type { Campaign } from "@/types/CommonPageTypes/MarketingTypes"
 
 export default function RecentCampaigns() {
   const { t } = useTranslation("dashboard")
@@ -98,7 +98,7 @@ export default function RecentCampaigns() {
           {t("marketing.recentCampaigns")}
         </h2>
         <div className="flex items-center gap-2">
-          
+
           <button
             onClick={() => router.push(`${basePath}/marketing/campaigns`)}
             className="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer"

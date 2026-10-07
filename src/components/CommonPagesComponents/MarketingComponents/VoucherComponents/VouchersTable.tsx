@@ -8,7 +8,7 @@ import CustomTable from "@/components/SharedComponents/CustomTable"
 import VoucherActionMenu from "../CommonComponents/VoucherActionMenu"
 import VoucherStatusBadge from "../CommonComponents/VoucherStatusBadge"
 import { mockVouchers } from "@/mock-data/DashboardMockData/marketing-mock-data"
-import type { Voucher } from "@/types/DashboardTypes/MarketingTypes"
+import type { Voucher } from "@/types/CommonPageTypes/MarketingTypes"
 
 export default function VouchersTable() {
   const { t } = useTranslation("dashboard")

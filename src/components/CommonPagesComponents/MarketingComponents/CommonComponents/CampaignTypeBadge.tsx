@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import type { CampaignTypeBadgeProps } from "@/types/DashboardTypes/MarketingTypes"
+import type { CampaignTypeBadgeProps } from "@/types/CommonPageTypes/MarketingTypes"
 
 const typeStyles: Record<string, string> = {
   Email: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30",
