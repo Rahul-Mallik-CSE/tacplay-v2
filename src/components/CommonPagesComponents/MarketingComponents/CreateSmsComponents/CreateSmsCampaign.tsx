@@ -20,7 +20,8 @@ export default function CreateSmsCampaign() {
   const [formData, setFormData] = useState({
     campaign_name: "",
     sender_id: "TACPLAY",
-    sms_body: "",
+    sms_body:
+      "Hi {{player_name}}, get 37% OFF your next booking at {{field_name}}. Limited slots available!",
     notification_type: "promotional",
     schedule: "now" as "now" | "later",
     schedule_date: "",

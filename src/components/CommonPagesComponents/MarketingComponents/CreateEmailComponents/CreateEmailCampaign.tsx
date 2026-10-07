@@ -22,7 +22,8 @@ export default function CreateEmailCampaign() {
     campaign_name: "",
     email_subject: "",
     preheader_text: "",
-    email_body: "",
+    email_body:
+      "Hi {{player_name}}, Get 20% OFF on any booking this weekend at {{field_name}}.",
     from_name: "TACPLAY",
     from_email: "",
     schedule: "now" as "now" | "later",

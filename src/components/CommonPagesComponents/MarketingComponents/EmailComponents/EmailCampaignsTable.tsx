@@ -23,6 +23,7 @@ import {
 } from "@/redux/features/shared/marketing/marketingAPI"
 import { getErrorMessage } from "@/lib/auth"
 import type { CampaignListItem } from "@/types/CommonPageTypes/MarketingTypes"
+import CampaignsTableLoading from "../CommonComponents/CampaignsTableLoading"
 
 function formatCampaignDate(dateStr?: string | null): { date: string; time: string } {
   if (!dateStr) return { date: "—", time: "" }
@@ -163,6 +164,17 @@ export default function EmailCampaignsTable() {
     } catch (err) {
       toast.error(getErrorMessage(err, "Failed to delete campaign"))
     }
+  }
+
+  if (isLoading && !campaignsResponse) {
+    return (
+      <CampaignsTableLoading
+        title={t("marketing.emailCampaigns", "Email Campaigns")}
+        hasCreateButton={true}
+        hasFilterButton={false}
+        hasTypeColumn={false}
+      />
+    )
   }
 
   return (
