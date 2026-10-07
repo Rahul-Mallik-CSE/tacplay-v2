@@ -10,6 +10,8 @@ export default function VoucherActionMenu({ voucher, onDelete, onEdit, onDuplica
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
+  const voucherId = "id" in voucher ? voucher.id : voucher.voucher_id
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -36,35 +38,35 @@ export default function VoucherActionMenu({ voucher, onDelete, onEdit, onDuplica
           <button
             onClick={(e) => {
               e.stopPropagation()
-              onDelete(voucher.voucher_id)
+              onDelete(voucherId)
               setOpen(false)
             }}
             className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
           >
             <Trash2 className="w-4 h-4" />
-            {t("marketing.actions.delete")}
+            {t("marketing.actions.delete", "Delete")}
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation()
-              onEdit(voucher.voucher_id)
+              onEdit(voucherId)
               setOpen(false)
             }}
             className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
           >
             <Pencil className="w-4 h-4" />
-            {t("marketing.actions.edit")}
+            {t("marketing.actions.edit", "Edit")}
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation()
-              onDuplicate(voucher.voucher_id)
+              onDuplicate(voucherId)
               setOpen(false)
             }}
             className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
           >
             <Copy className="w-4 h-4" />
-            {t("marketing.actions.duplicate")}
+            {t("marketing.actions.duplicate", "Duplicate")}
           </button>
         </div>
       )}

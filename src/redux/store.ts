@@ -9,6 +9,7 @@ import fieldProfileReducer from "@/redux/features/dashboard/field-profile/fieldP
 import staffReducer from "@/redux/features/shared/staff/staffSlice";
 import analyticsReducer from "@/redux/features/dashboard/analytics/analyticsSlice";
 import sessionReducer from "@/redux/features/dashboard/session/sessionSlice";
+import marketingReducer from "@/redux/features/shared/marketing/marketingSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     staff: staffReducer,
     analytics: analyticsReducer,
     session: sessionReducer,
+    marketing: marketingReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseAPI.middleware),
