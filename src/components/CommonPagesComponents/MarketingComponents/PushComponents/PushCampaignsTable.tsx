@@ -108,8 +108,8 @@ export default function PushCampaignsTable() {
           <CampaignActionMenu
             campaign={row as unknown as Campaign}
             onDelete={handleDelete}
-            onEdit={handleEdit}
-            onDuplicate={handleDuplicate}
+            /* onEdit={handleEdit} */
+            /* onDuplicate={handleDuplicate} */
           />
         )}
       />

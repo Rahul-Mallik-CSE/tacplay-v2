@@ -270,8 +270,8 @@ export default function RecentCampaigns({ data, filters, onRefetch }: RecentCamp
           <CampaignActionMenu
             campaign={row as unknown as RecentCampaignItem}
             onDelete={handleDeleteClick}
-            onEdit={handleEdit}
-            onDuplicate={handleDuplicate}
+            /* onEdit={handleEdit} */
+            /* onDuplicate={handleDuplicate} */
           />
         )}
       />

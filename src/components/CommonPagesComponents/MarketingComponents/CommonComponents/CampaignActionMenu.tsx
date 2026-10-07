@@ -51,7 +51,8 @@ export default function CampaignActionMenu({
       </button>
       {open && (
         <div className="absolute right-0 top-8 z-50 w-40 bg-card border border-white/10 rounded-lg shadow-lg py-1">
-          {canEdit && onEdit && (
+          {/* Edit button commented out */}
+          {/* {canEdit && onEdit && (
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -63,8 +64,10 @@ export default function CampaignActionMenu({
               <Pencil className="w-4 h-4" />
               {t("marketing.actions.edit", "Edit")}
             </button>
-          )}
-          {canDuplicate && onDuplicate && (
+          )} */}
+
+          {/* Duplicate button commented out */}
+          {/* {canDuplicate && onDuplicate && (
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -76,7 +79,7 @@ export default function CampaignActionMenu({
               <Copy className="w-4 h-4" />
               {t("marketing.actions.duplicate", "Duplicate")}
             </button>
-          )}
+          )} */}
           {canDelete && onDelete && (
             <button
               onClick={(e) => {
