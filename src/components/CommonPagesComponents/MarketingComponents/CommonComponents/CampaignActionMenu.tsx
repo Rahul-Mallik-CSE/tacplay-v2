@@ -12,7 +12,7 @@ import type {
 interface CampaignActionMenuProps {
   campaign: Campaign | RecentCampaignItem | CampaignListItem
   onDelete?: (id: number) => void
-  onEdit?: (id: number) => void
+  onEdit?: (campaign: Campaign | RecentCampaignItem | CampaignListItem) => void
   onDuplicate?: (id: number) => void
 }
 
@@ -54,36 +54,21 @@ export default function CampaignActionMenu({
         <MoreVertical className="w-4 h-4 text-secondary" />
       </button>
       {open && (
-        <div className="absolute right-0 top-8 z-50 w-40 bg-card border border-white/10 rounded-lg shadow-lg py-1">
-          {/* Edit button commented out */}
-          {/* {canEdit && onEdit && (
+        <div className="absolute right-0 top-8 z-50 w-36 bg-card border border-white/10 rounded-lg shadow-lg py-1">
+          {canEdit && onEdit && (
             <button
               onClick={(e) => {
                 e.stopPropagation()
-                onEdit(campaignId)
+                onEdit(campaign)
                 setOpen(false)
               }}
               className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
             >
-              <Pencil className="w-4 h-4" />
+              <Pencil className="w-4 h-4 text-secondary" />
               {t("marketing.actions.edit", "Edit")}
             </button>
-          )} */}
+          )}
 
-          {/* Duplicate button commented out */}
-          {/* {canDuplicate && onDuplicate && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                onDuplicate(campaignId)
-                setOpen(false)
-              }}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
-            >
-              <Copy className="w-4 h-4" />
-              {t("marketing.actions.duplicate", "Duplicate")}
-            </button>
-          )} */}
           {canDelete && onDelete && (
             <button
               onClick={(e) => {
@@ -91,9 +76,9 @@ export default function CampaignActionMenu({
                 onDelete(campaignId)
                 setOpen(false)
               }}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-white/5 transition-colors cursor-pointer"
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-4 h-4 text-red-400" />
               {t("marketing.actions.delete", "Delete")}
             </button>
           )}

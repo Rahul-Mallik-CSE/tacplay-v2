@@ -10,6 +10,7 @@ import FilterSheet from "@/components/SharedComponents/FilterSheet"
 import CampaignActionMenu from "../CommonComponents/CampaignActionMenu"
 import CampaignTypeBadge from "../CommonComponents/CampaignTypeBadge"
 import CampaignStatusBadge from "../CommonComponents/CampaignStatusBadge"
+import EditCampaignModal from "../CommonComponents/EditCampaignModal"
 import {
   Dialog,
   DialogContent,
@@ -68,6 +69,10 @@ export default function RecentCampaigns({ data, filters, onRefetch }: RecentCamp
   // Delete dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null)
+
+  // Edit dialog state
+  const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const [selectedCampaignForEdit, setSelectedCampaignForEdit] = useState<RecentCampaignItem | null>(null)
 
   const [deleteCampaign, { isLoading: isDeleting }] = useDeleteCampaignMutation()
   const [duplicateCampaign, { isLoading: isDuplicating }] = useDuplicateCampaignMutation()
@@ -225,8 +230,9 @@ export default function RecentCampaigns({ data, filters, onRefetch }: RecentCamp
     }
   }
 
-  const handleEdit = (id: number) => {
-    router.push(`${basePath}/marketing/campaigns`)
+  const handleEdit = (campaign: RecentCampaignItem) => {
+    setSelectedCampaignForEdit(campaign)
+    setEditDialogOpen(true)
   }
 
   const handleDuplicate = async (id: number) => {
@@ -270,8 +276,7 @@ export default function RecentCampaigns({ data, filters, onRefetch }: RecentCamp
           <CampaignActionMenu
             campaign={row as unknown as RecentCampaignItem}
             onDelete={handleDeleteClick}
-            /* onEdit={handleEdit} */
-            /* onDuplicate={handleDuplicate} */
+            onEdit={handleEdit as never}
           />
         )}
       />
@@ -327,6 +332,14 @@ export default function RecentCampaigns({ data, filters, onRefetch }: RecentCamp
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Edit Campaign Modal */}
+      <EditCampaignModal
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        campaign={selectedCampaignForEdit}
+        onSuccess={onRefetch}
+      />
     </div>
   )
 }

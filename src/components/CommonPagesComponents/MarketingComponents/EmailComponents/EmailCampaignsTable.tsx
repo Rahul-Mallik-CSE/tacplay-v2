@@ -24,6 +24,7 @@ import {
 import { getErrorMessage } from "@/lib/auth"
 import type { CampaignListItem } from "@/types/CommonPageTypes/MarketingTypes"
 import CampaignsTableLoading from "../CommonComponents/CampaignsTableLoading"
+import EditCampaignModal from "../CommonComponents/EditCampaignModal"
 
 function formatCampaignDate(dateStr?: string | null): { date: string; time: string } {
   if (!dateStr) return { date: "—", time: "" }
@@ -61,6 +62,10 @@ export default function EmailCampaignsTable() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null)
   const [deleteCampaign, { isLoading: isDeleting }] = useDeleteCampaignMutation()
+
+  // Edit modal state
+  const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const [selectedCampaignForEdit, setSelectedCampaignForEdit] = useState<CampaignListItem | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -153,6 +158,11 @@ export default function EmailCampaignsTable() {
     setDeleteDialogOpen(true)
   }
 
+  const handleEditClick = (campaign: CampaignListItem) => {
+    setSelectedCampaignForEdit(campaign)
+    setEditDialogOpen(true)
+  }
+
   const handleConfirmDelete = async () => {
     if (!selectedCampaignId) return
     try {
@@ -216,6 +226,7 @@ export default function EmailCampaignsTable() {
           <CampaignActionMenu
             campaign={row as unknown as CampaignListItem}
             onDelete={handleDeleteClick}
+            onEdit={handleEditClick as never}
           />
         )}
       />
@@ -253,6 +264,14 @@ export default function EmailCampaignsTable() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Edit Campaign Modal */}
+      <EditCampaignModal
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        campaign={selectedCampaignForEdit}
+        onSuccess={refetch}
+      />
     </div>
   )
 }

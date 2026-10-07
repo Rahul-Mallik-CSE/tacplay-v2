@@ -491,11 +491,25 @@ export interface CreateVoucherResponse {
   requestId?: string;
 }
 
+export interface UpdateCampaignPayload {
+  campaign_name: string;
+  audience: string;
+  [key: string]: unknown;
+}
+
+export interface UpdateCampaignResponse {
+  success: boolean;
+  message: string;
+  meta?: Record<string, unknown>;
+  data: CampaignListItem | Record<string, unknown>;
+  requestId?: string;
+}
+
 /** Props for CampaignActionMenu component */
 export interface CampaignActionMenuProps {
   campaign: Campaign | RecentCampaignItem | CampaignListItem;
   onDelete?: (id: number) => void;
-  onEdit?: (id: number) => void;
+  onEdit?: (campaign: Campaign | RecentCampaignItem | CampaignListItem) => void;
   onDuplicate?: (id: number) => void;
 }
 

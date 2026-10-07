@@ -62,6 +62,18 @@ export const marketingAPI = baseAPI.injectEndpoints({
       invalidatesTags: ["Marketing"],
     }),
 
+    updateCampaign: builder.mutation<
+      import("@/types/CommonPageTypes/MarketingTypes").UpdateCampaignResponse,
+      { id: number; body: import("@/types/CommonPageTypes/MarketingTypes").UpdateCampaignPayload }
+    >({
+      query: ({ id, body }) => ({
+        url: `/api/field-owner/marketing/campaigns/${id}/`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Marketing"],
+    }),
+
     createEmailCampaign: builder.mutation<CreateCampaignResponse, FormData>({
       query: (formData) => ({
         url: "/api/field-owner/marketing/email-campaigns/",
@@ -138,6 +150,7 @@ export const {
   useGetMarketingOverviewQuery,
   useGetCampaignsListQuery,
   useDeleteCampaignMutation,
+  useUpdateCampaignMutation,
   useDuplicateCampaignMutation,
   useCreateEmailCampaignMutation,
   useCreateSmsCampaignMutation,
