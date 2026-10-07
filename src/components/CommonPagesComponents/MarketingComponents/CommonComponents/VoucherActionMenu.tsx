@@ -5,7 +5,7 @@ import { MoreVertical, Trash2, Pencil, Copy } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import type { VoucherActionMenuProps } from "@/types/CommonPageTypes/MarketingTypes"
 
-export default function VoucherActionMenu({ voucher, onDelete, onEdit, onDuplicate }: VoucherActionMenuProps) {
+export default function VoucherActionMenu({ voucher, onDelete, onEdit }: VoucherActionMenuProps) {
   const { t } = useTranslation("dashboard")
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -34,40 +34,32 @@ export default function VoucherActionMenu({ voucher, onDelete, onEdit, onDuplica
         <MoreVertical className="w-4 h-4 text-secondary" />
       </button>
       {open && (
-        <div className="absolute right-0 top-8 z-50 w-40 bg-card border border-white/10 rounded-lg shadow-lg py-1">
+        <div className="absolute right-0 top-8 z-50 w-36 bg-card border border-white/10 rounded-lg shadow-lg py-1">
+          {onEdit && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onEdit(voucher)
+                setOpen(false)
+              }}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              <Pencil className="w-4 h-4 text-secondary" />
+              {t("marketing.actions.edit", "Edit")}
+            </button>
+          )}
           <button
             onClick={(e) => {
               e.stopPropagation()
               onDelete(voucherId)
               setOpen(false)
             }}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-4 h-4 text-red-400" />
             {t("marketing.actions.delete", "Delete")}
           </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onEdit(voucherId)
-              setOpen(false)
-            }}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
-          >
-            <Pencil className="w-4 h-4" />
-            {t("marketing.actions.edit", "Edit")}
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onDuplicate(voucherId)
-              setOpen(false)
-            }}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
-          >
-            <Copy className="w-4 h-4" />
-            {t("marketing.actions.duplicate", "Duplicate")}
-          </button>
+          {/* Duplicate button removed as requested */}
         </div>
       )}
     </div>

@@ -414,6 +414,83 @@ export interface CreateCampaignResponse {
   requestId?: string;
 }
 
+// ============================================================================
+// Voucher List & Modification API Types
+// ============================================================================
+
+export interface VoucherListItem {
+  id: number;
+  voucher_code: string;
+  session_id: number | null;
+  session_name: string | null;
+  discount_percentage: string | number;
+  minimum_order_value: string;
+  description: string;
+  schedule_type: string;
+  start_date: string | null;
+  end_date: string | null;
+  status: string;
+  usage_limit: number | null;
+  used_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface VoucherListMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPage: number;
+}
+
+export interface VoucherListResponse {
+  success: boolean;
+  message: string;
+  meta: VoucherListMeta;
+  data: VoucherListItem[];
+  requestId?: string;
+}
+
+export interface VoucherQueryParams {
+  search?: string;
+  page?: number;
+  limit?: number;
+  status?: string;
+}
+
+export interface UpdateVoucherPayload {
+  discount_percentage?: number | string;
+  minimum_order_value?: string | number;
+  description?: string;
+}
+
+export interface UpdateVoucherResponse {
+  success: boolean;
+  message: string;
+  meta?: Record<string, unknown>;
+  data: VoucherListItem;
+  requestId?: string;
+}
+
+export interface CreateVoucherPayload {
+  voucher_code: string;
+  session_id: number;
+  discount_percentage: number;
+  minimum_order_value: string;
+  description: string;
+  schedule_type: "active_now" | "schedule_days" | string;
+  start_date?: string | null;
+  end_date?: string | null;
+}
+
+export interface CreateVoucherResponse {
+  success: boolean;
+  message: string;
+  meta?: Record<string, unknown>;
+  data: VoucherListItem;
+  requestId?: string;
+}
+
 /** Props for CampaignActionMenu component */
 export interface CampaignActionMenuProps {
   campaign: Campaign | RecentCampaignItem | CampaignListItem;
@@ -424,8 +501,9 @@ export interface CampaignActionMenuProps {
 
 /** Props for VoucherActionMenu component */
 export interface VoucherActionMenuProps {
-  voucher: Voucher | ActiveVoucherItem;
+  voucher: Voucher | ActiveVoucherItem | VoucherListItem;
   onDelete: (id: number) => void;
-  onEdit: (id: number) => void;
-  onDuplicate: (id: number) => void;
+  onEdit?: (voucher: VoucherListItem | Voucher | ActiveVoucherItem) => void;
+  onDuplicate?: (id: number) => void;
 }
+
