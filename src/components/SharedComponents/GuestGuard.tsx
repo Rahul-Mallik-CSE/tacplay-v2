@@ -38,7 +38,7 @@ export default function GuestGuard({
 
     if (isAuthenticated && accountType) {
       // Already logged in — send them to their dashboard
-      if (accountType === "admin") {
+      if (accountType === "admin" || accountType === "admin_staff") {
         router.replace("/admin");
       } else {
         router.replace("/dashboard");

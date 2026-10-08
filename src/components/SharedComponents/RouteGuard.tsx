@@ -54,7 +54,7 @@ export default function RouteGuard({
 
     // 3. Authenticated but wrong role → send to their own dashboard
     if (!roles.includes(accountType as AccountType)) {
-      if (accountType === "admin") {
+      if (accountType === "admin" || accountType === "admin_staff") {
         router.replace("/admin");
       } else {
         router.replace("/dashboard");

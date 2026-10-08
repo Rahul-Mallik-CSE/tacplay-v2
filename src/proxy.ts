@@ -97,8 +97,9 @@ export function proxy(request: NextRequest) {
       const user = getUserFromCookie(request);
       if (hasValidToken(request) && user) {
         const accountType = user.account_type || user.role;
+        const isAdminUser = accountType === "admin" || accountType === "admin_staff";
 
-        if (accountType === "admin") {
+        if (isAdminUser) {
           return NextResponse.redirect(new URL("/admin", request.url));
         }
         return NextResponse.redirect(new URL("/dashboard", request.url));
@@ -117,14 +118,15 @@ export function proxy(request: NextRequest) {
   // ── 4. Role-based access control ────────────────────────────────────
   const user = getUserFromCookie(request);
   const accountType = user?.account_type || user?.role;
+  const isAdminUser = accountType === "admin" || accountType === "admin_staff";
 
-  // Admin trying to access /dashboard/* → send to /admin
-  if (pathname.startsWith("/dashboard") && accountType === "admin") {
+  // Admin / Admin staff trying to access /dashboard/* → send to /admin
+  if (pathname.startsWith("/dashboard") && isAdminUser) {
     return NextResponse.redirect(new URL("/admin", request.url));
   }
 
   // Field owner trying to access /admin/* → send to /dashboard
-  if (pathname.startsWith("/admin") && accountType !== "admin") {
+  if (pathname.startsWith("/admin") && !isAdminUser) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

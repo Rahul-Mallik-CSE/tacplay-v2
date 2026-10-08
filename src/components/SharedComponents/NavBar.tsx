@@ -53,7 +53,7 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
   // Read user from Redux
   const { user } = useAppSelector((s) => s.auth);
   const accountType = resolveAccountType(user);
-  const isAdmin = accountType === "admin";
+  const isAdmin = accountType === "admin" || accountType === "admin_staff";
 
   const profileImageUrl = toAbsoluteMediaUrl(user?.profile_image);
   const displayName = user?.full_name || "User";

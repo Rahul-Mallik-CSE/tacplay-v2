@@ -23,7 +23,7 @@ export default function Home() {
       return;
     }
 
-    if (accountType === "admin") {
+    if (accountType === "admin" || accountType === "admin_staff") {
       router.replace("/admin");
     } else {
       router.replace("/dashboard");

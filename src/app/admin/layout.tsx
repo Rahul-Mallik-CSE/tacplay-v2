@@ -12,7 +12,7 @@ export default function AdminRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <RouteGuard allowedRoles="admin">
+    <RouteGuard allowedRoles={["admin", "admin_staff"]}>
       <AdminLayout>{children}</AdminLayout>
     </RouteGuard>
   );

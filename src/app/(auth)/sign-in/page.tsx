@@ -50,7 +50,7 @@ function SignInPageInner() {
 
       // Route based on account_type from backend (not the role toggle)
       const accountType = user.account_type || user.role;
-      if (accountType === "admin") {
+      if (accountType === "admin" || accountType === "admin_staff") {
         router.replace("/admin");
       } else {
         // For field_owner: if arena_info_saved is false, go to profile setup

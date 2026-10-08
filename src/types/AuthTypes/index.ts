@@ -3,10 +3,12 @@
 // ─── Account Type Constants ─────────────────────────────────────────────────
 
 export const ACCOUNT_TYPE_ADMIN = "admin" as const;
+export const ACCOUNT_TYPE_ADMIN_STAFF = "admin_staff" as const;
 export const ACCOUNT_TYPE_FIELD_OWNER = "field_owner" as const;
 
 export type AccountType =
   | typeof ACCOUNT_TYPE_ADMIN
+  | typeof ACCOUNT_TYPE_ADMIN_STAFF
   | typeof ACCOUNT_TYPE_FIELD_OWNER;
 
 // ─── User ───────────────────────────────────────────────────────────────────

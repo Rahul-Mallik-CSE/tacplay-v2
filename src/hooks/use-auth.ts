@@ -23,7 +23,9 @@ export function useAuth() {
 
   const accountType = resolveAccountType(user);
 
-  const isAdmin = accountType === "admin";
+  const isAdmin = accountType === "admin" || accountType === "admin_staff";
+  const isSuperAdmin = accountType === "admin";
+  const isAdminStaff = accountType === "admin_staff";
   const isFieldOwner = accountType === "field_owner";
 
   const logout = useCallback(async () => {
@@ -44,6 +46,8 @@ export function useAuth() {
     user,
     accountType,
     isAdmin,
+    isSuperAdmin,
+    isAdminStaff,
     isFieldOwner,
     logout,
   } as const;

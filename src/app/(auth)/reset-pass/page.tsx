@@ -70,7 +70,7 @@ export default function ResetPasswordPage() {
 
         // Navigate based on role
         const accountType = user.account_type || user.role;
-        if (accountType === "admin") {
+        if (accountType === "admin" || accountType === "admin_staff") {
           router.replace("/admin");
         } else {
           router.replace("/dashboard");
