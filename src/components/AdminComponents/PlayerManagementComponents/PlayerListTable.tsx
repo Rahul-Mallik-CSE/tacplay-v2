@@ -81,7 +81,7 @@ export default function PlayerListTable() {
   // Status confirmation dialog state
   const [statusDialogPlayer, setStatusDialogPlayer] = useState<AdminPlayerListItem | null>(null)
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false)
-  const [targetAction, setTargetAction] = useState<"disable" | "activate">("disable")
+  const [targetAction, setTargetAction] = useState<"disable" | "enable">("disable")
 
   // Upgrade modal state
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
@@ -121,7 +121,7 @@ export default function PlayerListTable() {
       (playerItem.status?.toLowerCase() === "active")
 
     setStatusDialogPlayer(playerItem)
-    setTargetAction(isCurrentlyActive ? "disable" : "activate")
+    setTargetAction(isCurrentlyActive ? "disable" : "enable")
     setIsStatusDialogOpen(true)
   }
 
@@ -139,7 +139,7 @@ export default function PlayerListTable() {
         res?.message ||
           (targetAction === "disable"
             ? "Player disabled successfully"
-            : "Player activated successfully")
+            : "Player enabled successfully")
       )
       setIsStatusDialogOpen(false)
       setStatusDialogPlayer(null)

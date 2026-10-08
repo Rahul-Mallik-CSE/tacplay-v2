@@ -56,12 +56,12 @@ export default function PlayerActionDropdown({
 
   // Check if player has actions array from API
   const apiActions = "actions" in player ? (player as AdminPlayerListItem).actions : undefined
-  const blockAction = apiActions?.find((a) => a.key === "block" || a.key === "activate" || a.key === "disable")
+  const blockAction = apiActions?.find((a) => a.key === "block" || a.key === "enable" || a.key === "activate" || a.key === "disable")
 
   const statusLabel = blockAction?.label || (
     isCurrentlyActive
       ? t("playerManagement.actions.blockPlayer", "Block Player")
-      : t("playerManagement.actions.activatePlayer", "Activate Player")
+      : t("playerManagement.actions.enablePlayer", "Enable Player")
   )
 
   return (

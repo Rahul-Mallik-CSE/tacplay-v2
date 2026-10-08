@@ -56,7 +56,7 @@ export default function PlayerStatusConfirmDialog({
           <DialogTitle className="text-xl font-bold text-primary">
             {isDisable
               ? t("playerManagement.confirmDialog.blockTitle", "Block Player Account")
-              : t("playerManagement.confirmDialog.activateTitle", "Activate Player Account")}
+              : t("playerManagement.confirmDialog.enableTitle", "Enable Player Account")}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-sm mt-2 leading-relaxed">
             {isDisable ? (
@@ -67,7 +67,7 @@ export default function PlayerStatusConfirmDialog({
               </>
             ) : (
               <>
-                Are you sure you want to activate{" "}
+                Are you sure you want to enable{" "}
                 <span className="font-semibold text-primary">{playerName}</span>
                 {displayId ? ` (${displayId})` : ""}? Their account access and privileges will be fully restored.
               </>
@@ -102,7 +102,7 @@ export default function PlayerStatusConfirmDialog({
             ) : isDisable ? (
               t("playerManagement.actions.blockPlayer", "Block Player")
             ) : (
-              t("playerManagement.actions.activatePlayer", "Activate Player")
+              t("playerManagement.actions.enablePlayer", "Enable Player")
             )}
           </button>
         </DialogFooter>

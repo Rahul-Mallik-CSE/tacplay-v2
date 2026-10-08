@@ -388,7 +388,7 @@ export default function PlayerDetailsSheet({
                   ) : (
                     <>
                       <ShieldCheck className="w-4 h-4" />
-                      {t("playerManagement.actions.activatePlayer", "Activate Player")}
+                      {t("playerManagement.actions.enablePlayer", "Enable Player")}
                     </>
                   )}
                 </button>

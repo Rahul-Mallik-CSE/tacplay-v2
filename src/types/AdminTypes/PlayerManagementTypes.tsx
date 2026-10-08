@@ -7,7 +7,7 @@ import React from "react"
 // ============================================================================
 
 export interface PlayerActionPayload {
-  action: "disable" | "activate" | string
+  action: "disable" | "enable" | "activate" | string
 }
 
 export interface PlayerApiAction {
@@ -240,7 +240,7 @@ export interface PlayerDetailActions {
     method: string
     endpoint: string
     payload: {
-      action: "disable" | "activate"
+      action: "disable" | "enable" | "activate"
     }
   }
   upgrade_plan?: {
@@ -276,7 +276,7 @@ export interface AdminPlayerDetailResponse {
 
 // Status update
 export interface UpdatePlayerStatusPayload {
-  action: "disable" | "activate"
+  action: "disable" | "enable" | "activate" | string
 }
 
 export interface UpdatePlayerStatusResponse {
@@ -366,7 +366,7 @@ export interface PlayerStatusConfirmDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   player: AdminPlayerListItem | Player | null
-  targetAction: "disable" | "activate"
+  targetAction: "disable" | "enable" | "activate"
   onConfirm: () => void
   isLoading?: boolean
 }
