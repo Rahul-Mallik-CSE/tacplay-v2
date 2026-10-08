@@ -43,7 +43,10 @@ export default function UpgradePlanModal({
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-sm mt-1">
             {t("playerManagement.upgradeModal.description", {
-              name: player?.name || "",
+              name:
+                (player && "full_name" in player ? player.full_name : null) ||
+                (player && "name" in player ? player.name : "") ||
+                "",
             })}
           </DialogDescription>
         </DialogHeader>
