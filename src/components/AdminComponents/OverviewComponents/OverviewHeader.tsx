@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Calendar, Download } from "lucide-react"
+import { Calendar, Download, Loader2 } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 interface OverviewHeaderProps {
@@ -12,6 +12,7 @@ interface OverviewHeaderProps {
   exportAvailable?: boolean
   onYearChange?: (year: number) => void
   onExport?: () => void
+  isExporting?: boolean
 }
 
 export default function OverviewHeader({
@@ -22,6 +23,7 @@ export default function OverviewHeader({
   exportAvailable = true,
   onYearChange,
   onExport,
+  isExporting = false,
 }: OverviewHeaderProps) {
   const { t } = useTranslation("dashboard")
 
@@ -69,9 +71,14 @@ export default function OverviewHeader({
         {exportAvailable && (
           <button
             onClick={onExport}
-            className="flex cursor-pointer items-center gap-2 px-4 py-2 bg-custom-red text-white rounded-lg text-sm font-medium hover:bg-custom-red/90 transition-colors shadow-sm"
+            disabled={isExporting}
+            className="flex cursor-pointer items-center gap-2 px-4 py-2 bg-custom-red text-white rounded-lg text-sm font-medium hover:bg-custom-red/90 transition-colors shadow-sm disabled:opacity-50"
           >
-            <Download className="w-4 h-4" />
+            {isExporting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
             {t("analytics.exportReport")}
           </button>
         )}

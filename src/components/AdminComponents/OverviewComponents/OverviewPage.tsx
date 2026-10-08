@@ -1,6 +1,7 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
+import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
@@ -30,10 +31,114 @@ import {
   DollarSign,
   Crown,
 } from "lucide-react"
+import type { AdminOverviewData } from "@/types/AdminTypes/OverviewTypes"
+
+function exportAdminOverviewCSV(data: AdminOverviewData) {
+  try {
+    const lines: string[] = []
+    lines.push(`"Tacplay Admin Overview Report"`)
+    lines.push(`Period: Year ${data.header?.selected_year || ""}`)
+    lines.push("")
+
+    // Summary Metrics
+    lines.push("SUMMARY METRICS")
+    lines.push("Metric,Value,Change")
+    if (data.analytics_cards?.total_field) {
+      lines.push(
+        `"Total Field","${data.analytics_cards.total_field.value}","${data.analytics_cards.total_field.change?.display || ""}"`
+      )
+    }
+    if (data.analytics_cards?.total_player) {
+      lines.push(
+        `"Total Player","${data.analytics_cards.total_player.value}","${data.analytics_cards.total_player.change?.display || ""}"`
+      )
+    }
+    if (data.analytics_cards?.premium_player) {
+      lines.push(
+        `"Premium Player","${data.analytics_cards.premium_player.value}","${data.analytics_cards.premium_player.change?.display || ""}"`
+      )
+    }
+    if (data.analytics_cards?.total_revenue) {
+      lines.push(
+        `"Total Revenue","${data.analytics_cards.total_revenue.display || data.analytics_cards.total_revenue.value}","${data.analytics_cards.total_revenue.change?.display || ""}"`
+      )
+    }
+    if (data.analytics_cards?.total_subscription) {
+      lines.push(
+        `"Total Subscription","${data.analytics_cards.total_subscription.value}","${data.analytics_cards.total_subscription.change?.display || ""}"`
+      )
+    }
+
+    // Revenue Over Time
+    lines.push("")
+    lines.push("REVENUE OVER TIME")
+    lines.push("Month,Amount")
+    ;(data.revenue_over_time?.items || []).forEach((item) => {
+      lines.push(`"${item.label}","${item.amount}"`)
+    })
+
+    // Active Subscriptions
+    lines.push("")
+    lines.push("SUBSCRIPTION ACTIVITY")
+    lines.push("Month,Field,Player")
+    ;(data.subscription_chart?.items || []).forEach((item) => {
+      lines.push(`"${item.label}","${item.field}","${item.player}"`)
+    })
+
+    // Subscription Breakdown
+    lines.push("")
+    lines.push("SUBSCRIPTION BREAKDOWN")
+    lines.push("Plan,Count,Percentage")
+    ;(data.subscription_breakdown?.items || []).forEach((item) => {
+      lines.push(`"${item.plan}","${item.count}","${item.percentage_display}"`)
+    })
+
+    // Revenue by Country
+    lines.push("")
+    lines.push("REVENUE BY COUNTRY")
+    lines.push("Country,Code,Revenue,Percentage")
+    ;(data.revenue_by_country?.items || []).forEach((item) => {
+      lines.push(
+        `"${item.country}","${item.country_code || ""}","${item.revenue}","${item.percentage_display}"`
+      )
+    })
+
+    // Recent Fields
+    lines.push("")
+    lines.push("RECENT FIELDS")
+    lines.push(
+      "Field Name,Owner,Email,Subscription,Country,Bookings,Revenue,Status"
+    )
+    ;(data.recent_fields?.items || []).forEach((f) => {
+      lines.push(
+        `"${f.field_name}","${f.owner?.name || ""}","${f.owner?.email || ""}","${f.subscription?.name || ""}","${f.country?.name || ""}","${f.booking_count}","${f.revenue}","${f.status}"`
+      )
+    })
+
+    const blob = new Blob([lines.join("\n")], {
+      type: "text/csv;charset=utf-8;",
+    })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.setAttribute("href", url)
+    link.setAttribute(
+      "download",
+      `admin_overview_${data.header?.selected_year || "report"}.csv`
+    )
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    toast.success("Overview report downloaded successfully.")
+  } catch {
+    toast.error("Failed to export overview report.")
+  }
+}
 
 export default function OverviewPage() {
   const { t } = useTranslation("dashboard")
   const dispatch = useDispatch()
+  const [isExporting, setIsExporting] = useState(false)
 
   const {
     selectedYear,
@@ -42,7 +147,12 @@ export default function OverviewPage() {
     countryPeriod,
   } = useSelector((state: RootState) => state.adminOverview)
 
-  const { data: overviewRes, isLoading, isError, refetch } = useGetAdminOverviewQuery({
+  const {
+    data: overviewRes,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetAdminOverviewQuery({
     year: selectedYear ?? 2026,
     revenue_period: revenuePeriod,
     subscription_period: subscriptionPeriod,
@@ -62,6 +172,16 @@ export default function OverviewPage() {
   const countryRevenueSection = data?.revenue_by_country
   const recentActivitySection = data?.recent_activity
   const recentFieldsSection = data?.recent_fields
+
+  const handleExport = () => {
+    if (!data) {
+      toast.error("No overview data available to export.")
+      return
+    }
+    setIsExporting(true)
+    exportAdminOverviewCSV(data)
+    setIsExporting(false)
+  }
 
   // Format Stat Cards
   const statCards = cards
@@ -116,39 +236,49 @@ export default function OverviewPage() {
   }))
 
   // Format Subscription Chart
-  const subscriptionBarData = (subscriptionChartSection?.items || []).map((item) => ({
+  const subscriptionBarData = (
+    subscriptionChartSection?.items || []
+  ).map((item) => ({
     month: item.label,
     field: item.field,
     player: item.player,
   }))
 
   // Format Recent Activities
-  const recentActivities = (recentActivitySection?.items || []).map((item, idx) => {
-    let formattedTime = ""
-    if (item.created_at) {
-      try {
-        const d = new Date(item.created_at)
-        formattedTime = d.toLocaleDateString("en-US", {
-          day: "2-digit",
-          month: "short",
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      } catch {
-        formattedTime = item.created_at
+  const recentActivities = (recentActivitySection?.items || []).map(
+    (item, idx) => {
+      let formattedTime = ""
+      if (item.created_at) {
+        try {
+          const d = new Date(item.created_at)
+          formattedTime = d.toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        } catch {
+          formattedTime = item.created_at
+        }
+      }
+
+      return {
+        id: idx + 1,
+        icon: item.type === "new_subscription" ? Crown : Users,
+        iconColor:
+          item.type === "new_subscription"
+            ? "text-custom-yellow"
+            : "text-emerald-400",
+        iconBg:
+          item.type === "new_subscription"
+            ? "bg-custom-yellow/10"
+            : "bg-emerald-500/10",
+        title: item.title,
+        description: item.description,
+        time: formattedTime,
       }
     }
-
-    return {
-      id: idx + 1,
-      icon: item.type === "new_subscription" ? Crown : Users,
-      iconColor: item.type === "new_subscription" ? "text-custom-yellow" : "text-emerald-400",
-      iconBg: item.type === "new_subscription" ? "bg-custom-yellow/10" : "bg-emerald-500/10",
-      title: item.title,
-      description: item.description,
-      time: formattedTime,
-    }
-  })
+  )
 
   return (
     <div className="space-y-6">
@@ -156,9 +286,13 @@ export default function OverviewPage() {
         title={header?.title}
         subtitle={header?.subtitle}
         selectedYear={selectedYear}
-        availableYears={header?.available_years || overviewRes?.meta?.available_years}
+        availableYears={
+          header?.available_years || overviewRes?.meta?.available_years
+        }
         exportAvailable={header?.export_available}
         onYearChange={(yr) => dispatch(setSelectedYear(yr))}
+        onExport={handleExport}
+        isExporting={isExporting}
       />
 
       {isError && (
@@ -179,16 +313,12 @@ export default function OverviewPage() {
         <RevenueAreaChart
           data={revenueChartData}
           title={revenueSection?.title}
-          selectedPeriod={revenuePeriod}
-          periodOptions={revenueSection?.period_options}
-          onPeriodChange={(val) => dispatch(setRevenuePeriod(val))}
+          showPeriodSelector={false}
         />
         <SubscriptionBarChart
           data={subscriptionBarData}
           title={subscriptionChartSection?.title}
-          selectedPeriod={subscriptionPeriod}
-          periodOptions={subscriptionChartSection?.period_options}
-          onPeriodChange={(val) => dispatch(setSubscriptionPeriod(val))}
+          showPeriodSelector={false}
         />
         <SubscriptionDonutChart
           items={subscriptionBreakdown?.items}
@@ -207,7 +337,11 @@ export default function OverviewPage() {
         />
         <RecentActivityList
           activities={recentActivities}
-          viewAllLabel={recentActivitySection?.view_all?.available ? t("adminOverview.viewAll") : undefined}
+          viewAllLabel={
+            recentActivitySection?.view_all?.available
+              ? t("adminOverview.viewAll")
+              : undefined
+          }
         />
       </div>
 
