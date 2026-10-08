@@ -437,8 +437,8 @@ export default function AnalyticsPage() {
 
         {/* Bottom row skeleton */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          <div className="h-[340px] bg-muted/60 rounded-xl border border-white/5" />
-          <div className="h-[340px] bg-muted/60 rounded-xl border border-white/5" />
+          <div className="h-[420px] bg-muted/60 rounded-xl border border-white/5" />
+          <div className="h-[420px] bg-muted/60 rounded-xl border border-white/5" />
         </div>
       </div>
     )

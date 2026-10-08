@@ -19,6 +19,7 @@ interface RevenueByListProps {
   selectedPeriod?: string
   periodOptions?: Array<{ label: string; value: string }>
   onPeriodChange?: (period: string) => void
+  className?: string
 }
 
 export default function RevenueByList({
@@ -31,6 +32,7 @@ export default function RevenueByList({
   selectedPeriod = "month",
   periodOptions,
   onPeriodChange,
+  className = "",
 }: RevenueByListProps) {
   const { t } = useTranslation("dashboard")
 
@@ -76,39 +78,43 @@ export default function RevenueByList({
   }
 
   return (
-    <div className="rounded-xl border border-white/5 bg-card p-4 sm:p-6 flex flex-col justify-between">
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base sm:text-lg font-bold text-primary">
-            {title}
-          </h3>
-          <select
-            value={selectedPeriod}
-            onChange={(e) => onPeriodChange?.(e.target.value)}
-            className="bg-muted border border-white/10 text-primary text-xs rounded-md px-3 py-1.5 outline-none cursor-pointer hover:border-white/20 transition-colors"
-          >
-            {options.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+    <div
+      className={`rounded-xl border border-white/5 bg-card p-4 sm:p-6 flex flex-col h-[420px] ${className}`}
+    >
+      {/* Header - Fixed */}
+      <div className="flex items-center justify-between mb-4 shrink-0">
+        <h3 className="text-base sm:text-lg font-bold text-primary">
+          {title}
+        </h3>
+        <select
+          value={selectedPeriod}
+          onChange={(e) => onPeriodChange?.(e.target.value)}
+          className="bg-muted border border-white/10 text-primary text-xs rounded-md px-3 py-1.5 outline-none cursor-pointer hover:border-white/20 transition-colors"
+        >
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {attributionNote && (
+        <div className="mb-4 flex items-start gap-2 p-2.5 rounded-lg bg-muted/40 border border-white/5 text-[11px] sm:text-xs text-secondary shrink-0">
+          <Info className="w-4 h-4 text-custom-yellow shrink-0 mt-0.5" />
+          <span>{attributionNote}</span>
         </div>
+      )}
 
-        {attributionNote && (
-          <div className="mb-4 flex items-start gap-2 p-2.5 rounded-lg bg-muted/40 border border-white/5 text-[11px] sm:text-xs text-secondary">
-            <Info className="w-4 h-4 text-custom-yellow shrink-0 mt-0.5" />
-            <span>{attributionNote}</span>
-          </div>
-        )}
-
+      {/* Scrollable Content Area */}
+      <div className="flex-1 min-h-0 overflow-y-auto pr-1">
         {type === "campaign" ? (
           campaignItems.length === 0 ? (
-            <div className="py-12 text-center text-sm text-secondary">
+            <div className="flex items-center justify-center h-full text-sm text-secondary py-12">
               {t("adminAnalytics.noCampaigns", "No campaigns found for this period.")}
             </div>
           ) : (
-            <div className="space-y-3 max-h-[360px] overflow-y-auto pr-1">
+            <div className="space-y-3">
               {campaignItems.map((item) => {
                 const currencySymbol =
                   item.currency === "EUR" ? "€" : item.currency || currency || "€"
@@ -156,14 +162,12 @@ export default function RevenueByList({
               })}
             </div>
           )
+        ) : data.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-sm text-secondary py-12">
+            {t("adminAnalytics.noData", "No data found for this period.")}
+          </div>
         ) : (
-          data.length === 0 ? (
-            <div className="py-12 text-center text-sm text-secondary">
-              {t("adminAnalytics.noData", "No data found for this period.")}
-            </div>
-          ) : (
-            <CountryList data={data} />
-          )
+          <CountryList data={data} />
         )}
       </div>
     </div>
