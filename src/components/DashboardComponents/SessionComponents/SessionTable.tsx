@@ -19,6 +19,12 @@ import SessionStatusBadge from "./SessionStatusBadge"
 import AssignStaffSheet from "./AssignStaffSheet"
 import CustomTable from "@/components/SharedComponents/CustomTable"
 import FilterSheet, { FilterGroup } from "@/components/SharedComponents/FilterSheet"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
 import { SessionTableSkeleton } from "./SessionLoading"
 import {
   useGetSessionsQuery,
@@ -269,89 +275,48 @@ function SessionTable() {
     [t]
   )
 
-  // Custom action renderer with dropdown menu
+  // Custom action renderer with portaled DropdownMenu
   const actionRenderer = (row: SessionsListItem) => (
-    <div className="relative inline-block" ref={openActionId === row.id ? actionMenuRef : undefined}>
-      <button
-        onClick={(e) => {
-          e.stopPropagation()
-          setOpenActionId(openActionId === row.id ? null : row.id)
-        }}
-        className="cursor-pointer p-1.5 sm:p-2 hover:bg-white/5 rounded-full transition-colors inline-flex items-center justify-center"
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          onClick={(e) => e.stopPropagation()}
+          className="cursor-pointer p-1.5 sm:p-2 hover:bg-white/5 rounded-full transition-colors inline-flex items-center justify-center outline-none text-secondary hover:text-primary"
+          aria-label="Session Actions"
+        >
+          <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent
+        align="end"
+        sideOffset={4}
+        className="w-48 bg-card border border-white/10 rounded-lg shadow-xl z-50 py-1 backdrop-blur-md"
       >
-        <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-secondary" />
-      </button>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation()
+            handleAssignStaff(row)
+          }}
+          className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-primary cursor-pointer focus:bg-white/5 outline-none"
+        >
+          <Users className="w-4 h-4 text-custom-red shrink-0" />
+          <span>{t("sessions.actions.assignStaff")}</span>
+        </DropdownMenuItem>
 
-      {/* Action Dropdown Menu */}
-      {openActionId === row.id && (
-        <div className="absolute right-0 top-full mt-1 z-50 w-48 bg-card border border-white/10 rounded-lg shadow-xl py-1">
-          {/* 
-            Disable Toggle - commented out per user instruction
-            <div className="flex items-center justify-between px-4 py-2.5 hover:bg-white/5">
-              <span className="flex items-center gap-2 text-sm text-primary">
-                <Pencil className="w-4 h-4" />
-                {t("sessions.actions.disable")}
-              </span>
-              <Switch size="sm" checked={!disabledSessions.has(row.id)} onCheckedChange={() => handleDisableToggle(row.id)} />
-            </div>
-          */}
-
-          {/* 
-            Edit Session - commented out per user instruction
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                setOpenActionId(null)
-                router.push(`/dashboard/sessions/${row.id}`)
-              }}
-              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
-            >
-              <Pencil className="w-4 h-4" />
-              {t("sessions.actions.editSession")}
-            </button>
-          */}
-
-          {/* 
-            Duplicate - commented out per user instruction
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                setOpenActionId(null)
-              }}
-              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
-            >
-              <Copy className="w-4 h-4" />
-              {t("sessions.actions.duplicate")}
-            </button>
-          */}
-
-          {/* Assign Staff */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              handleAssignStaff(row)
-            }}
-            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
-          >
-            <Users className="w-4 h-4 text-custom-red" />
-            {t("sessions.actions.assignStaff")}
-          </button>
-
-          {/* View Details */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              setOpenActionId(null)
-              router.push(`/dashboard/sessions/${row.id}`)
-            }}
-            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
-          >
-            <Eye className="w-4 h-4 text-secondary" />
-            {t("sessions.actions.viewDetails")}
-          </button>
-        </div>
-      )}
-    </div>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation()
+            router.push(`/dashboard/sessions/${row.id}`)
+          }}
+          className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-primary cursor-pointer focus:bg-white/5 outline-none"
+        >
+          <Eye className="w-4 h-4 text-secondary shrink-0" />
+          <span>{t("sessions.actions.viewDetails")}</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 
   // Dynamic filter groups based on user prompt API parameters

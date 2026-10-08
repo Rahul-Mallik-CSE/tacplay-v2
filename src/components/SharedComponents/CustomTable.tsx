@@ -202,7 +202,7 @@ const CustomTable = <T extends Record<string, unknown>>({
   };
 
   return (
-    <div className="w-full space-y-3 sm:space-y-4 overflow-x-auto">
+    <div className="w-full space-y-3 sm:space-y-4">
       {/* Table Container */}
       <div className="rounded-xl overflow-hidden border border-white/5">
         <div className="overflow-x-auto">

@@ -6,9 +6,14 @@
  * Shows Delete, Edit, Duplicate, and Deactivate options.
  */
 
-import { useState, useRef, useEffect } from "react"
-import { MoreVertical, Trash2, Pencil, Copy, AlertTriangle } from "lucide-react"
+import { MoreVertical, Pencil } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
 import type { PackageItem } from "@/types/DashboardTypes/ArenaManagementTypes"
 
 interface PackageActionDropdownProps {
@@ -22,88 +27,40 @@ interface PackageActionDropdownProps {
 export default function PackageActionDropdown({
   pkg,
   onEdit,
-  onDelete,
-  onDuplicate,
-  onDeactivate,
 }: PackageActionDropdownProps) {
   const { t } = useTranslation("dashboard")
-  const [isOpen, setIsOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onEdit(pkg)
+  }
 
   return (
-    <div className="relative" ref={dropdownRef}>
-      <button
-        onClick={(e) => {
-          e.stopPropagation()
-          setIsOpen(!isOpen)
-        }}
-        className="p-1.5 hover:bg-white/10 rounded-md transition-colors cursor-pointer"
-      >
-        <MoreVertical className="w-5 h-5 text-primary" />
-      </button>
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          onClick={(e) => e.stopPropagation()}
+          className="p-1.5 hover:bg-white/10 rounded-md transition-colors cursor-pointer outline-none inline-flex items-center justify-center"
+          aria-label="Package Actions"
+        >
+          <MoreVertical className="w-5 h-5 text-primary" />
+        </button>
+      </DropdownMenuTrigger>
 
-      {isOpen && (
-        <div className="absolute right-0 top-full mt-1 z-50 bg-card rounded-lg shadow-lg border border-white/10 py-1 min-w-[180px]">
-          {/*
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onDelete(pkg)
-              setIsOpen(false)
-            }}
-            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-white/5 transition-colors cursor-pointer"
-          >
-            <Trash2 className="w-4 h-4 text-destructive" />
-            {t("arena.packagesTab.deletePackage")}
-          </button>
-          */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onEdit(pkg)
-              setIsOpen(false)
-            }}
-            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer"
-          >
-            <Pencil className="w-4 h-4 text-secondary" />
-            {t("arena.packagesTab.editPackage")}
-          </button>
-          {/*
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onDuplicate(pkg)
-              setIsOpen(false)
-            }}
-            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-white/5 transition-colors cursor-pointer"
-          >
-            <Copy className="w-4 h-4 text-secondary" />
-            {t("arena.packagesTab.duplicate")}
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onDeactivate(pkg)
-              setIsOpen(false)
-            }}
-            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-white/5 transition-colors cursor-pointer"
-          >
-            <AlertTriangle className="w-4 h-4 text-yellow-500" />
-            {t("arena.packagesTab.deactivate")}
-          </button>
-          */}
-        </div>
-      )}
-    </div>
+      <DropdownMenuContent
+        align="end"
+        sideOffset={4}
+        className="w-48 bg-card border border-white/10 rounded-lg shadow-xl z-50 py-1 backdrop-blur-md"
+      >
+        <DropdownMenuItem
+          onClick={handleEdit}
+          className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-primary cursor-pointer focus:bg-white/5 outline-none"
+        >
+          <Pencil className="w-4 h-4 text-secondary" />
+          <span>{t("arena.packagesTab.editPackage", "Edit Package")}</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
