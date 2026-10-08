@@ -13,6 +13,7 @@ import marketingReducer from "@/redux/features/shared/marketing/marketingSlice";
 import adminOverviewReducer from "@/redux/features/admin/overview/overviewSlice";
 import adminEarningReducer from "@/redux/features/admin/earning/earningSlice";
 import playerManagementReducer from "@/redux/features/admin/playerManagement/playerManagementSlice";
+import adminAnalyticsReducer from "@/redux/features/admin/analytics/analyticsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     adminOverview: adminOverviewReducer,
     adminEarning: adminEarningReducer,
     playerManagement: playerManagementReducer,
+    adminAnalytics: adminAnalyticsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseAPI.middleware),

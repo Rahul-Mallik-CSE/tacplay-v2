@@ -19,6 +19,7 @@ interface RevenueAreaChartProps {
   selectedPeriod?: string
   periodOptions?: Array<{ label: string; value: string }>
   onPeriodChange?: (period: string) => void
+  showPeriodSelector?: boolean
 }
 
 const CustomTooltip = ({
@@ -47,6 +48,7 @@ export default function RevenueAreaChart({
   selectedPeriod,
   periodOptions,
   onPeriodChange,
+  showPeriodSelector = true,
 }: RevenueAreaChartProps) {
   const { t } = useTranslation("dashboard")
   const [internalTimeRange, setInternalTimeRange] = useState("month")
@@ -65,20 +67,22 @@ export default function RevenueAreaChart({
         <h3 className="text-base sm:text-lg font-bold text-primary">
           {title || t("adminAnalytics.revenueOverTime")}
         </h3>
-        <select
-          value={activePeriod}
-          onChange={(e) => {
-            setInternalTimeRange(e.target.value)
-            onPeriodChange?.(e.target.value)
-          }}
-          className="bg-muted border border-white/10 text-primary text-xs rounded-md px-3 py-1.5 outline-none cursor-pointer"
-        >
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+        {showPeriodSelector && (
+          <select
+            value={activePeriod}
+            onChange={(e) => {
+              setInternalTimeRange(e.target.value)
+              onPeriodChange?.(e.target.value)
+            }}
+            className="bg-muted border border-white/10 text-primary text-xs rounded-md px-3 py-1.5 outline-none cursor-pointer"
+          >
+            {options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
       <div className="h-[250px] sm:h-[300px]">
         <ResponsiveContainer width="100%" height="100%">

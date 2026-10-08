@@ -20,6 +20,7 @@ interface SubscriptionBarChartProps {
   selectedPeriod?: string
   periodOptions?: Array<{ label: string; value: string }>
   onPeriodChange?: (period: string) => void
+  showPeriodSelector?: boolean
 }
 
 export default function SubscriptionBarChart({
@@ -28,6 +29,7 @@ export default function SubscriptionBarChart({
   selectedPeriod,
   periodOptions,
   onPeriodChange,
+  showPeriodSelector = true,
 }: SubscriptionBarChartProps) {
   const { t } = useTranslation("dashboard")
   const [internalTimeRange, setInternalTimeRange] = useState("day")
@@ -46,20 +48,22 @@ export default function SubscriptionBarChart({
         <h3 className="text-base sm:text-lg font-bold text-primary">
           {title || t("adminAnalytics.subscriptionChart")}
         </h3>
-        <select
-          value={activePeriod}
-          onChange={(e) => {
-            setInternalTimeRange(e.target.value)
-            onPeriodChange?.(e.target.value)
-          }}
-          className="bg-muted border border-white/10 text-primary text-xs rounded-md px-3 py-1.5 outline-none cursor-pointer"
-        >
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+        {showPeriodSelector && (
+          <select
+            value={activePeriod}
+            onChange={(e) => {
+              setInternalTimeRange(e.target.value)
+              onPeriodChange?.(e.target.value)
+            }}
+            className="bg-muted border border-white/10 text-primary text-xs rounded-md px-3 py-1.5 outline-none cursor-pointer"
+          >
+            {options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
       <div className="flex items-center gap-4 mb-4">
         <div className="flex items-center gap-2">
