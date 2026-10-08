@@ -117,7 +117,7 @@ export default function PlayerDetailsSheet({
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="w-full sm:w-[480px] bg-card border-white/10 p-0 overflow-y-auto"
+        className="w-full sm:max-w-lg bg-card border-white/10 p-0 overflow-y-auto"
       >
         <SheetHeader className="p-6 pb-4 border-b border-white/5">
           <div className="flex items-center justify-between mb-3">
@@ -375,11 +375,10 @@ export default function PlayerDetailsSheet({
                 <button
                   type="button"
                   onClick={handleToggle}
-                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
-                    isCurrentlyActive
-                      ? "bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20"
-                      : "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"
-                  }`}
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${isCurrentlyActive
+                    ? "bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20"
+                    : "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"
+                    }`}
                 >
                   {isCurrentlyActive ? (
                     <>
