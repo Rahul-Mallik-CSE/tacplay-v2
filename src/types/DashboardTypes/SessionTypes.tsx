@@ -505,6 +505,7 @@ export interface PlayerDetailsSheetProps {
   sessionId: number | null
   bookingId: number | null
   onSuccess?: () => void
+  sessionType?: string
 }
 
 /** Props for AssignStaffSheet component */

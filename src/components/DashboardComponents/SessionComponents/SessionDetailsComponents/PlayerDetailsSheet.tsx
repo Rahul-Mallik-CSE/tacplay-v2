@@ -35,6 +35,7 @@ function PlayerDetailsSheet({
   onOpenChange,
   sessionId,
   bookingId,
+  sessionType: propSessionType,
   onSuccess,
 }: PlayerDetailsSheetProps) {
   const { t } = useTranslation("dashboard")
@@ -58,6 +59,24 @@ function PlayerDetailsSheet({
   const scoreManagement = details?.score_management
   const isCheckedIn = Boolean(scoreManagement?.checked_in)
   const resultDisplay = scoreManagement?.result_display
+
+  const rawSessionType = (
+    propSessionType ||
+    details?.session_type ||
+    details?.session_type_display ||
+    ""
+  )
+    .trim()
+    .toLowerCase()
+    .replace(/_/g, " ")
+
+  const isTeamSession =
+    rawSessionType === "team" ||
+    rawSessionType === "teams" ||
+    (rawSessionType.includes("team") &&
+      !rawSessionType.includes("manual") &&
+      !rawSessionType.includes("individual")) ||
+    scoreManagement?.show_submit_button === false
 
   // Sync matchStatus when data loads
   useEffect(() => {
@@ -213,92 +232,109 @@ function PlayerDetailsSheet({
                   </div>
                 </div>
 
-                {/* Score Management Section (Available only AFTER check-in) */}
-                <div className="mt-5">
-                  <h3 className="text-sm font-semibold text-primary uppercase tracking-wider mb-2 text-custom-yellow">
-                    Score Management
-                  </h3>
-                  {isCheckedIn ? (
-                    <div className="space-y-3">
-                      <div className="bg-[#0c0a0c] border border-white/5 rounded-2xl p-1.5 flex items-center">
-                        {statusOptions.map((status) => (
-                          <button
-                            key={status}
-                            type="button"
-                            onClick={() => setMatchStatus(status)}
-                            className={`flex-1 py-2 cursor-pointer text-sm font-semibold rounded-xl transition-all duration-200 ${
-                              matchStatus === status
-                                ? "bg-[#e2b83b] text-black shadow-md"
-                                : "text-secondary hover:text-white"
-                            }`}
-                          >
-                            {status}
-                          </button>
-                        ))}
-                      </div>
-                      {scoreManagement?.awarded_score !== undefined && (
-                        <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 border border-white/5 text-xs">
-                          <span className="text-secondary">Current Awarded Score:</span>
-                          <span className="font-bold text-primary">
-                            {scoreManagement.awarded_score > 0
-                              ? `+${scoreManagement.awarded_score}`
-                              : scoreManagement.awarded_score}
-                          </span>
+                {/* Score Management Section (Available only for manual player sessions) */}
+                {!isTeamSession ? (
+                  <div className="mt-5">
+                    <h3 className="text-sm font-semibold text-primary uppercase tracking-wider mb-2 text-custom-yellow">
+                      Score Management
+                    </h3>
+                    {isCheckedIn ? (
+                      <div className="space-y-3">
+                        <div className="bg-[#0c0a0c] border border-white/5 rounded-2xl p-1.5 flex items-center">
+                          {statusOptions.map((status) => (
+                            <button
+                              key={status}
+                              type="button"
+                              onClick={() => setMatchStatus(status)}
+                              className={`flex-1 py-2 cursor-pointer text-sm font-semibold rounded-xl transition-all duration-200 ${
+                                matchStatus === status
+                                  ? "bg-[#e2b83b] text-black shadow-md"
+                                  : "text-secondary hover:text-white"
+                              }`}
+                            >
+                              {status}
+                            </button>
+                          ))}
                         </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="p-3.5 rounded-xl border border-custom-yellow/30 bg-custom-yellow/10 space-y-1.5">
-                      <div className="flex items-center gap-2 text-custom-yellow font-semibold text-xs">
-                        <AlertCircle className="w-4 h-4 shrink-0" />
-                        <span>Check-In Required First</span>
+                        {scoreManagement?.awarded_score !== undefined && (
+                          <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 border border-white/5 text-xs">
+                            <span className="text-secondary">Current Awarded Score:</span>
+                            <span className="font-bold text-primary">
+                              {scoreManagement.awarded_score > 0
+                                ? `+${scoreManagement.awarded_score}`
+                                : scoreManagement.awarded_score}
+                            </span>
+                          </div>
+                        )}
                       </div>
-                      <p className="text-xs text-secondary/90 leading-relaxed">
-                        This player is not checked in yet. You must check in the player first before score recording and final results can be submitted.
-                      </p>
+                    ) : (
+                      <div className="p-3.5 rounded-xl border border-custom-yellow/30 bg-custom-yellow/10 space-y-1.5">
+                        <div className="flex items-center gap-2 text-custom-yellow font-semibold text-xs">
+                          <AlertCircle className="w-4 h-4 shrink-0" />
+                          <span>Check-In Required First</span>
+                        </div>
+                        <p className="text-xs text-secondary/90 leading-relaxed">
+                          This player is not checked in yet. You must check in the player first before score recording and final results can be submitted.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  scoreManagement?.awarded_score !== undefined && (
+                    <div className="mt-5">
+                      <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-muted/30 border border-white/5 text-xs">
+                        <span className="text-secondary">Awarded Score:</span>
+                        <span className="font-bold text-primary text-sm">
+                          {scoreManagement.awarded_score > 0
+                            ? `+${scoreManagement.awarded_score}`
+                            : scoreManagement.awarded_score} pts
+                        </span>
+                      </div>
                     </div>
-                  )}
-                </div>
+                  )
+                )}
               </>
             )}
           </div>
         </div>
 
-        {/* Footer Buttons: Check In first, then Submit Score */}
+        {/* Footer Buttons: Check In first, then Submit Score (Submit Score hidden for team session) */}
         {details && (
-          <SheetFooter className="px-5 py-4 border-t border-white/5 flex-row gap-3 justify-center">
-            {!isCheckedIn ? (
-              <Button
-                onClick={handleCheckIn}
-                disabled={isCheckingIn}
-                className="w-full py-2.5 rounded-lg bg-custom-yellow text-black text-sm font-bold hover:bg-custom-yellow/80 transition-colors disabled:opacity-50 cursor-pointer shadow-lg shadow-custom-yellow/10"
-              >
-                {isCheckingIn ? (
-                  <span className="flex items-center gap-2 justify-center">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Checking In Player...
-                  </span>
-                ) : (
-                  "Check In Player"
-                )}
-              </Button>
-            ) : (
-              <Button
-                onClick={handleSubmitPlayerResult}
-                disabled={isSubmittingResult}
-                className="w-full py-2.5 rounded-lg bg-custom-red text-white text-sm font-semibold hover:bg-custom-red/80 transition-colors disabled:opacity-50 cursor-pointer"
-              >
-                {isSubmittingResult ? (
-                  <span className="flex items-center gap-2 justify-center">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Submitting Score...
-                  </span>
-                ) : (
-                  "Submit Score"
-                )}
-              </Button>
-            )}
-          </SheetFooter>
+          (!isCheckedIn || !isTeamSession) && (
+            <SheetFooter className="px-5 py-4 border-t border-white/5 flex-row gap-3 justify-center">
+              {!isCheckedIn ? (
+                <Button
+                  onClick={handleCheckIn}
+                  disabled={isCheckingIn}
+                  className="w-full py-2.5 rounded-lg bg-custom-yellow text-black text-sm font-bold hover:bg-custom-yellow/80 transition-colors disabled:opacity-50 cursor-pointer shadow-lg shadow-custom-yellow/10"
+                >
+                  {isCheckingIn ? (
+                    <span className="flex items-center gap-2 justify-center">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Checking In Player...
+                    </span>
+                  ) : (
+                    "Check In Player"
+                  )}
+                </Button>
+              ) : !isTeamSession ? (
+                <Button
+                  onClick={handleSubmitPlayerResult}
+                  disabled={isSubmittingResult}
+                  className="w-full py-2.5 rounded-lg bg-custom-red text-white text-sm font-semibold hover:bg-custom-red/80 transition-colors disabled:opacity-50 cursor-pointer"
+                >
+                  {isSubmittingResult ? (
+                    <span className="flex items-center gap-2 justify-center">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Submitting Score...
+                    </span>
+                  ) : (
+                    "Submit Score"
+                  )}
+                </Button>
+              ) : null}
+            </SheetFooter>
+          )
         )}
       </SheetContent>
     </Sheet>

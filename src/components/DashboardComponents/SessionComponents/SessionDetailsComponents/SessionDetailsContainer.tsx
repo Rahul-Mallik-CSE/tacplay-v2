@@ -214,6 +214,7 @@ function SessionDetailsContainer() {
         onOpenChange={setPlayerDetailsOpen}
         sessionId={sessionId}
         bookingId={selectedBookingId}
+        sessionType={details?.session_type}
         onSuccess={() => refetch()}
       />
 
