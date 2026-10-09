@@ -1,25 +1,60 @@
 "use client"
 
 import { useTranslation } from "react-i18next"
-import { AlertTriangle, Eye } from "lucide-react"
+import { AlertTriangle, CheckCircle, Eye } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu"
-import type { FieldActionDropdownProps } from "@/types/AdminTypes/FieldManagementTypes"
+import type {
+  FieldActionDropdownProps,
+  FieldOwnerStatusAction,
+} from "@/types/AdminTypes/FieldManagementTypes"
 
 export default function FieldActionDropdown({
   field,
   onViewDetails,
-  onSuspendField,
+  onStatusAction,
 }: FieldActionDropdownProps) {
   const { t } = useTranslation("dashboard")
+  const statusStr =
+    typeof field?.status === "string"
+      ? field.status
+      : typeof field?.status === "object" && field?.status !== null
+      ? ((field.status as Record<string, unknown>).value as string) ||
+        ((field.status as Record<string, unknown>).label as string) ||
+        ""
+      : String(field?.status || "")
 
-  const handleSuspend = (e: React.MouseEvent) => {
+  const status = statusStr.toLowerCase()
+
+  let actionKey: FieldOwnerStatusAction = "suspend"
+  let actionLabel = t("fieldManagement.actions.suspendField", "Suspend Field")
+  let actionIcon = <AlertTriangle className="w-4 h-4 text-yellow-400 shrink-0" />
+  let actionClass = "text-yellow-400"
+
+  if (status === "pending") {
+    actionKey = "approve"
+    actionLabel = t("fieldManagement.actions.approveField", "Approve Field")
+    actionIcon = <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+    actionClass = "text-emerald-400"
+  } else if (status === "suspended") {
+    actionKey = "activate"
+    actionLabel = t("fieldManagement.actions.activateField", "Activate Field")
+    actionIcon = <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+    actionClass = "text-emerald-400"
+  } else {
+    actionKey = "suspend"
+    actionLabel = t("fieldManagement.actions.suspendField", "Suspend Field")
+    actionIcon = <AlertTriangle className="w-4 h-4 text-yellow-400 shrink-0" />
+    actionClass = "text-yellow-400"
+  }
+
+  const handleAction = (e: React.MouseEvent) => {
     e.stopPropagation()
-    onSuspendField(field)
+    onStatusAction(field, actionKey)
   }
 
   const handleDetails = (e: React.MouseEvent) => {
@@ -54,11 +89,11 @@ export default function FieldActionDropdown({
         className="w-48 bg-card border border-white/10 rounded-lg shadow-xl z-50 py-1 backdrop-blur-md"
       >
         <DropdownMenuItem
-          onClick={handleSuspend}
-          className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-yellow-400 cursor-pointer focus:bg-white/5 outline-none"
+          onClick={handleAction}
+          className={`flex items-center gap-2.5 px-3.5 py-2.5 text-sm ${actionClass} cursor-pointer focus:bg-white/5 outline-none`}
         >
-          <AlertTriangle className="w-4 h-4 text-yellow-400 shrink-0" />
-          <span>{t("fieldManagement.actions.suspendedField", "Suspend Field")}</span>
+          {actionIcon}
+          <span>{actionLabel}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={handleDetails}

@@ -9,7 +9,11 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog"
-import type { UpgradeFieldPlanModalProps } from "@/types/AdminTypes/FieldManagementTypes"
+import type {
+  UpgradeFieldPlanModalProps,
+  FieldOwnerItem,
+  FieldOwnerDetailData,
+} from "@/types/AdminTypes/FieldManagementTypes"
 
 export default function UpgradeFieldPlanModal({
   field,
@@ -18,6 +22,12 @@ export default function UpgradeFieldPlanModal({
   onConfirm,
 }: UpgradeFieldPlanModalProps) {
   const { t } = useTranslation("dashboard")
+
+  const fieldName =
+    (field as FieldOwnerDetailData)?.field_summary?.field_name ||
+    (field as FieldOwnerDetailData)?.field?.field_name ||
+    (field as FieldOwnerItem)?.field_name ||
+    ""
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -39,11 +49,12 @@ export default function UpgradeFieldPlanModal({
             </svg>
           </div>
           <DialogTitle className="text-lg font-semibold text-primary">
-            {t("fieldManagement.upgradeModal.title")}
+            {t("fieldManagement.upgradeModal.title", "Upgrade Field Plan")}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-sm mt-1">
             {t("fieldManagement.upgradeModal.description", {
-              name: field?.fieldName || "",
+              name: fieldName,
+              defaultValue: `Are you sure you want to upgrade the plan for ${fieldName}?`,
             })}
           </DialogDescription>
         </DialogHeader>
@@ -52,7 +63,7 @@ export default function UpgradeFieldPlanModal({
             onClick={() => onOpenChange(false)}
             className="flex-1 px-4 py-2.5 bg-muted border border-white/10 text-primary rounded-lg text-sm font-medium hover:bg-muted/80 transition-colors cursor-pointer"
           >
-            {t("common.cancel")}
+            {t("common.cancel", "Cancel")}
           </button>
           <button
             onClick={() => {
@@ -61,7 +72,7 @@ export default function UpgradeFieldPlanModal({
             }}
             className="flex-1 px-4 py-2.5 bg-custom-red text-white rounded-lg text-sm font-medium hover:bg-custom-red/90 transition-colors cursor-pointer"
           >
-            {t("fieldManagement.upgradeModal.confirm")}
+            {t("fieldManagement.upgradeModal.confirm", "Confirm")}
           </button>
         </DialogFooter>
       </DialogContent>
