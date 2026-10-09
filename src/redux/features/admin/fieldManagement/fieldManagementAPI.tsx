@@ -10,6 +10,8 @@ import type {
   AdminSessionListResponse,
   AdminSessionQueryParams,
   AdminSessionDetailResponse,
+  AdminSessionSubmitScorePayload,
+  AdminSessionSubmitScoreResponse,
 } from "@/types/AdminTypes/FieldManagementTypes"
 
 export const fieldManagementAPI = baseAPI.injectEndpoints({
@@ -119,6 +121,24 @@ export const fieldManagementAPI = baseAPI.injectEndpoints({
         { type: "AdminSessions", id },
       ],
     }),
+
+    submitAdminSessionScore: builder.mutation<
+      AdminSessionSubmitScoreResponse,
+      {
+        sessionId: number | string
+        payload: AdminSessionSubmitScorePayload
+      }
+    >({
+      query: ({ sessionId, payload }) => ({
+        url: `/api/admin/session-management/${sessionId}/score/`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: (_result, _error, { sessionId }) => [
+        { type: "AdminSessions", id: sessionId },
+        { type: "AdminSessions", id: "LIST" },
+      ],
+    }),
   }),
 })
 
@@ -130,4 +150,5 @@ export const {
   useGetAdminSessionsQuery,
   useGetAdminSessionDetailQuery,
   useLazyGetAdminSessionDetailQuery,
+  useSubmitAdminSessionScoreMutation,
 } = fieldManagementAPI

@@ -1,5 +1,4 @@
-"use client"
-
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { ArrowLeft, Clock, Calendar, MapPin, Users, Award, Shield, Loader2 } from "lucide-react"
 import Image from "next/image"
@@ -10,13 +9,21 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  SheetFooter,
 } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+import { toast } from "react-toastify"
 import SessionStatusBadge from "./SessionStatusBadge"
-import { useGetAdminSessionDetailQuery } from "@/redux/features/admin/fieldManagement/fieldManagementAPI"
+import SessionResultSelector from "@/components/DashboardComponents/SessionComponents/SessionDetailsComponents/SessionResultSelector"
+import {
+  useGetAdminSessionDetailQuery,
+  useSubmitAdminSessionScoreMutation,
+} from "@/redux/features/admin/fieldManagement/fieldManagementAPI"
 import { toAbsoluteMediaUrl } from "@/lib/utils"
 import type {
   SessionDetailsSheetProps,
   AdminSessionPlayerItem,
+  AdminSessionSubmitScorePayload,
 } from "@/types/AdminTypes/FieldManagementTypes"
 
 export default function SessionDetailsSheet({
@@ -25,14 +32,19 @@ export default function SessionDetailsSheet({
   onOpenChange,
 }: SessionDetailsSheetProps) {
   const { t } = useTranslation("dashboard")
+  const [teamAResult, setTeamAResult] = useState<"win" | "loss" | "draw">("win")
 
   const {
     data: detailResponse,
     isLoading,
     isFetching,
+    refetch,
   } = useGetAdminSessionDetailQuery(sessionId!, {
     skip: !sessionId || !open,
   })
+
+  const [submitScore, { isLoading: isSubmittingScore }] =
+    useSubmitAdminSessionScoreMutation()
 
   const detail = detailResponse?.data
   const summary = detail?.session_summary
@@ -41,6 +53,21 @@ export default function SessionDetailsSheet({
   const teamAPlayers = detail?.team_a_players || []
   const teamBPlayers = detail?.team_b_players || []
   const stats = detail?.stats
+
+  const teamBResult: "win" | "loss" | "draw" =
+    teamAResult === "draw" ? "draw" : teamAResult === "win" ? "loss" : "win"
+
+  const updateFromTeamA = (result: "win" | "loss" | "draw") => {
+    setTeamAResult(result)
+  }
+
+  const updateFromTeamB = (result: "win" | "loss" | "draw") => {
+    if (result === "draw") {
+      setTeamAResult("draw")
+      return
+    }
+    setTeamAResult(result === "win" ? "loss" : "win")
+  }
 
   if (!open && !sessionId) return null
 
@@ -51,6 +78,181 @@ export default function SessionDetailsSheet({
   const location = sessionInfo?.field_location || ""
   const status = summary?.status_display || summary?.status || sessionInfo?.status_display || sessionInfo?.status || "open"
 
+  const currentStatus = (
+    summary?.status ||
+    sessionInfo?.status ||
+    status ||
+    ""
+  ).toLowerCase()
+
+  const isOngoingStatus = currentStatus === "ongoing"
+  const isCompletedStatus =
+    currentStatus === "completed" || currentStatus === "complete"
+  const isCancelledStatus =
+    currentStatus === "cancelled" || currentStatus === "canceled"
+  const canSubmitScore =
+    isOngoingStatus || (!isCompletedStatus && !isCancelledStatus)
+
+  const rawSessionType = (
+    (detail as any)?.session_type ||
+    (sessionInfo as any)?.session_type ||
+    (summary as any)?.session_type ||
+    (detail as any)?.session_info?.session_type ||
+    ""
+  )
+    .trim()
+    .toLowerCase()
+    .replace(/_/g, " ")
+
+  const isManualPlayer =
+    rawSessionType === "manual player" ||
+    rawSessionType === "individual player" ||
+    rawSessionType.includes("manual") ||
+    rawSessionType.includes("individual")
+
+  const formatSessionType = (type?: string) => {
+    if (!type) return "Team"
+    const normalized = type.trim().toLowerCase().replace(/_/g, " ")
+    if (
+      normalized === "manual player" ||
+      normalized === "manual" ||
+      normalized === "individual player"
+    ) {
+      return "Individual player"
+    }
+    return type
+  }
+
+  const buildPlayersPayload = (): {
+    players: Array<{ booking_id: number; result: "win" | "loss" | "draw" }>
+  } => {
+    const playersPayload: Array<{
+      booking_id: number
+      result: "win" | "loss" | "draw"
+    }> = []
+
+    teamAPlayers.forEach((player: AdminSessionPlayerItem) => {
+      const bId = Number(player.booking_id ?? (player as any).bookingId)
+      if (bId && !isNaN(bId)) {
+        playersPayload.push({
+          booking_id: bId,
+          result: teamAResult,
+        })
+      }
+    })
+
+    teamBPlayers.forEach((player: AdminSessionPlayerItem) => {
+      const bId = Number(player.booking_id ?? (player as any).bookingId)
+      if (bId && !isNaN(bId)) {
+        playersPayload.push({
+          booking_id: bId,
+          result: teamBResult,
+        })
+      }
+    })
+
+    // Fallback for flat player list if team lists were empty
+    if (playersPayload.length === 0) {
+      const flatPlayers: Record<string, any>[] =
+        (detail as any)?.players || []
+      if (Array.isArray(flatPlayers) && flatPlayers.length > 0) {
+        flatPlayers.forEach((player: Record<string, any>) => {
+          const bId = Number(player.booking_id ?? player.bookingId)
+          if (bId && !isNaN(bId)) {
+            const isTeamA =
+              player.team === "A" ||
+              player.team === "team_a" ||
+              player.team_name === sessionInfo?.team_a_name ||
+              player.team_name === scoreboard?.left_team?.name
+            const res =
+              teamAResult === "draw"
+                ? "draw"
+                : isTeamA
+                ? teamAResult
+                : teamBResult
+            playersPayload.push({
+              booking_id: bId,
+              result: res,
+            })
+          }
+        })
+      }
+    }
+
+    return { players: playersPayload }
+  }
+
+  const handleSubmitResult = async () => {
+    if (!sessionId) return
+
+    let payload: AdminSessionSubmitScorePayload
+
+    if (isManualPlayer) {
+      const pPayload = buildPlayersPayload()
+      if (pPayload.players.length === 0) {
+        toast.error(
+          t(
+            "sessions.details.noPlayersToSubmit",
+            "For manual player session, players list is required but no players were found."
+          )
+        )
+        return
+      }
+      payload = pPayload
+    } else {
+      payload = {
+        team_a_result: teamAResult,
+        team_b_result: teamBResult,
+      }
+    }
+
+    try {
+      const res = await submitScore({
+        sessionId,
+        payload,
+      }).unwrap()
+
+      toast.success(
+        res.message ||
+          t("sessions.details.resultSuccess", "Final result submitted successfully.")
+      )
+      refetch()
+    } catch (err: unknown) {
+      const errMessage =
+        (err as { data?: { message?: string } })?.data?.message || ""
+
+      // If backend reports it's manual player, automatically retry with players list
+      if (!isManualPlayer && errMessage.toLowerCase().includes("manual player")) {
+        const fallbackPayload = buildPlayersPayload()
+        if (fallbackPayload.players.length > 0) {
+          try {
+            const retryRes = await submitScore({
+              sessionId,
+              payload: fallbackPayload,
+            }).unwrap()
+            toast.success(
+              retryRes.message ||
+                t("sessions.details.resultSuccess", "Final result submitted successfully.")
+            )
+            refetch()
+            return
+          } catch (retryErr: unknown) {
+            const retryErrorMsg =
+              (retryErr as { data?: { message?: string } })?.data?.message ||
+              t("sessions.details.resultFailed", "Failed to submit final result.")
+            toast.error(retryErrorMsg)
+            return
+          }
+        }
+      }
+
+      toast.error(
+        errMessage ||
+          t("sessions.details.resultFailed", "Failed to submit final result.")
+      )
+    }
+  }
+
   const leftLogo = scoreboard?.left_team?.logo ? toAbsoluteMediaUrl(scoreboard.left_team.logo) : null
   const rightLogo = scoreboard?.right_team?.logo ? toAbsoluteMediaUrl(scoreboard.right_team.logo) : null
 
@@ -59,8 +261,9 @@ export default function SessionDetailsSheet({
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="w-full sm:max-w-xl bg-card border-white/10 p-0 overflow-y-auto"
+        className="w-full sm:max-w-xl bg-card border-white/10 p-0 flex flex-col justify-between"
       >
+        <div className="overflow-y-auto flex-1">
         <SheetHeader className="p-6 pb-0">
           <div className="flex items-center gap-3 mb-4">
             <button
@@ -276,6 +479,12 @@ export default function SessionDetailsSheet({
                     {sessionInfo?.entry_fee_with_currency || "€0.00"}
                   </span>
                 </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Session Type</span>
+                  <span className="text-sm font-medium text-primary">
+                    {formatSessionType(rawSessionType)}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -316,6 +525,32 @@ export default function SessionDetailsSheet({
                 </div>
               </div>
             </div>
+
+            {/* Result Selector for Matches */}
+            {canSubmitScore && (
+              <div className="space-y-3 bg-muted/20 rounded-2xl p-4 border border-white/5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-semibold uppercase tracking-wider text-custom-yellow">
+                    {t("sessions.details.teamResult", "Score Giving / Result Submission")}
+                  </h3>
+                  <span className="text-xs text-muted-foreground">
+                    {formatSessionType(rawSessionType)}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <SessionResultSelector
+                    title={scoreboard?.left_team?.name || sessionInfo?.team_a_name || "Team A"}
+                    value={teamAResult}
+                    onChange={updateFromTeamA}
+                  />
+                  <SessionResultSelector
+                    title={scoreboard?.right_team?.name || sessionInfo?.team_b_name || "Team B"}
+                    value={teamBResult}
+                    onChange={updateFromTeamB}
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Team A Players */}
             <div>
@@ -443,6 +678,27 @@ export default function SessionDetailsSheet({
               )}
             </div>
           </div>
+        )}
+        </div>
+
+        {/* Footer Actions */}
+        {detail && canSubmitScore && (
+          <SheetFooter className="p-5 border-t border-white/5 bg-card/95 backdrop-blur flex-row">
+            <Button
+              onClick={handleSubmitResult}
+              disabled={isSubmittingScore}
+              className="w-full py-2.5 bg-custom-yellow hover:bg-custom-yellow/80 text-black font-semibold disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
+            >
+              {isSubmittingScore ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Submitting Final Result...</span>
+                </>
+              ) : (
+                <span>{t("sessions.details.submitResult", "Submit Final Result")}</span>
+              )}
+            </Button>
+          </SheetFooter>
         )}
       </SheetContent>
     </Sheet>

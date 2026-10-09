@@ -505,6 +505,26 @@ export interface AdminSessionDetailResponse {
   requestId?: string
 }
 
+export type AdminSessionSubmitScorePayload =
+  | {
+      team_a_result: "win" | "loss" | "draw" | string
+      team_b_result: "win" | "loss" | "draw" | string
+    }
+  | {
+      players: Array<{
+        booking_id: number
+        result: "win" | "loss" | "draw" | string
+      }>
+    }
+
+export interface AdminSessionSubmitScoreResponse {
+  success: boolean
+  message: string
+  meta?: Record<string, unknown>
+  data?: Record<string, unknown>
+  requestId?: string
+}
+
 // ==========================================
 // Backward Compatible / UI Types
 // ==========================================
