@@ -7,11 +7,10 @@
 
 import { type ReactNode } from "react";
 import {
-  CircleDollarSign,
+  CircleEuro,
   Crosshair,
 } from "lucide-react";
 import { IoDocumentText } from "react-icons/io5";
-import { BiSolidDollarCircle } from "react-icons/bi";
 import { useTranslation } from "react-i18next";
 import StatsCard from "./StatsCard";
 import type { DashboardMark1Item } from "@/types/DashboardTypes/HomeTypes";
@@ -19,7 +18,7 @@ import { FaHourglassEnd } from "react-icons/fa";
 
 /** Icon mapping for each stats card key — matches the provided design */
 const STATS_ICON_BY_KEY: Record<string, ReactNode> = {
-  total_revenue: <BiSolidDollarCircle className="w-5 h-5" />,
+  total_revenue: <CircleEuro className="w-5 h-5" />,
   total_bookings: <IoDocumentText className="w-5 h-5" />,
   upcoming_sessions: <FaHourglassEnd className="w-5 h-5" />,
   matches_hosted: <Crosshair className="w-5 h-5" />,
@@ -55,7 +54,7 @@ const StatsGrid = ({ items }: StatsGridProps) => {
           showCurrencyIcon={item.key === "total_revenue"}
           icon={
             STATS_ICON_BY_KEY[item.key] ?? (
-              <CircleDollarSign className="w-5 h-5" />
+              <CircleEuro className="w-5 h-5" />
             )
           }
           subtitle={item.subtitle}

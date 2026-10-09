@@ -62,6 +62,11 @@ const RevenueChart = ({
 
   const rangeLabel = (range: DashboardRange) => t(`home.${range}`);
 
+  const cleanValueDisplay =
+    typeof valueDisplay === "string"
+      ? valueDisplay.replace(/[€$]/g, "").trim()
+      : valueDisplay;
+
   return (
     <div className="bg-card border border-white/5 rounded-xl p-5 relative overflow-hidden flex flex-col">
       {/* Header with title, value, and range dropdown */}
@@ -69,7 +74,7 @@ const RevenueChart = ({
         <div>
           <p className="text-sm text-[#8381A3] mb-1">{translatedTitle}</p>
           <h2 className="text-xl md:text-2xl font-bold text-primary flex items-center gap-1">
-            <Euro className="w-4 h-4" /> {valueDisplay}
+            <Euro className="w-4 h-4" /> {cleanValueDisplay}
           </h2>
         </div>
 

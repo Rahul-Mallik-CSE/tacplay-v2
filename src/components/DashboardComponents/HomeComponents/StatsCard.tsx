@@ -18,6 +18,13 @@ const StatsCard = ({
   showCurrencyIcon,
   subtitle,
 }: StatsCardProps) => {
+  const cleanValue =
+    typeof value === "string"
+      ? showCurrencyIcon
+        ? value.replace(/[€$]/g, "").trim()
+        : value.replace(/\$/g, "")
+      : value;
+
   return (
     <div className="bg-card border border-white/5 rounded-xl p-5 flex flex-col min-w-0 flex-1">
       {/* Row 1: Title left, icon right */}
@@ -30,7 +37,7 @@ const StatsCard = ({
       <div className="flex items-center gap-3 mb-2">
         <h2 className="text-2xl lg:text-4xl font-bold text-primary tracking-tight">
           {showCurrencyIcon && <span className="text-2xl">€</span>}
-          {value}
+          {cleanValue}
         </h2>
         <span
           className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md ${isPositive
