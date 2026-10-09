@@ -204,6 +204,8 @@ function SessionDetailsContainer() {
         sessionId={sessionId}
         onMatchStatusChange={() => refetch()}
         onViewResultSummary={() => setResultSummaryOpen(true)}
+        teamAPlayers={details?.team_a_players}
+        teamBPlayers={details?.team_b_players}
       />
 
       <PlayerDetailsSheet

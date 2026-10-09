@@ -487,6 +487,8 @@ export interface SessionInfoSheetProps {
   sessionId: number | null
   onMatchStatusChange?: () => void
   onViewResultSummary?: () => void
+  teamAPlayers?: SessionTeamPlayer[]
+  teamBPlayers?: SessionTeamPlayer[]
 }
 
 /** Props for EditSessionSheet component */

@@ -28,11 +28,16 @@ import SessionResultSelector from "./SessionResultSelector"
 import SessionInfoSheetLoading from "./SessionInfoSheetLoading"
 import {
   useGetSessionInfoQuery,
+  useGetSessionDetailsQuery,
   useStartMatchMutation,
   useCancelMatchMutation,
   useSubmitResultMutation,
 } from "@/redux/features/dashboard/session/sessionAPI"
-import type { SessionInfoSheetProps } from "@/types/DashboardTypes/SessionTypes"
+import type {
+  SessionInfoSheetProps,
+  SessionSubmitResultPayload,
+  SessionTeamPlayer,
+} from "@/types/DashboardTypes/SessionTypes"
 
 function SessionInfoSheet({
   open,
@@ -40,11 +45,13 @@ function SessionInfoSheet({
   sessionId,
   onMatchStatusChange,
   onViewResultSummary,
+  teamAPlayers: propTeamAPlayers,
+  teamBPlayers: propTeamBPlayers,
 }: SessionInfoSheetProps) {
   const { t } = useTranslation("dashboard")
   const [teamAResult, setTeamAResult] = useState<"win" | "loss" | "draw">("win")
 
-  // API query
+  // API queries
   const {
     data: infoResponse,
     isLoading,
@@ -53,6 +60,14 @@ function SessionInfoSheet({
   } = useGetSessionInfoQuery(sessionId ?? 0, {
     skip: !sessionId || !open,
   })
+
+  // Also query session details for player lists and session_type fallback
+  const { data: sessionDetailsResponse } = useGetSessionDetailsQuery(
+    sessionId ?? 0,
+    {
+      skip: !sessionId || !open,
+    }
+  )
 
   // API mutations
   const [startMatch, { isLoading: isStarting }] = useStartMatchMutation()
@@ -118,18 +133,137 @@ function SessionInfoSheet({
     }
   }
 
-  // Handle Team Result Submission
+  // Helper to format session type for display
+  const getSessionTypeDisplay = (type?: string) => {
+    if (!type) return "N/A"
+    const normalized = type.trim().toLowerCase().replace(/_/g, " ")
+    if (
+      normalized === "manual player" ||
+      normalized === "manual" ||
+      normalized === "individual player"
+    ) {
+      return "Individual player"
+    }
+    return type
+  }
+
+  // Handle Result Submission (Team vs Manual Player)
   const handleSubmitTeamResult = async () => {
     if (!sessionId) return
+
+    const sessionTypeRaw = (
+      details?.session_info?.session_type ||
+      sessionDetailsResponse?.data?.session_type ||
+      ""
+    )
+      .trim()
+      .toLowerCase()
+      .replace(/_/g, " ")
+
+    const isManualPlayer =
+      sessionTypeRaw === "manual player" ||
+      sessionTypeRaw === "individual player" ||
+      sessionTypeRaw.includes("manual") ||
+      sessionTypeRaw.includes("individual")
+
     try {
-      const res = await submitResult({
-        sessionId,
-        payload: {
+      let payload: SessionSubmitResultPayload
+
+      if (isManualPlayer) {
+        const teamAPlayersList: (SessionTeamPlayer | { booking_id?: number; bookingId?: number })[] =
+          propTeamAPlayers ||
+          sessionDetailsResponse?.data?.team_a_players ||
+          (details as any)?.team_a_players ||
+          []
+        const teamBPlayersList: (SessionTeamPlayer | { booking_id?: number; bookingId?: number })[] =
+          propTeamBPlayers ||
+          sessionDetailsResponse?.data?.team_b_players ||
+          (details as any)?.team_b_players ||
+          []
+
+        const playersPayload: Array<{
+          booking_id: number
+          result: "win" | "loss" | "draw"
+        }> = []
+
+        teamAPlayersList.forEach((player: SessionTeamPlayer | { booking_id?: number; bookingId?: number }) => {
+          const bId = Number(player.booking_id ?? (player as any).bookingId)
+          if (bId && !isNaN(bId)) {
+            playersPayload.push({
+              booking_id: bId,
+              result: teamAResult,
+            })
+          }
+        })
+
+        teamBPlayersList.forEach((player: SessionTeamPlayer | { booking_id?: number; bookingId?: number }) => {
+          const bId = Number(player.booking_id ?? (player as any).bookingId)
+          if (bId && !isNaN(bId)) {
+            playersPayload.push({
+              booking_id: bId,
+              result: teamBResult,
+            })
+          }
+        })
+
+        // Fallback for flat player list if team lists were empty
+        if (playersPayload.length === 0) {
+          const flatPlayers: Array<{ booking_id?: number; bookingId?: number; team?: string; team_name?: string }> =
+            (sessionDetailsResponse?.data as any)?.players ||
+            (details as any)?.players ||
+            []
+          if (Array.isArray(flatPlayers) && flatPlayers.length > 0) {
+            flatPlayers.forEach((player: { booking_id?: number; bookingId?: number; team?: string; team_name?: string }) => {
+              const bId = Number(player.booking_id ?? player.bookingId)
+              if (bId && !isNaN(bId)) {
+                const isTeamA =
+                  player.team === "A" ||
+                  player.team === "team_a" ||
+                  player.team_name === details?.team_info?.team_a_name
+                const res =
+                  teamAResult === "draw"
+                    ? "draw"
+                    : isTeamA
+                    ? teamAResult
+                    : teamBResult
+                playersPayload.push({
+                  booking_id: bId,
+                  result: res,
+                })
+              }
+            })
+          }
+        }
+
+        if (playersPayload.length === 0) {
+          toast.error(
+            t(
+              "sessions.details.noPlayersToSubmit",
+              "For manual player session, players list is required but no players were found."
+            )
+          )
+          return
+        }
+
+        payload = {
+          players: playersPayload,
+        }
+      } else {
+        // Team session
+        payload = {
           team_a_result: teamAResult,
           team_b_result: teamBResult,
-        },
+        }
+      }
+
+      const res = await submitResult({
+        sessionId,
+        payload,
       }).unwrap()
-      toast.success(res.message || t("sessions.details.resultSuccess", "Final result submitted successfully."))
+      toast.success(
+        res.message ||
+          t("sessions.details.resultSuccess", "Final result submitted successfully.")
+      )
       refetch()
       onMatchStatusChange?.()
     } catch (err: unknown) {
@@ -252,7 +386,7 @@ function SessionInfoSheet({
                     />
                     <SessionInfoRow
                       label={t("sessions.details.sessionType", "Session Type")}
-                      value={details.session_info.session_type}
+                      value={getSessionTypeDisplay(details.session_info.session_type)}
                     />
                     <SessionInfoRow
                       label={t("sessions.details.team", "Team")}
