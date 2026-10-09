@@ -11,6 +11,7 @@ import {
   Megaphone,
   Percent,
   CreditCard,
+  Trophy,
 } from "lucide-react";
 import { GiSoccerField } from "react-icons/gi";
 import { FaUserGroup } from "react-icons/fa6";
@@ -53,7 +54,7 @@ export function useAdminNavItems(): NavItemConfig[] {
           label: t("sidebar.roleManagement"),
         },
       ],
-      
+
     },
     {
       href: "/admin/marketing",
@@ -80,11 +81,11 @@ export function useAdminNavItems(): NavItemConfig[] {
           icon: Megaphone,
           label: t("marketing.sms"),
         },
-        {
-          href: "/admin/marketing/push-notification",
-          icon: Megaphone,
-          label: t("marketing.pushNotification"),
-        },
+        // {
+        //   href: "/admin/marketing/push-notification",
+        //   icon: Megaphone,
+        //   label: t("marketing.pushNotification"),
+        // },
         {
           href: "/admin/marketing/vouchers",
           icon: Megaphone,
@@ -112,7 +113,11 @@ export function useAdminNavItems(): NavItemConfig[] {
       href: "/admin/subscription-management",
       icon: CreditCard,
       label: t("adminSidebar.subscriptionManagement"),
-      
+    },
+    {
+      href: "/admin/score-management",
+      icon: Trophy,
+      label: t("adminSidebar.scoreManagement", "Score Management"),
     },
     {
       href: "/admin/settings",

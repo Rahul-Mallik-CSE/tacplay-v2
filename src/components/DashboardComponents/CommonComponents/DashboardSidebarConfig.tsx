@@ -2,7 +2,7 @@
 
 "use client";
 
-import { LayoutGrid,CalendarCheck,CalendarClock, Settings, BarChart3, CircleHelp, Package, Users, Megaphone, MessageCircle } from "lucide-react";
+import { LayoutGrid, CalendarCheck, CalendarClock, Settings, BarChart3, CircleHelp, Package, Users, Megaphone, MessageCircle } from "lucide-react";
 import { FaHouseUser } from "react-icons/fa";
 import { GrUserManager } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
@@ -70,7 +70,7 @@ export function useDashboardNavItems(): NavItemConfig[] {
           label: t("arena.tabs.billings"),
         },
       ],
-      
+
     },
     {
       href: "/dashboard/marketing",
@@ -97,11 +97,11 @@ export function useDashboardNavItems(): NavItemConfig[] {
           icon: Megaphone,
           label: t("marketing.sms"),
         },
-        {
-          href: "/dashboard/marketing/push-notification",
-          icon: Megaphone,
-          label: t("marketing.pushNotification"),
-        },
+        // {
+        //   href: "/dashboard/marketing/push-notification",
+        //   icon: Megaphone,
+        //   label: t("marketing.pushNotification"),
+        // },
         {
           href: "/dashboard/marketing/vouchers",
           icon: Megaphone,
@@ -153,7 +153,7 @@ export function useDashboardNavItems(): NavItemConfig[] {
           label: t("subscription.tabs.paymentMethods"),
         },
       ],
-      
+
     },
     // {
     //   href: "/dashboard/chat",
