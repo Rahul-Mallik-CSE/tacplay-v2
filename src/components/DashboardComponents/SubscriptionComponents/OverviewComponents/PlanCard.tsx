@@ -148,9 +148,6 @@ export default function PlanCard({
             </li>
           ))}
         </ul>
-        <button className="text-custom-yellow text-xs font-medium mt-3 hover:underline cursor-pointer">
-          {t("subscription.overview.seeAll")}
-        </button>
       </div>
     </div>
   )
