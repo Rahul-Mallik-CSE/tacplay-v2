@@ -13,6 +13,7 @@ export default function PlanCardsSection({
   billingCycle,
   onSelectPlan,
   onBillingCycleChange,
+  upgradingPlanCode,
 }: PlanCardsSectionProps) {
   const { t } = useTranslation("dashboard")
 
@@ -39,9 +40,10 @@ export default function PlanCardsSection({
             key={plan.id}
             plan={plan}
             isSelected={selectedPlanCode === plan.code}
-            isCurrentPlan={currentPlanCode === plan.code}
+            isCurrentPlan={currentPlanCode === plan.code || Boolean(plan.is_current)}
             onSelect={onSelectPlan}
             billingCycle={billingCycle}
+            isUpgrading={upgradingPlanCode === plan.code}
           />
         ))}
       </div>

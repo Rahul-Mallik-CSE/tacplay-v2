@@ -16,6 +16,7 @@ import playerManagementReducer from "@/redux/features/admin/playerManagement/pla
 import adminAnalyticsReducer from "@/redux/features/admin/analytics/analyticsSlice";
 import fieldManagementReducer from "@/redux/features/admin/fieldManagement/fieldManagementSlice";
 import subscriptionManagementReducer from "@/redux/features/admin/subscriptionManagement/subscriptionManagementSlice";
+import subscriptionReducer from "@/redux/features/dashboard/subscription/subscriptionSlice";
 
 export const store = configureStore({
   reducer: {
@@ -34,6 +35,7 @@ export const store = configureStore({
     adminAnalytics: adminAnalyticsReducer,
     fieldManagement: fieldManagementReducer,
     subscriptionManagement: subscriptionManagementReducer,
+    subscription: subscriptionReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseAPI.middleware),

@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils"
 import type { CurrentSubscription } from "@/types/DashboardTypes/SubscriptionTypes"
 
 interface CurrentPlanCardProps {
-  subscription: CurrentSubscription
-  onManageBilling: () => void
+  subscription?: CurrentSubscription | null
+  onManageBilling?: () => void
   onUpgradePlan: () => void
 }
 
@@ -19,19 +19,53 @@ export default function CurrentPlanCard({
 }: CurrentPlanCardProps) {
   const { t } = useTranslation("dashboard")
 
-  const getPlanLogo = (planCode: string) => {
-    if (planCode.includes("bronze")) return "/bronze.png"
-    if (planCode.includes("silver")) return "/silver.png"
+  const getPlanLogo = (planCode?: string) => {
+    const code = (planCode || "").toLowerCase()
+    if (code.includes("bronze")) return "/bronze.png"
+    if (code.includes("silver")) return "/silver.png"
     return "/gold.png"
   }
+
+  const formatBillingDate = (dateStr?: string) => {
+    if (!dateStr) return ""
+    try {
+      const d = new Date(dateStr)
+      if (isNaN(d.getTime())) return dateStr
+      return d.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    } catch {
+      return dateStr
+    }
+  }
+
+  const currencySymbol =
+    subscription?.currency === "EUR" ? "€" :
+    subscription?.currency === "USD" ? "$" :
+    subscription?.currency === "GBP" ? "£" :
+    subscription?.currency || "€"
+
+  const billingCycleLabel =
+    subscription?.billing_cycle === "yearly" ? " / year" : " / month"
+
+  const displayDate =
+    formatBillingDate(subscription?.expires_at) ||
+    subscription?.next_billing_date ||
+    "N/A"
+
+  const isActive =
+    subscription?.status === "active" ||
+    subscription?.has_active_subscription === true
 
   return (
     <div className="rounded-xl border border-white/10 bg-[#141315] p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div className="relative w-16 h-16 sm:w-26 sm:h-26 shrink-0">
           <Image
-            src={getPlanLogo(subscription.plan_code)}
-            alt={subscription.plan_name}
+            src={getPlanLogo(subscription?.plan_code)}
+            alt={subscription?.plan_name || "Subscription Plan"}
             fill
             className="object-contain"
           />
@@ -41,24 +75,24 @@ export default function CurrentPlanCard({
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-xl sm:text-2xl font-bold text-primary">
               {t("subscription.overview.currentPlanTitle", {
-                plan: subscription.plan_name,
+                plan: subscription?.plan_name || "Plan",
               })}
             </h2>
             <span
               className={cn(
                 "px-2.5 py-0.5 rounded-full text-xs font-semibold",
-                subscription.status === "active"
+                isActive
                   ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                   : "bg-secondary/20 text-secondary border border-secondary/30"
               )}
             >
-              {t("subscription.overview.active")}
+              {isActive ? t("subscription.overview.active") : "Inactive"}
             </span>
           </div>
 
           <p className="text-secondary text-sm mt-1">
             {t("subscription.overview.nextBilling", {
-              date: subscription.next_billing_date,
+              date: displayDate,
             })}
           </p>
 
@@ -70,9 +104,9 @@ export default function CurrentPlanCard({
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
           <div className="text-left sm:text-right">
             <span className="text-2xl sm:text-3xl font-bold text-primary">
-              {subscription.currency}{subscription.price}
+              {currencySymbol}{subscription?.price ?? "0.00"}
             </span>
-            <span className="text-secondary text-sm"> / month</span>
+            <span className="text-secondary text-sm">{billingCycleLabel}</span>
           </div>
 
           <div className="flex gap-2 w-full sm:w-auto">

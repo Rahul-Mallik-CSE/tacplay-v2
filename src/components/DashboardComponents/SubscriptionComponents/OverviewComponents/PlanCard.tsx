@@ -13,13 +13,32 @@ export default function PlanCard({
   isCurrentPlan,
   onSelect,
   billingCycle,
+  isUpgrading = false,
 }: PlanCardProps) {
   const { t } = useTranslation("dashboard")
 
-  const price = billingCycle === "annual" ? plan.annualPrice : plan.price
-  const displayPrice = billingCycle === "annual"
-    ? (plan.annualPrice / 12).toFixed(2)
-    : plan.price.toFixed(2)
+  const getPlanLogo = (code?: string) => {
+    const c = (code || "").toLowerCase()
+    if (c.includes("bronze")) return "/bronze.png"
+    if (c.includes("silver")) return "/silver.png"
+    return "/gold.png"
+  }
+
+  const rawPrice = Number(plan.price) || 0
+  const annualTotal = plan.annualPrice ?? (billingCycle === "annual" ? rawPrice : rawPrice * 12)
+  const displayPrice =
+    billingCycle === "annual"
+      ? (annualTotal / 12).toFixed(2)
+      : rawPrice.toFixed(2)
+
+  const currencySymbol =
+    plan.currency === "EUR" ? "€" :
+    plan.currency === "USD" ? "$" :
+    plan.currency === "GBP" ? "£" :
+    plan.currency || "€"
+
+  const planLogo = plan.logo || getPlanLogo(plan.code)
+  const features = Array.isArray(plan.features) ? plan.features : []
 
   return (
     <div
@@ -51,7 +70,7 @@ export default function PlanCard({
       <div className="flex items-center gap-3 mb-3">
         <div className="relative w-12 h-12">
           <Image
-            src={plan.logo}
+            src={planLogo}
             alt={plan.name}
             fill
             className="object-contain"
@@ -64,7 +83,7 @@ export default function PlanCard({
 
       <div className="mb-2">
         <span className="text-white text-3xl sm:text-4xl font-bold">
-          {plan.currency}{displayPrice}
+          {currencySymbol}{displayPrice}
         </span>
         <span className="text-secondary text-sm ml-1">
           {t("subscription.overview.perMonth")}
@@ -75,40 +94,42 @@ export default function PlanCard({
         {plan.description}
       </p>
 
-      {plan.code.includes("bronze") ? (
-        <button
-          className="w-full py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-white hover:border-white transition-colors cursor-pointer mb-5"
-          onClick={() => onSelect(plan.code)}
-        >
-          {t("subscription.overview.activeBronze")}
-        </button>
-      ) : plan.code.includes("gold") ? (
-        <button
-          onClick={() => onSelect(plan.code)}
-          className="w-full py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-white hover:border-white transition-colors cursor-pointer mb-5"
-        >
-          {t("subscription.overview.goGold")}
-        </button>
-      ) : isCurrentPlan ? (
+      {isCurrentPlan ? (
         <button
           className="w-full py-2.5 rounded-xl text-sm font-semibold border border-emerald-500/30 text-emerald-400 cursor-default mb-5"
           disabled
         >
-          {t("subscription.overview.activeBronze")}
+          {plan.button_text || t("subscription.overview.activeBronze")}
         </button>
       ) : plan.code.includes("silver") ? (
         <button
           onClick={() => onSelect(plan.code)}
-          className="w-full py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#980009] via-[#C00069] to-[#980009] text-white shadow-[0_0_12px_rgba(192,0,105,0.4)] hover:opacity-90 transition-opacity cursor-pointer mb-5"
+          disabled={isUpgrading}
+          className="w-full py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#980009] via-[#C00069] to-[#980009] text-white shadow-[0_0_12px_rgba(192,0,105,0.4)] hover:opacity-90 transition-opacity cursor-pointer mb-5 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {t("subscription.overview.upgradeToSilver")}
+          {isUpgrading
+            ? "Processing..."
+            : plan.button_text || t("subscription.overview.upgradeToSilver")}
+        </button>
+      ) : plan.code.includes("bronze") ? (
+        <button
+          onClick={() => onSelect(plan.code)}
+          disabled={isUpgrading}
+          className="w-full py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-white hover:border-white transition-colors cursor-pointer mb-5 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isUpgrading
+            ? "Processing..."
+            : plan.button_text || t("subscription.overview.activeBronze")}
         </button>
       ) : (
         <button
           onClick={() => onSelect(plan.code)}
-          className="w-full py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-white hover:border-white transition-colors cursor-pointer mb-5"
+          disabled={isUpgrading}
+          className="w-full py-2.5 rounded-xl text-sm font-semibold border border-white/20 text-white hover:border-white transition-colors cursor-pointer mb-5 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {t("subscription.overview.goGold")}
+          {isUpgrading
+            ? "Processing..."
+            : plan.button_text || t("subscription.overview.goGold")}
         </button>
       )}
 
@@ -117,7 +138,7 @@ export default function PlanCard({
           {t("subscription.overview.includedFeatures")}
         </p>
         <ul className="space-y-2">
-          {plan.features.map((feature) => (
+          {features.map((feature) => (
             <li
               key={feature}
               className="flex items-start gap-2 text-xs text-secondary"
