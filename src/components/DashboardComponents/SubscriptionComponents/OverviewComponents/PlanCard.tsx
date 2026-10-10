@@ -25,11 +25,7 @@ export default function PlanCard({
   }
 
   const rawPrice = Number(plan.price) || 0
-  const annualTotal = plan.annualPrice ?? (billingCycle === "annual" ? rawPrice : rawPrice * 12)
-  const displayPrice =
-    billingCycle === "annual"
-      ? (annualTotal / 12).toFixed(2)
-      : rawPrice.toFixed(2)
+  const displayPrice = rawPrice.toFixed(2)
 
   const currencySymbol =
     plan.currency === "EUR" ? "€" :
@@ -86,7 +82,7 @@ export default function PlanCard({
           {currencySymbol}{displayPrice}
         </span>
         <span className="text-secondary text-sm ml-1">
-          {t("subscription.overview.perMonth")}
+          {billingCycle === "annual" ? "/ annual" : t("subscription.overview.perMonth")}
         </span>
       </div>
 
