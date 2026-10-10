@@ -115,6 +115,24 @@ export interface UpgradeSubscriptionResponse {
   requestId?: string
 }
 
+export interface BillingHistoryItem {
+  invoice_id: string
+  date: string
+  plan: string
+  price: string
+  currency: string
+  payment_status: string
+  paid_at: string
+}
+
+export interface BillingHistoryResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: BillingHistoryItem[]
+  requestId?: string
+}
+
 // ============================================================================
 // Billing History Types
 // ============================================================================

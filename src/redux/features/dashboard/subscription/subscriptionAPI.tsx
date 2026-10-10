@@ -6,6 +6,7 @@ import type {
   SubscriptionPlansResponse,
   UpgradeSubscriptionPayload,
   UpgradeSubscriptionResponse,
+  BillingHistoryResponse,
 } from "@/types/DashboardTypes/SubscriptionTypes"
 
 export const subscriptionAPI = baseAPI.injectEndpoints({
@@ -50,8 +51,17 @@ export const subscriptionAPI = baseAPI.injectEndpoints({
       invalidatesTags: [
         { type: "FieldOwnerSubscription", id: "STATUS" },
         { type: "FieldOwnerSubscription", id: "PLANS" },
+        { type: "FieldOwnerSubscription", id: "BILLING_HISTORY" },
         "Dashboard",
       ],
+    }),
+
+    getBillingHistory: builder.query<BillingHistoryResponse, void>({
+      query: () => ({
+        url: "/api/auth/field-owner/subscription/billing-history/",
+        method: "GET",
+      }),
+      providesTags: [{ type: "FieldOwnerSubscription", id: "BILLING_HISTORY" }],
     }),
   }),
 })
@@ -62,6 +72,8 @@ export const {
   useGetSubscriptionPlansQuery,
   useLazyGetSubscriptionPlansQuery,
   useUpgradeSubscriptionMutation,
+  useGetBillingHistoryQuery,
+  useLazyGetBillingHistoryQuery,
 } = subscriptionAPI
 
 export default subscriptionAPI
