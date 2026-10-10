@@ -47,7 +47,7 @@ export default function OverviewContainer() {
         />
       </div>
 
-      <AnnualBillingBanner onSwitchToAnnual={handleSwitchToAnnual} />
+      {/* <AnnualBillingBanner onSwitchToAnnual={handleSwitchToAnnual} /> */}
     </div>
   )
 }

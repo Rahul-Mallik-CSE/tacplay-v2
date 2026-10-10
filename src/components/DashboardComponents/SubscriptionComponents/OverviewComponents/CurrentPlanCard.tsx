@@ -76,12 +76,12 @@ export default function CurrentPlanCard({
           </div>
 
           <div className="flex gap-2 w-full sm:w-auto">
-            <button
+            {/* <button
               onClick={onManageBilling}
               className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-custom-yellow text-custom-yellow text-sm font-medium hover:bg-custom-yellow/10 transition-colors cursor-pointer"
             >
               {t("subscription.overview.manageBilling")}
-            </button>
+            </button> */}
             <button
               onClick={onUpgradePlan}
               className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-gradient-to-r from-[#980009] via-[#C00069] to-[#980009] text-white text-sm font-medium hover:opacity-90 transition-opacity cursor-pointer"
