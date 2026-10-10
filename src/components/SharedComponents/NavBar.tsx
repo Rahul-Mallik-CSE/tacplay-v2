@@ -26,6 +26,7 @@ import LogoutModal from "./LogOutModal";
 import { useAppSelector } from "@/redux/hooks";
 import { resolveAccountType } from "@/redux/features/auth/authSlice";
 import { toAbsoluteMediaUrl } from "@/lib/utils";
+import { useGetUnreadCountQuery } from "@/redux/features/shared/notification/notificationAPI";
 
 interface NavBarProps {
   pageTitle?: string;
@@ -54,6 +55,11 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
   const { user } = useAppSelector((s) => s.auth);
   const accountType = resolveAccountType(user);
   const isAdmin = accountType === "admin" || accountType === "admin_staff";
+
+  const { data: unreadData } = useGetUnreadCountQuery(undefined, {
+    skip: isAdmin,
+  });
+  const unreadCount = unreadData?.data?.unread_count ?? 0;
 
   const profileImageUrl = toAbsoluteMediaUrl(user?.profile_image);
   const displayName = user?.full_name || "User";
@@ -117,7 +123,9 @@ export default function NavBar({ pageTitle, onLogout }: NavBarProps) {
             className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#2a2a3e] flex items-center justify-center hover:bg-[#3a3a4e] transition-colors relative cursor-pointer"
           >
             <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
-            <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#1a1a2e]" />
+            {unreadCount > 0 && (
+              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#1a1a2e]" />
+            )}
           </button>
 
           {/* Email Button */}

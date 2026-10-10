@@ -1,4 +1,4 @@
-import type { NotificationItem } from "@/types/DashboardTypes/NotificationTypes"
+import type { NotificationItem } from "@/types/CommonPageTypes/NotificationTypes"
 
 export const mockNotifications: NotificationItem[] = [
   {

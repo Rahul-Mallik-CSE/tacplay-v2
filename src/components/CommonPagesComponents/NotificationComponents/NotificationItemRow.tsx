@@ -8,10 +8,9 @@ import {
   AlertTriangle,
   CheckCircle,
   XCircle,
-  Trash2,
   MailOpen,
 } from "lucide-react"
-import type { NotificationItem, NotificationType } from "@/types/DashboardTypes/NotificationTypes"
+import type { NotificationItem, NotificationType } from "@/types/CommonPageTypes/NotificationTypes"
 
 const typeConfig: Record<NotificationType, { icon: typeof Bell; color: string; bg: string }> = {
   booking: { icon: Calendar, color: "text-blue-400", bg: "bg-blue-500/15" },
@@ -35,8 +34,9 @@ export default function NotificationItemRow({
   onMarkAsRead,
   onDelete,
 }: NotificationItemRowProps) {
-  const config = typeConfig[notification.type]
-  const Icon = config.icon
+  const config = typeConfig[notification.type] || typeConfig.system
+  const Icon = config.icon || Bell
+  const notifId = notification.id || notification.notification_id
 
   return (
     <div
@@ -46,7 +46,7 @@ export default function NotificationItemRow({
           : "border-white/10 bg-card"
       }`}
     >
-      <div className={`w-10 h-10 rounded-full ${config.bg} flex items-center justify-center flex-shrink-0`}>
+      <div className={`w-10 h-10 rounded-full ${config.bg} flex items-center justify-center shrink-0`}>
         <Icon className={`w-5 h-5 ${config.color}`} />
       </div>
 
@@ -56,7 +56,7 @@ export default function NotificationItemRow({
             {notification.title}
           </h4>
           {!notification.is_read && (
-            <span className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1.5" />
+            <span className="w-2 h-2 bg-blue-500 rounded-full shrink-0 mt-1.5" />
           )}
         </div>
         <p className="text-sm text-secondary mt-1 line-clamp-2">
@@ -67,20 +67,13 @@ export default function NotificationItemRow({
           <div className="flex items-center gap-1">
             {!notification.is_read && (
               <button
-                onClick={() => onMarkAsRead?.(notification.notification_id)}
+                onClick={() => onMarkAsRead?.(notifId)}
                 className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-secondary hover:text-primary cursor-pointer"
                 title="Mark as read"
               >
                 <MailOpen className="w-4 h-4" />
               </button>
             )}
-            <button
-              onClick={() => onDelete?.(notification.notification_id)}
-              className="p-1.5 rounded-lg hover:bg-red-500/15 transition-colors text-secondary hover:text-red-400 cursor-pointer"
-              title="Delete"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
           </div>
         </div>
       </div>
