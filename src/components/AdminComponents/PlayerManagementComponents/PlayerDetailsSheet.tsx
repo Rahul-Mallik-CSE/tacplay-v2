@@ -393,7 +393,8 @@ export default function PlayerDetailsSheet({
                   )}
                 </button>
 
-                {detailData?.actions?.upgrade_plan?.available !== false && (
+                {/* Upgrade Plan button commented out as per requirement */}
+                {/* {detailData?.actions?.upgrade_plan?.available !== false && (
                   <button
                     type="button"
                     onClick={handleUpgrade}
@@ -402,7 +403,7 @@ export default function PlayerDetailsSheet({
                     <Zap className="w-4 h-4" />
                     {t("playerManagement.actions.upgradePlan", "Upgrade Plan")}
                   </button>
-                )}
+                )} */}
               </div>
             </>
           )}
