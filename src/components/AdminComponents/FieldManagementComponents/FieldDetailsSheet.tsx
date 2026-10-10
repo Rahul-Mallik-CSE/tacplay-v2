@@ -1,8 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { ArrowLeft, MapPin, AlertTriangle, CheckCircle, Loader2 } from "lucide-react"
+import {
+  ArrowLeft,
+  MapPin,
+  AlertTriangle,
+  CheckCircle,
+  Loader2,
+  Sparkles,
+  ChevronUp,
+} from "lucide-react"
 import Image from "next/image"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
@@ -12,12 +20,23 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
 import FieldPlanBadge from "./FieldPlanBadge"
-import { useGetAdminFieldOwnerDetailQuery } from "@/redux/features/admin/fieldManagement/fieldManagementAPI"
+import UpgradeFieldPlanModal from "./UpgradeFieldPlanModal"
+import {
+  useGetAdminFieldOwnerDetailQuery,
+  useGetFieldOwnerUpgradePlanOptionsQuery,
+} from "@/redux/features/admin/fieldManagement/fieldManagementAPI"
 import { toAbsoluteMediaUrl } from "@/lib/utils"
 import type {
   FieldDetailsSheetProps,
   FieldOwnerStatusAction,
+  FieldOwnerAvailablePlan,
 } from "@/types/AdminTypes/FieldManagementTypes"
 
 export default function FieldDetailsSheet({
@@ -31,6 +50,8 @@ export default function FieldDetailsSheet({
 }: FieldDetailsSheetProps) {
   const { t } = useTranslation("dashboard")
   const [showUpgradeDropdown, setShowUpgradeDropdown] = useState(false)
+  const [selectedTargetPlan, setSelectedTargetPlan] = useState<FieldOwnerAvailablePlan | null>(null)
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false)
 
   const activeId = fieldId || initialField?.user_id || null
 
@@ -42,7 +63,36 @@ export default function FieldDetailsSheet({
     skip: !activeId || !open,
   })
 
+  const {
+    data: upgradeOptionsResponse,
+    isLoading: isLoadingUpgradeOptions,
+    refetch: refetchUpgradeOptions,
+  } = useGetFieldOwnerUpgradePlanOptionsQuery(activeId!, {
+    skip: !activeId || !open,
+  })
+
   const detail = detailResponse?.data
+  const upgradeData = upgradeOptionsResponse?.data
+  const currentSubscription = upgradeData?.current_subscription
+  const currentPlanCode = currentSubscription?.plan_code
+  const currentPlanName =
+    currentSubscription?.plan_name ||
+    detail?.field_info?.plan?.name ||
+    detail?.stats?.subscription_plan ||
+    initialField?.subscription?.name ||
+    "Plan"
+
+  const availablePlans = upgradeData?.available_plans || []
+
+  // Show the other 2 plans based on current plan
+  const eligibleUpgradePlans = useMemo(() => {
+    if (!availablePlans || availablePlans.length === 0) return []
+    return availablePlans.filter((plan) => {
+      if (plan.is_current_plan) return false
+      if (currentPlanCode && plan.plan_code === currentPlanCode) return false
+      return true
+    })
+  }, [availablePlans, currentPlanCode])
 
   if (!open && !activeId) return null
 
@@ -348,46 +398,90 @@ export default function FieldDetailsSheet({
               </button>
 
               <div className="relative flex-1">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (upgradePlans.length > 0) {
-                      setShowUpgradeDropdown(!showUpgradeDropdown)
-                    } else if (onUpgradePlan && (detail || initialField)) {
-                      onUpgradePlan(detail || initialField!)
-                    }
-                  }}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 rounded-lg text-sm font-medium hover:bg-yellow-500/20 transition-colors cursor-pointer"
+                <DropdownMenu
+                  open={showUpgradeDropdown}
+                  onOpenChange={setShowUpgradeDropdown}
                 >
-                  <AlertTriangle className="w-4 h-4" />
-                  <span>
-                    {detail?.actions?.upgrade_plan?.label ||
-                      t("fieldManagement.actions.upgradePlan", "Upgrade Plan")}
-                  </span>
-                </button>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 rounded-lg text-sm font-medium hover:bg-yellow-500/20 transition-colors cursor-pointer"
+                    >
+                      <Sparkles className="w-4 h-4 text-yellow-400" />
+                      <span>
+                        {detail?.actions?.upgrade_plan?.label ||
+                          t("fieldManagement.actions.upgradePlan", "Upgrade Plan")}
+                      </span>
+                      <ChevronUp className="w-3.5 h-3.5 ml-0.5 opacity-70" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    side="top"
+                    sideOffset={8}
+                    className="w-64 bg-card border border-white/10 rounded-xl shadow-2xl p-1.5 z-50 backdrop-blur-md"
+                  >
+                    <div className="px-3 py-2 border-b border-white/5">
+                      <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+                        Available Upgrade Plans
+                      </p>
+                      {currentPlanName && (
+                        <p className="text-xs text-primary mt-0.5 truncate">
+                          Current:{" "}
+                          <span className="text-emerald-400 font-medium">
+                            {currentPlanName}
+                          </span>
+                        </p>
+                      )}
+                    </div>
 
-                {showUpgradeDropdown && upgradePlans.length > 0 && (
-                  <div className="absolute bottom-full mb-2 right-0 w-48 bg-card border border-white/10 rounded-lg shadow-xl z-50 py-1 backdrop-blur-md">
-                    {upgradePlans.map((plan) => (
-                      <button
-                        key={plan.id}
-                        type="button"
-                        onClick={() => {
-                          if (onUpgradePlan && (detail || initialField)) {
-                            onUpgradePlan(detail || initialField!)
-                          }
-                          setShowUpgradeDropdown(false)
-                        }}
-                        className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-primary hover:bg-white/5 transition-colors cursor-pointer text-left"
-                      >
-                        <span className="font-medium">{plan.name}</span>
-                        <span className="text-xs text-muted-foreground">
-                          €{plan.price}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
+                    {isLoadingUpgradeOptions ? (
+                      <div className="py-4 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin text-yellow-400" />
+                        <span>Checking available plans...</span>
+                      </div>
+                    ) : eligibleUpgradePlans.length === 0 ? (
+                      <div className="py-4 text-center text-xs text-muted-foreground">
+                        No other plans available
+                      </div>
+                    ) : (
+                      <div className="py-1 space-y-1">
+                        {eligibleUpgradePlans.map((plan) => (
+                          <DropdownMenuItem
+                            key={plan.plan_id}
+                            onClick={() => {
+                              setSelectedTargetPlan(plan)
+                              setIsUpgradeModalOpen(true)
+                              setShowUpgradeDropdown(false)
+                            }}
+                            className="flex items-center justify-between p-2.5 rounded-lg text-xs cursor-pointer focus:bg-white/5 transition-colors group outline-none"
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <FieldPlanBadge plan={plan.plan_name} size="sm" />
+                              <div className="min-w-0">
+                                <p className="font-semibold text-primary truncate group-hover:text-amber-300 transition-colors">
+                                  {plan.plan_name}
+                                </p>
+                                <p className="text-[10px] text-muted-foreground capitalize">
+                                  {plan.billing_cycle}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="text-right shrink-0 ml-2">
+                              <p className="font-bold text-primary">
+                                {plan.currency === "EUR" ? "€" : plan.currency}
+                                {plan.price}
+                              </p>
+                              <span className="text-[10px] text-emerald-400 font-medium">
+                                Upgrade &rarr;
+                              </span>
+                            </div>
+                          </DropdownMenuItem>
+                        ))}
+                      </div>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 
@@ -435,6 +529,18 @@ export default function FieldDetailsSheet({
           </div>
         )}
       </SheetContent>
+
+      <UpgradeFieldPlanModal
+        field={detail || initialField}
+        userId={activeId}
+        targetPlan={selectedTargetPlan}
+        currentPlanName={currentPlanName}
+        open={isUpgradeModalOpen}
+        onOpenChange={setIsUpgradeModalOpen}
+        onSuccess={() => {
+          refetchUpgradeOptions()
+        }}
+      />
     </Sheet>
   )
 }

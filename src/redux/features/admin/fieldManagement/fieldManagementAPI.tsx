@@ -12,6 +12,9 @@ import type {
   AdminSessionDetailResponse,
   AdminSessionSubmitScorePayload,
   AdminSessionSubmitScoreResponse,
+  FieldOwnerUpgradePlanResponse,
+  UpgradeFieldOwnerPlanPayload,
+  UpgradeFieldOwnerPlanResponse,
 } from "@/types/AdminTypes/FieldManagementTypes"
 
 export const fieldManagementAPI = baseAPI.injectEndpoints({
@@ -139,6 +142,35 @@ export const fieldManagementAPI = baseAPI.injectEndpoints({
         { type: "AdminSessions", id: "LIST" },
       ],
     }),
+
+    getFieldOwnerUpgradePlanOptions: builder.query<
+      FieldOwnerUpgradePlanResponse,
+      number | string
+    >({
+      query: (id) => ({
+        url: `/api/admin/field-owners/${id}/upgrade-plan/`,
+        method: "GET",
+      }),
+      providesTags: (_result, _error, id) => [
+        { type: "AdminFieldOwners", id: `UPGRADE_${id}` },
+      ],
+    }),
+
+    upgradeFieldOwnerPlan: builder.mutation<
+      UpgradeFieldOwnerPlanResponse,
+      { id: number | string; data: UpgradeFieldOwnerPlanPayload }
+    >({
+      query: ({ id, data }) => ({
+        url: `/api/admin/field-owners/${id}/upgrade-plan/`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: "AdminFieldOwners", id: "LIST" },
+        { type: "AdminFieldOwners", id },
+        { type: "AdminFieldOwners", id: `UPGRADE_${id}` },
+      ],
+    }),
   }),
 })
 
@@ -151,4 +183,7 @@ export const {
   useGetAdminSessionDetailQuery,
   useLazyGetAdminSessionDetailQuery,
   useSubmitAdminSessionScoreMutation,
+  useGetFieldOwnerUpgradePlanOptionsQuery,
+  useLazyGetFieldOwnerUpgradePlanOptionsQuery,
+  useUpgradeFieldOwnerPlanMutation,
 } = fieldManagementAPI

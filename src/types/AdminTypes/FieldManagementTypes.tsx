@@ -633,11 +633,117 @@ export interface FieldDetailsSheetProps {
   onViewAllSession: () => void
 }
 
+// ==========================================
+// Field Owner Upgrade Plan Types
+// ==========================================
+
+export interface FieldOwnerCurrentSubscription {
+  subscription_id: number
+  plan_id: number
+  plan_name: string
+  plan_code: string
+  billing_cycle: string
+  price: string
+  currency: string
+  status: string
+  started_at: string
+  expires_at: string
+  is_admin_assigned: boolean
+  payment_reference: string
+}
+
+export interface FieldOwnerAvailablePlan {
+  plan_id: number
+  plan_name: string
+  plan_code: string
+  billing_cycle: string
+  price: string
+  currency: string
+  duration_days: number
+  is_current_plan: boolean
+}
+
+export interface FieldOwnerUpgradePlanData {
+  user_id: number
+  display_user_id: string
+  user_name: string
+  email: string
+  account_type: string
+  current_subscription: FieldOwnerCurrentSubscription
+  available_plans: FieldOwnerAvailablePlan[]
+}
+
+export interface FieldOwnerUpgradePlanResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: FieldOwnerUpgradePlanData
+  requestId?: string
+}
+
+export interface UpgradeFieldOwnerPlanPayload {
+  plan_code: string
+}
+
+export interface UpgradeFieldOwnerPlanResponse {
+  success: boolean
+  message: string
+  meta: Record<string, unknown>
+  data: {
+    user_id: number
+    display_user_id: string
+    user_name: string
+    email: string
+    account_type: string
+    is_premium: boolean
+    is_admin_assigned: boolean
+    payment_required: boolean
+    payment_method: string
+    payment_reference: string
+    assigned_by_admin: {
+      id: number
+      email: string
+      name: string
+    }
+    subscription: {
+      id: number
+      plan_id: number
+      plan_name: string
+      plan_code: string
+      billing_cycle: string
+      price: string
+      paid_amount: string
+      currency: string
+      status: string
+      started_at: string
+      expires_at: string
+      duration_days: number
+      auto_renew: boolean
+      notes: string
+    }
+    checkout: {
+      id: number
+      invoice_id: string
+      payment_status: string
+      upgrade_status: string
+      amount: string
+      currency: string
+      paid_at: string
+      completed_at: string
+    }
+  }
+  requestId?: string
+}
+
 export interface UpgradeFieldPlanModalProps {
-  field: FieldOwnerDetailData | FieldOwnerItem | null
+  field?: FieldOwnerDetailData | FieldOwnerItem | null
+  userId?: number | null
+  targetPlan?: FieldOwnerAvailablePlan | null
+  currentPlanName?: string
   open: boolean
   onOpenChange: (open: boolean) => void
-  onConfirm: (plan: string) => void
+  onConfirm?: (plan: string) => void
+  onSuccess?: () => void
 }
 
 export interface SessionSearchBarProps {
