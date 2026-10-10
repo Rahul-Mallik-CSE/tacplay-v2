@@ -99,7 +99,7 @@ const baseQueryWithReauth: BaseQueryFn<
 const baseAPI = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Auth", "Profile", "Dashboard", "Bookings", "ArenaInfo", "FieldSetup", "OpeningHours", "Staff", "Roles", "Analytics", "Sessions", "Packages", "Earnings", "Marketing", "AdminOverview", "AdminEarnings", "AdminPlayers", "AdminAnalytics", "AdminFieldOwners", "AdminSessions", "PlayerScoreSetting"],
+  tagTypes: ["Auth", "Profile", "Dashboard", "Bookings", "ArenaInfo", "FieldSetup", "OpeningHours", "Staff", "Roles", "Analytics", "Sessions", "Packages", "Earnings", "Marketing", "AdminOverview", "AdminEarnings", "AdminPlayers", "AdminAnalytics", "AdminFieldOwners", "AdminSessions", "PlayerScoreSetting", "AdminSubscriptions"],
   endpoints: () => ({}),
 });
 

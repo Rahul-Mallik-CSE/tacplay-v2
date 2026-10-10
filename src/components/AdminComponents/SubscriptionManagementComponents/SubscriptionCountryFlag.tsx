@@ -1,28 +1,44 @@
 "use client"
 
 import React from "react"
+import ReactCountryFlag from "react-country-flag"
+import { Globe } from "lucide-react"
 import type { SubscriptionCountryFlagProps } from "@/types/AdminTypes/SubscriptionManagementTypes"
 
-const FLAG_EMOJIS: Record<string, string> = {
-  ES: "\u{1F1EA}\u{1F1F8}",
-  US: "\u{1F1FA}\u{1F1F8}",
-  GB: "\u{1F1EC}\u{1F1E7}",
-  DE: "\u{1F1E9}\u{1F1EA}",
-  FR: "\u{1F1EB}\u{1F1F7}",
-  IT: "\u{1F1EE}\u{1F1F9}",
-  PT: "\u{1F1F5}\u{1F1F9}",
-  NL: "\u{1F1F3}\u{1F1F1}",
-  BR: "\u{1F1E7}\u{1F1F7}",
-  AR: "\u{1F1E6}\u{1F1F7}",
-}
+function SubscriptionCountryFlag({
+  countryCode,
+  countryName,
+  size = "sm",
+}: SubscriptionCountryFlagProps) {
+  const isIsoCode =
+    countryCode &&
+    typeof countryCode === "string" &&
+    countryCode.trim().length === 2
 
-function SubscriptionCountryFlag({ countryCode }: SubscriptionCountryFlagProps) {
-  const flag = FLAG_EMOJIS[countryCode] || "\u{1F3F3}\uFE0F"
+  const displayName =
+    countryName || (countryCode && !isIsoCode ? countryCode : "")
 
   return (
-    <span className="text-lg" title={countryCode}>
-      {flag}
-    </span>
+    <div className="flex items-center gap-2">
+      {isIsoCode ? (
+        <ReactCountryFlag
+          countryCode={countryCode.trim().toUpperCase()}
+          svg
+          style={{
+            width: size === "sm" ? "1.4em" : "1.8em",
+            height: size === "sm" ? "1.4em" : "1.8em",
+            borderRadius: "3px",
+          }}
+        />
+      ) : (
+        <div className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+          <Globe className="w-3 h-3 text-muted-foreground" />
+        </div>
+      )}
+      {displayName && (
+        <span className="text-sm text-primary">{displayName}</span>
+      )}
+    </div>
   )
 }
 
