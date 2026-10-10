@@ -8,22 +8,19 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 
 import Image from "next/image";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LogoutModal from "./LogOutModal";
-import UpgradeModal from "./UpgradeModal";
 import type { NavItemConfig } from "./NavItem";
 import NavItem from "./NavItem";
 import { useTranslation } from "react-i18next";
+import { useGetSubscriptionStatusQuery } from "@/redux/features/dashboard/subscription/subscriptionAPI";
 
 interface AppSidebarProps {
   navItems: NavItemConfig[];
@@ -43,8 +40,15 @@ export default function AppSidebar({
   const { t } = useTranslation("dashboard");
   const { state } = useSidebar();
   const pathname = usePathname();
+  const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+
+  const { data: subscriptionStatus } = useGetSubscriptionStatusQuery(
+    undefined,
+    {
+      skip: !showUpgradeBanner,
+    }
+  );
 
   const isCollapsed = state === "collapsed";
 
@@ -52,6 +56,27 @@ export default function AppSidebar({
     setIsLogoutModalOpen(false);
     onLogout?.();
   };
+
+  const handleUpgradeClick = () => {
+    router.push("/dashboard/subscription/overview");
+  };
+
+  const planCode =
+    subscriptionStatus?.data?.plan_code?.toLowerCase() || "";
+
+  const currentBadge = planCode.includes("gold")
+    ? { logo: "/gold.png", alt: "Gold Badge" }
+    : planCode.includes("silver")
+    ? { logo: "/silver.png", alt: "Silver Badge" }
+    : { logo: "/bronze.png", alt: "Bronze Badge" };
+
+  const upgradeTitle = planCode.includes("silver")
+    ? "Upgrade to Gold!"
+    : planCode.includes("gold")
+    ? "You're on Gold!"
+    : "Upgrade to Silver!";
+
+  const buttonText = planCode.includes("gold") ? "View Plan" : "Upgrade Now!";
 
   return (
     <>
@@ -75,9 +100,13 @@ export default function AppSidebar({
               {logo ? (
                 logo
               ) : isCollapsed ? (
-                <Image src="/logo.png" alt="Logo" width={40} height={40} 
-                    className="pb-4 pt-1"
-                    />
+                <Image
+                  src="/logo.png"
+                  alt="Logo"
+                  width={40}
+                  height={40}
+                  className="pb-4 pt-1"
+                />
               ) : (
                 <div className="w-full h-16 flex items-center gap-2 pb-2 border-b-2 border-white/10 ">
                   <Image
@@ -131,9 +160,9 @@ export default function AppSidebar({
             isCollapsed ? (
               <div className="flex justify-center mb-2">
                 <Button
-                  onClick={() => setIsUpgradeModalOpen(true)}
-                  className="w-10 h-10 rounded-full flex items-center justify-center bg-linear-to-br from-[#980009] to-[#C00069] border-2 border-[#cdba20] shadow-lg"
-                  title={t("sidebar.upgradeToPremium")}
+                  onClick={handleUpgradeClick}
+                  className="w-10 h-10 rounded-full flex items-center justify-center bg-linear-to-br from-[#980009] to-[#C00069] border-2 border-[#cdba20] shadow-lg cursor-pointer"
+                  title={t("sidebar.upgradeToPremium", "Upgrade to Premium")}
                 >
                   <Crown size={18} className="text-[#cdba20]" />
                 </Button>
@@ -144,8 +173,8 @@ export default function AppSidebar({
                   <div className="mb-2">
                     <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center p-0.5">
                       <Image
-                        src="/bronze.png"
-                        alt="Bronze Badge"
+                        src={currentBadge.logo}
+                        alt={currentBadge.alt}
                         width={64}
                         height={64}
                         className="w-full h-full object-contain rounded-xl"
@@ -153,17 +182,17 @@ export default function AppSidebar({
                     </div>
                   </div>
                   <h3 className="text-white text-lg font-semibold ">
-                    Upgrade to Silver!
+                    {upgradeTitle}
                   </h3>
                   <p className="text-white/80 text-sm mb-2 leading-relaxed">
                     Upgrade your account and unlock all of the benefits.
                   </p>
                   <Button
-                    onClick={() => setIsUpgradeModalOpen(true)}
-                    className="w-full flex items-center justify-center gap-2 bg-white text-gray-900 font-bold py-3 rounded-2xl text-sm hover:bg-gray-100 transition-colors"
+                    onClick={handleUpgradeClick}
+                    className="w-full flex items-center justify-center gap-2 bg-white text-gray-900 font-bold py-3 rounded-2xl text-sm hover:bg-gray-100 transition-colors cursor-pointer"
                   >
                     <Crown size={16} className="text-[#d4a843]" />
-                    Upgrade Now!
+                    {buttonText}
                   </Button>
                 </div>
               </div>
@@ -177,10 +206,6 @@ export default function AppSidebar({
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
         onConfirm={handleConfirmLogout}
-      />
-      <UpgradeModal
-        isOpen={isUpgradeModalOpen}
-        onClose={() => setIsUpgradeModalOpen(false)}
       />
     </>
   );

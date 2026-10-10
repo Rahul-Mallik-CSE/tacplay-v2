@@ -147,11 +147,11 @@ export function useDashboardNavItems(): NavItemConfig[] {
           icon: Package,
           label: t("subscription.tabs.billingHistory"),
         },
-        {
-          href: "/dashboard/subscription/payment-methods",
-          icon: Package,
-          label: t("subscription.tabs.paymentMethods"),
-        },
+        // {
+        //   href: "/dashboard/subscription/payment-methods",
+        //   icon: Package,
+        //   label: t("subscription.tabs.paymentMethods"),
+        // },
       ],
 
     },
